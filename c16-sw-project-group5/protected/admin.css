@@ -1,0 +1,480 @@
+
+
+
+
+
+/* resized response config */
+@media (max-width: 1000px ){
+    .col-md-6{
+        flex: 0 0 auto !important;
+        width: 100% !important;
+    }
+}
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
+
+.col-md-6{
+    margin-top:100px;
+
+}
+
+.filter-game-layout{
+    min-width:300px;
+    width:auto;
+    height:350px;
+    background-color: #c5c5c5;
+    margin:auto;
+    margin-right:5%;
+    margin-right:25px;
+    border-radius: 4px;
+    margin-left:25px;
+
+}
+#searchGameInput{
+    width:400px;
+}
+#search-game-btn-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+#search-game-btn-container> .delete-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:auto;
+    margin-top:10px;
+    width:100px;
+    font-size: 20px;
+    color:white !important;
+    background-color:black !important;
+    border:1px solid transparent !important;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px rgb(44, 44, 44);
+}
+#search-game-btn-container> .delete-button:hover{
+    color:black !important;
+    background-color:white !important;
+}
+.btn-outline-success {
+    color: #000000;
+    border-color: #000000;
+}
+.filter-game-media{
+    background-color: rgb(255, 251, 227);
+    min-width:200px !important;
+    width:auto;
+    height:200px;
+    overflow-y:scroll;
+    margin:auto;
+    margin-right:10%;
+    margin-left:10%;
+    border:1px solid black;
+}
+.inside-layout{
+    padding-top:20px;
+}
+/* .delete-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:auto;
+    margin-top:10px;
+    width:100px;
+    font-size: 20px;
+} */
+/* .btn-warning {
+    color: rgb(197, 197, 197);
+    background-color: #000000;
+    border-color: #505050;
+} */
+/* .btn-warning:hover {
+    color: #000;
+    border-color: #a7a7a7;
+} */
+.search-game-container{
+    width:201px;
+    /* max-width:401px;
+    min-width:1001px; */
+    display: flex;
+    padding-top:20px;
+    justify-content: center;
+    margin:auto;
+}
+.search-game{
+width:300px;
+}
+
+
+#show-game-info>div{
+    text-overflow:initial;
+    white-space:pre-line;
+    padding:0.5rem 1rem;
+    color:black;
+    
+}
+
+#show-game-info div.gameContainer:nth-child(odd){
+    background:rgb(219, 219, 219);
+}
+
+
+.mediaDiv:hover{
+    border:1px solid rgb(153, 153, 153);
+    transform:scale(3.5) !important;
+    transition: transform .25s ease-in-out ,border .3s ease-in-out;
+    z-index:10;
+}
+.gameContainer{
+    display:flex;
+    justify-content:left;
+    align-items:center;
+    font-size:12px;
+    
+}
+.gameContainer:hover{
+    cursor:pointer;
+}
+
+.gameContainer > img{
+    margin-left:10px;
+    margin-right:10px;
+    margin-top:10px;
+    width:30px;
+    height:30px;
+    border:1px solid transparent;
+    border-radius: 15px;
+}
+
+.gameSelected{
+    color:white !important;
+    background-color:rgba(5, 5, 5, 0.5) !important;
+    border:1px solid white;
+    border-radius: 10px;
+    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+}
+.gameContainer > div{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.gameContainer > .nameDiv{
+    width:120px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-right: 1px solid rgb(0, 0, 0);
+}
+.gameContainer > .gameIdDiv{
+    width:90px;
+    padding-right:20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-right: 1px solid rgb(0, 0, 0);
+}
+.gameContainer > .game-Created-Date-Div{
+    width:163px;
+    padding-left:5px;
+    padding-right:5px;
+    
+}
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
+
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
+
+.filter-user-layout{
+    min-width:300px;
+    width:auto;
+    height:350px;
+    background-color: #c5c5c5;
+    margin:auto;
+    margin-right:25px;
+    border-radius: 4px;
+    margin-left:25px;
+    margin-top:50px;
+
+}
+#search-user-btn-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+#searchUserInput{
+    width:400px;
+}
+
+#search-user-btn-container> .delete-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:auto;
+    margin-top:10px;
+    width:100px;
+    font-size: 20px;
+    color:white !important;
+    background-color:black !important;
+    border:1px solid transparent !important;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px rgb(44, 44, 44);
+}
+#search-user-btn-container> .delete-button:hover{
+    color:black !important;
+    background-color:white !important;
+}
+#search-user-btn-container> .upgrade-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:auto;
+    margin-top:10px;
+    width:100px;
+    font-size: 20px;
+    color:white !important;
+    background-color:black !important;
+    border:1px solid transparent !important;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px rgb(44, 44, 44);
+    
+}
+
+#search-user-btn-container> .upgrade-button:hover{
+    color:black !important;
+    background-color:white !important;
+}
+/* .search-user-btn-container> .btn-outline-success {
+    color: #000000;
+    border-color: #000000;
+} */
+
+
+.filter-user-Info{
+background-color: rgb(255, 251, 227);
+min-width:200px !important;
+width:auto;
+height:200px;
+overflow-y:scroll;
+margin:auto;
+margin-right:10%;
+margin-left:10%;
+border:1px solid black;
+}
+.inside-layout{
+    padding-top:20px;
+}
+
+
+
+/* .filter-user-layout>.btn-warning {
+    color: rgb(197, 197, 197);
+    background-color: #000000;
+    border-color: #505050;
+} */
+/* .btn-warning:hover {
+    color: #000;
+    background-color: #f1f1f1;
+    border-color: #a7a7a7;
+} */
+.search-user-container{
+    width: 201px;
+    display: flex;
+    padding-top:20px;
+    justify-content: center;
+    margin:auto;
+}
+
+
+.search-user{
+width:300px;
+}
+
+#show-user-info>div{
+    text-overflow:initial;
+    white-space:pre-line;
+    padding:0.5rem 1rem;
+    color:black;
+    
+}
+
+#show-user-info div.userContainer:nth-child(odd){
+    background:rgb(219, 219, 219);
+}
+
+.userContainer{
+    display:flex;
+    justify-content:left;
+    align-items:center;
+    font-size:12px;
+    
+}
+.userContainer:hover{
+    cursor:pointer;
+}
+
+.userContainer > img{
+    margin-left:10px;
+    margin-right:10px;
+    margin-top:10px;
+    width:30px;
+    height:30px;
+    border:1px solid transparent;
+    border-radius: 15px;
+}
+.userSelected{
+    color:white !important;
+    background-color:rgba(5, 5, 5, 0.5) !important;
+    border:1px solid white;
+    border-radius: 10px;
+    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+}
+.userContainer > div{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.userContainer > .nameDiv{
+    width:85px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.userContainer > .emailDiv{
+    width:163px;
+    padding-left:5px;
+    padding-right:5px;
+    border-right: 1px solid rgb(0, 0, 0);
+}
+
+
+
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
+
+
+
+
+
+
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
+/* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
+
+
+.collapsible {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 91%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    margin-bottom: 20px;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+  
+  
+  
+  .active, .collapsible:hover {
+    background-color: #ccc;
+  }
+  
+
+  .content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+  }
+  .collapsible:after {
+    content: '\02795'; 
+    font-size: 13px;
+    color: white;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  .active:after {
+    content: "\2796"; 
+  }
+
+ #right-column{
+     margin-bottom: 10%;
+ }
+  /* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
+  /* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
+  /* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
+
+
+/* disable text selection */
+
+  ::selection { background: transparent; } ::-moz-selection { background: transparent; }
+
+/* disable text selection */
+
+
+
+
+
+/* loading  css*/
+
+@import url('https://fonts.googleapis.com/css2?family=Advent+Pro&display=swap');
+
+.main{
+  display:flex;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  justify-content:center;
+  flex-direction:column;
+  align-items:center;
+  height:100vh;
+  background-color:#F6f5fb ;
+  font-size:1.5em;
+  z-index: 99999;
+}
+
+@keyframes title {
+  50%{ opacity:100%; }
+}
+@keyframes larger {
+  50%{ border-width:10px }
+} 
+
+.test-wrapper{
+  font-family: 'Advent Pro', sans-serif;
+  color : #000;
+  opacity:10%;
+  animation:title 2s linear infinite ;
+} 
+
+.spinner-wrap{
+  margin:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+} 
+
+.loading-circle{
+  width:25px;
+  height:25px;
+  background-color: #099a97;
+  border:0 solid #ace6f6;
+  border-radius:50%;
+  animation:larger 2s linear infinite;
+} 
+
+
+
+
+/* loading  css*/

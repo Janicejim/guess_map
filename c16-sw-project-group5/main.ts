@@ -1,0 +1,85 @@
+import express from "express";
+import userRoutes from "./router/userRoutes";
+import dotenv from "dotenv";
+import { isAdmin } from "./guard";
+import grant from "grant";
+import { env } from "./env";
+import { logger } from "./logger";
+import expressSession from "express-session";
+import gameRoutes from "./router/gameRoutes";
+import scoreRoutes from "./scoring_system";
+import http from "http";
+import { Server as SocketIO } from "socket.io";
+import { chatRoomIO } from "./router/SocketRoute";
+import adminRoutes from "./router/adminRoutes";
+import midRoutes from "./router/middlewares";
+
+dotenv.config();
+
+const app = express();
+
+//--教server read json--
+app.use(express.json());
+
+// -----  socketIO & session config  ----- ---------------------------------------//
+const server = new http.Server(app);
+const io = new SocketIO(server);
+
+const sessionMiddleware = expressSession({
+  secret: "Tecky Academy teaches typescript",
+  resave: true,
+  saveUninitialized: true,
+  cookie: { secure: false },
+});
+
+app.use(sessionMiddleware);
+
+io.use((socket, next) => {
+  let req = socket.request as express.Request;
+  let res = req.res as express.Response;
+  sessionMiddleware(req, res, next as express.NextFunction);
+});
+chatRoomIO(io);
+
+app.use(
+  expressSession({
+    secret: "map picker",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+//---------------------------------------------------------------------------------
+
+//------------------- google login-------------------------------
+const grantExpress = grant.express({
+  defaults: {
+    origin: "http://localhost:8000",
+    transport: "session",
+    state: true,
+  },
+  google: {
+    key: env.GOOGLE_CLIENT_ID,
+    secret: env.GOOGLE_CLIENT_SECRET,
+    scope: ["profile", "email"],
+    callback: "/login/google",
+  },
+});
+
+//All routers here
+app.use(grantExpress as express.RequestHandler);
+app.use(userRoutes);
+app.use(gameRoutes);
+app.use(adminRoutes);
+app.use(scoreRoutes);
+app.use(express.static("public"));
+app.use(express.static("site_images"));
+app.use(express.static("uploads"));
+app.use(express.static("profileUploads"));
+app.use(isAdmin, express.static("protected"));
+app.use(midRoutes);
+
+const PORT = env.PORT;
+server.listen(PORT, () => {
+  logger.info(`Server is ready =>: http://localhost:${PORT}/`);
+});

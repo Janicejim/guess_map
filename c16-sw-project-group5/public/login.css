@@ -1,0 +1,200 @@
+.login-button {
+  width: 100px;
+  margin-left: 20px;
+  color: black;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+#current-user {
+  margin-right: 80px;
+  margin-top: 30px;
+  text-align: right;
+}
+
+.game-area {
+  margin: auto;
+  margin-top: 100px;
+  width: 600px !important;
+  position: relative;
+  border-radius: 80px;
+}
+.game-media {
+  width: 574x;
+  height: 500px;
+  opacity: 1; /*close game change to 0.2*/
+  position: relative;
+}
+.fa-check-circle {
+  position: absolute;
+  top: 150px;
+  left: 200px;
+  font-size: 150px;
+  display: none; /*close game change to inline*/
+}
+
+.game-information {
+  display: flex;
+  justify-content: space-between;
+}
+.report-and-share {
+  display: flex;
+  align-items: center;
+}
+
+.report-button {
+  margin: 0 15px;
+}
+.start-game {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-top: 30px;
+  font-size: 20px;
+}
+.game-time {
+  font-size: 30px;
+}
+.fa-stopwatch {
+  margin-left: 10px;
+  color: orange;
+}
+
+footer {
+  background-color: black;
+  width: 100%;
+  color: white;
+  margin-top: 20px !important;
+  padding: 20px;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>   nav bar css   <<<<<<<<<<<<<<<<<<<<<<<<<<< */
+
+.login-container {
+  background-color: rgb(241, 241, 241);
+  width: 400px;
+  height: 480px;
+  color: black;
+  border-radius: 10px;
+  margin: auto;
+  margin-top: 0px;
+  margin-bottom: 50px;
+}
+
+.logo-icon {
+  font-size: 50px;
+  text-align: center;
+  padding-top: 50px;
+}
+.email-column {
+  width: 250px;
+  margin: auto;
+  padding-top: 30px;
+}
+.password-column {
+  width: 250px;
+  margin: auto;
+  padding-top: 30px;
+}
+#Alert {
+  text-align: center;
+}
+.sign-in-button {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* @import url(https://fonts.googleapis.com/css?family=Roboto:500); */
+
+.google-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.google-btn {
+  width: 184px;
+  height: 42px;
+  background-color: #4285f4;
+  border-radius: 2px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+}
+.google-btn .google-icon-wrapper {
+  position: absolute;
+  margin-top: 1px;
+  margin-left: 1px;
+  width: 35px;
+  height: 40px;
+  border-radius: 2px;
+  background-color: #fff;
+}
+.google-btn .google-icon {
+  position: absolute;
+  margin-top: 11px;
+  margin-left: 11px;
+  width: 18px;
+  height: 18px;
+}
+.google-btn .btn-text {
+  float: right;
+  margin: 11px 11px 0 2px;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  /* font-family: "Roboto"; */
+}
+.google-btn:hover {
+  box-shadow: 0 0 6px #4285f4;
+}
+.google-btn:active {
+  background: #1669f2;
+}
+.sign-up-message {
+  margin-top: 50px;
+  padding-top: 40px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  margin-left: 80px;
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #0336ff;
+  border-color: #0336ff;
+}
+
+.btn-success:hover {
+  color: #fff;
+  background-color: #ff0266;
+  border-color: #ff0266;
+}
+
+.btn-warning {
+  color: #000;
+  background-color: #ff0266;
+  border-color: #ff0266;
+  color: white;
+}
+
+.btn-warning:hover {
+  color: #000;
+  background-color: #0336ff;
+  border-color: #0336ff;
+  color: white;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+    <link rel="stylesheet" href="./index.css">
+    <link rel="icon" href="./favicon_group5.svg" type="image/svg+xml">
+    <title>index</title>
+</head>
+
+<body>
+
+    <!--header -->
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid fixed-top">
+          
+            <div class="navbar-container">
+           
+                <a class="navbar-brand narbar-icon logo neonText " href="#">估你唔島</i></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <!-- homepage -->
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#"><i
+                                    class="fas fa-home narbar-icon"></i></a>
+                        </li>
+                        <!-- add game -->
+                        <li class="nav-item">
+
+                            <a  class="nav-link" href="upload-game.html"><i class="fas fa-plus-square narbar-icon"></i></a>
+                        </li>
+
+                        <!-- rank -->
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="#"><i class="fas fa-trophy narbar-icon"></i></a>
+                        </li>
+
+                        <!--user-->
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user narbar-icon"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Message</a></li>
+                                <li><a class="dropdown-item" href="#">Rules</a></li>
+                
+                            </ul>
+                        </li>
+                        <!-- sign in  -->
+                        <li class="nav-item">
+
+                            <button id="index-signin" class="show btn-warning login-button">Sign In</button>
+                        </li>
+                            <!-- sign up  -->
+                        <li class="nav-item">
+
+                            <button id="index-signup" class="show btn-success login-button">Sign Up</button>
+                        </li>
+                            <!-- Logout  -->
+                        <li class="nav-item">
+
+                            <button id="index-logout" class="hide btn-success login-button">Logout</button>
+                        </li>
+
+                        
+
+                       
+                    </ul>
+                    
+                </div>
+        </div>
+    </nav>
+
+  
+
+    <div id="current-user">Current user here</div>  
+          
+
+
+    <!-- game-zone -->\
+    
+    <div class=" row row-cols-1 row-cols-md-2 g-4">
+
+        <!-- game-sample 1 -->
+
+        <div class="col game-area">
+            <div class="card-header">
+                <i class="fas fa-stopwatch"></i> <span>10 hr 20 mins 20 sec</span>
+              </div>
+
+
+            <div class="card">
+                <img class="game-media" src="../image/ jimmyBridge.jpeg" class="card-img-top" alt="game-media">
+                <div class="card-body">
+                    <div class="game-information">
+                        <div>Guess amount: <span>500</span></div>
+
+                        <div class="report-and-share">
+                            <div class="report-button">Report</div>
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-warning start-game">Click me to guess!</button>
+                    <div class="game-time">
+
+                        <i class="fas fa-check-circle"></i>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- game-sample 2 -->
+        <div class="col game-area">
+            <div class="card-header">
+                <i class="fas fa-stopwatch"></i> <span>10 hr 20 mins 20 sec</span>
+              </div>
+
+
+            <div class="card">
+                <img class="game-media" src="../image/centralGrahamStreet.jpeg" class="card-img-top" alt="game-media">
+                <div class="card-body">
+                    <div class="game-information">
+                        <div>Guess amount: <span>500</span></div>
+
+                        <div class="report-and-share">
+                            <div class="report-button">Report</div>
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-warning start-game">Click me to guess!</button>
+                    <div class="game-time">
+
+                        <i class="fas fa-check-circle"></i>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+  <!-- game-sample 3-->
+        <div class="col game-area">
+            <div class="card-header">
+                <i class="fas fa-stopwatch"></i> <span>10 hr 20 mins 20 sec</span>
+              </div>
+
+            <div class="card">
+                <img class="game-media" src="../image/kwunTungLokWahEstCarPart.jpeg" class="card-img-top" alt="game-media">
+                <div class="card-body">
+                    <div class="game-information">
+                        <div>Guess amount: <span>500</span></div>
+
+                        <div class="report-and-share">
+                            <div class="report-button">Report</div>
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-warning start-game">Click me to guess!</button>
+                    <div class="game-time">
+                        <i class="fas fa-check-circle"></i>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+  <!-- game-sample 4 -->
+        <div class="col game-area">
+            <div class="card-header">
+                <i class="fas fa-stopwatch"></i> <span>10 hr 20 mins 20 sec</span>
+              </div>
+
+            <div class="card">
+                <img class="game-media" src="../image/monsterBuilding.jpeg" class="card-img-top" alt="game-media">
+                <div class="card-body">
+                    <div class="game-information">
+                        <div>Guess amount: <span>500</span></div>
+
+                        <div class="report-and-share">
+                            <div class="report-button">Report</div>
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-warning start-game">Click me to guess!</button>
+                    <div class="game-time">
+                        <i class="fas fa-check-circle"></i>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+<!-- footer -->
+    <footer class="fixed-bottom">
+<div>Copyright © 2021 </div>
+    </footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+.table-container {
+  width: 75vw;
+}
+.rank-title {
+  color: #0336ff;
+  font-weight: 700;
+  font-size: 3rem;
+  margin-top: -2.5rem;
+  margin-left: 1rem;
+}
+
+.plus {
+  color: #ff0266;
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+.table-dark {
+  --bs-table-bg: #0336ff;
+  --bs-table-striped-bg: #2c3034;
+  --bs-table-striped-color: #fff;
+  --bs-table-active-bg: #373b3e;
+  --bs-table-active-color: #fff;
+  --bs-table-hover-bg: #323539;
+  --bs-table-hover-color: #fff;
+  color: #fff;
+  border-color: #373b3e;
+}
+
+/* tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-color: #ff0266;
+  border-style: solid;
+  border-width: 0;
+} */
+
+.rank-table {
+  background-color: white !important;
+}
