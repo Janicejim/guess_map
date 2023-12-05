@@ -37,19 +37,9 @@ app.use(sessionMiddleware);
 io.use((socket, next) => {
   let req = socket.request as express.Request;
   let res = req.res as express.Response;
-  sessionMiddleware(req, res, next as express.NextFunction);
+  sessionMiddleware(req, res || {}, next as express.NextFunction);
 });
 chatRoomIO(io);
-
-app.use(
-  expressSession({
-    secret: "map picker",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
-
-//---------------------------------------------------------------------------------
 
 //------------------- google login-------------------------------
 const grantExpress = grant.express({
