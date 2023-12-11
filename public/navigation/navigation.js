@@ -78,9 +78,9 @@ function hasScrolled() {
 
 // ----------- get current user
 async function getUserProfile() {
+  console.log("get user");
   const res = await fetch("/user");
   const result = await res.json();
-  // console.log('result', result.user);
   const signinDiv = document.querySelector("#signin-btn");
   const logoutDiv = document.querySelector("#logout-btn");
   const profileDiv = document.querySelector("#profile-btn");
@@ -96,7 +96,8 @@ async function getUserProfile() {
     logoutDiv.classList.remove("hide");
     logoutDiv.classList.add("show");
 
-    userInfoDiv.innerHTML = "你好 " + (result.user.name || result.user.email);
+    userInfoDiv.innerHTML =
+      "你好 " + (result.user[0].name || result.user[0].email);
   } else {
     signinDiv.classList.remove("hide");
     signinDiv.classList.add("show");

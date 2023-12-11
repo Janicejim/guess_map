@@ -1,3 +1,8 @@
+//load navbar
+$(function () {
+  $("#navbar").load("/navigation/navigation.html");
+});
+
 let params = new URLSearchParams(location.search);
 let id = params.get("id");
 
@@ -34,10 +39,8 @@ async function getCurrentUser() {
 }
 
 async function previewUserInfo() {
-  const res = await fetch(`/profile/${id}`, {
-    method: "POST",
-  });
-  const result = await res.json(res);
+  const res = await fetch(`/profile/${id}`);
+  const result = (await res.json()).user;
   // console.log('preview result ===>', result);
 
   //format date
@@ -52,7 +55,7 @@ async function previewUserInfo() {
   const userDesDiv = document.querySelector("#user-description");
   const userCreDiv = document.querySelector("#user-created-at");
   const userScoreDiv = document.querySelector("#user-score-record");
-
+  console.log({ result });
   // Profile content
   if (result.profile_image) {
     profilePicDiv.outerHTML = `<img id="profile-resize" class="profile-image" src="../${result.profile_image}"/>`;

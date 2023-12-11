@@ -1,16 +1,16 @@
 import express, { Request, Response } from "express";
-import { client } from "../db";
-import { logger } from "../logger";
+import { client } from "../utils/db";
+import { logger } from "../utils/logger";
 import { io } from "./SocketRoute";
 
 const adminRoutes = express.Router();
 
-adminRoutes.put("/searchGame", searchGame);
-adminRoutes.delete("/deleteGame", deleteGame);
+adminRoutes.post("/search/game", searchGame);
+adminRoutes.delete("/game", deleteGame);
 
-adminRoutes.put("/searchUser", searchUser);
-adminRoutes.put("/upgradeUser", SwitchGradeUser);
-adminRoutes.delete("/deleteUser", deleteUser);
+adminRoutes.post("/search/user", searchUser);
+adminRoutes.put("/user", SwitchGradeUser);
+adminRoutes.delete("/user", deleteUser);
 
 // async function searchGame(){
 //     const gameInfo = await client.query(`select * from `)

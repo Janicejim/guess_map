@@ -1,42 +1,24 @@
 import express, { Request, Response } from "express";
-import { client } from "../db";
-import { isLoggedIn } from "../guard";
-import { logger } from "../logger";
-import multer from "multer";
+import { client } from "../utils/db";
+import { isLoggedIn } from "../utils/guard";
+import { logger } from "../utils/logger";
 import { io } from "./SocketRoute";
-//import { compare } from "bcryptjs";
+import { multerUpload } from "../utils/multer";
 
 const gameRoutes = express.Router();
 
-// multer set up
-const singleStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, `${file.fieldname}-${Date.now()}.${file.mimetype.split("/")[1]}`);
-  },
-});
-
-const upload = multer({ storage: singleStorage });
-
 // Game Routes
-gameRoutes.get("/getAllGames", getAllGames);
-gameRoutes.post("/upload-game", isLoggedIn, upload.single("media"), uploadGame);
-// gameRoutes.put("/game/:id", isLoggedIn, upload.single("media"), updateGame);
-gameRoutes.get("/play-game/:id", isLoggedIn, showSingleGame);
-gameRoutes.post("/play-game/:id", isLoggedIn, playSingleGame);
+gameRoutes.get("/games", getAllGames);
+gameRoutes.post("/game", isLoggedIn, multerUpload, uploadGame);
+gameRoutes.get("/game/:id", isLoggedIn, showSingleGame);
+gameRoutes.post("/game/record/:id", isLoggedIn, playSingleGame);
 // get user game status
-gameRoutes.post("/getUserGameStatus/:id", getUserGameStatus);
-
-// gameRoutes.get("/getUserGameStatus",getUserGameStatus)
-gameRoutes.get("/getCompletedGame", getCompletedGame);
-// gameRoutes.delete("/game/:id", deleteGameById);
-// gameRoutes.delete("/games", deleteAllGames);
-gameRoutes.post("/like/game/:id", isLoggedIn, likeGameById);
-gameRoutes.post("/dislike/game/:id", isLoggedIn, dislikeGameById);
-gameRoutes.get("/liked_game", isLoggedIn, likeGameByUser);
-gameRoutes.get("/disliked_game", isLoggedIn, disLikeGameByUser);
+gameRoutes.get("/user/status/:id", getUserGameStatus);
+gameRoutes.get("/game/completed", getCompletedGame);
+gameRoutes.post("/game/like/:id", isLoggedIn, likeGameById);
+gameRoutes.post("/game/dislike/:id", isLoggedIn, dislikeGameById);
+gameRoutes.get("/game/like", isLoggedIn, likeGameByUser);
+gameRoutes.get("/game/dislike", isLoggedIn, disLikeGameByUser);
 
 //////get game data///////
 async function getAllGames(req: Request, res: Response) {

@@ -1,3 +1,8 @@
+//load navbar
+$(function () {
+  $("#navbar").load("/navigation/navigation.html");
+});
+
 // ******** Search Game ******** //
 
 const searchGameForm = document.querySelector("#search-game");
@@ -11,8 +16,8 @@ searchGameForm.addEventListener("submit", async (event) => {
   const gameObj = { searchText: form.searchGameInput.value };
   // console.log("mark-client-1")
 
-  const res = await fetch("/searchGame", {
-    method: "PUT",
+  const res = await fetch("/search/game", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -101,7 +106,7 @@ searchGameForm.addEventListener("submit", async (event) => {
         // console.log('allGameIDArray', allGameIDArray);
       }
 
-      const res = await fetch("/deleteGame", {
+      const res = await fetch("/game", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -132,8 +137,8 @@ searchUserForm.addEventListener("submit", async (event) => {
   const userObj = { searchText: form.searchUserInput.value };
   // console.log('userObj = ', userObj);
 
-  const res = await fetch("/searchUser", {
-    method: "PUT",
+  const res = await fetch("/search/user", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -222,7 +227,7 @@ searchUserForm.addEventListener("submit", async (event) => {
         );
       }
       // console.log('allEmailArray', allEmailArray);
-      const res = await fetch("/deleteUser", {
+      const res = await fetch("/user", {
         method: "Delete",
         headers: {
           "Content-Type": "application/json",
@@ -254,7 +259,7 @@ searchUserForm.addEventListener("submit", async (event) => {
             .innerText.split("\n")[1]
         );
       }
-      const res = await fetch("/upgradeUser", {
+      const res = await fetch("/user", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

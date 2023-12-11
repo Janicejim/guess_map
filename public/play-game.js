@@ -1,3 +1,8 @@
+//load navbar
+$(function () {
+  $("#navbar").load("/navigation/navigation.html");
+});
+
 let playGame;
 let attempt = 1;
 let closedGame = [];
@@ -18,7 +23,7 @@ window.onload = () => {
 
 //fetch("/game/?id=xxxx")
 async function loadSingleGame(id) {
-  const res = await fetch(`/play-game/${id}`);
+  const res = await fetch(`/game/${id}`);
   const playGames = await res.json();
   playGame = playGames[0];
   // console.log(playGame);
@@ -52,102 +57,68 @@ async function loadSingleGame(id) {
   <form id="chat-form" action ="">
       <input id="chat-input" autocomplete="off"  /><button>Send</button>
   </form>`;
-
-  // ---------  Chat Room JS  --------- //
-  // ---------  Chat Room JS  --------- //
-  // ---------  Chat Room JS  --------- //
-
-  // >>>>>> Join Room <<<<<<< //
-
-  socket.emit("join-room", id);
-
-  // >>>>>> Leave Room <<<<<< //
-  // socket.emit("leave-room",id)
-
-  //  >>>>> Room setup <<<<< //
-  let input = document.querySelector("#chat-input");
-  let messages = document.querySelector("#messages");
-  let chatroom = document.querySelector("#chatroom-container");
-
-  // >>>>>>> submit message 上 server
-  document
-    .querySelector("#chat-form")
-    .addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      if (input.value) {
-        socket.emit("chat message", input.value);
-        input.value = "";
-      }
-    });
-  // >>>>>>> socket.on => get the message broadcasted from server = (msg)
-
-  socket.emit("userName", async (name) => {
-    const res = await fetch("/user");
-    const result = await res.json();
-    name = result.user.name;
-  });
-
-  //room-Update
-
-  //message-Update
-  socket.on("chat message", async function (img, msg) {
-    let msgContainer = document.createElement("div");
-    let getImg = document.createElement("img");
-    let item = document.createElement("div");
-    if (img != null) {
-      getImg.src = img;
-    } else {
-      getImg.src = "anonymous.png";
-    }
-    item.textContent = msg;
-    msgContainer.classList.add("msgContainer");
-
-    // console.log("getImg.src", getImg);
-    // console.log("item", item);
-
-    msgContainer.appendChild(getImg);
-    msgContainer.appendChild(item);
-
-    messages.appendChild(msgContainer);
-
-    //scroll to button
-    messages.scrollTop = messages.scrollHeight;
-  });
-
-  // async function pushUserName() {
-  //   event.preventDefault();
-  // }
-
-  //  >>>>> Room setup <<<<< //
-
-  // ^^^^^^^^^  Chat Room JS  ^^^^^^^^^ //
-  // ^^^^^^^^^  Chat Room JS  ^^^^^^^^^ //
-  // ^^^^^^^^^  Chat Room JS  ^^^^^^^^^ //
 }
+// ---------  Chat Room JS  --------- //
+// ---------  Chat Room JS  --------- //
+// ---------  Chat Room JS  --------- //
 
-// create play-game-form submit event
-// document
-//   .querySelector("#play-game-form")
-//   .addEventListener("submit", async (event) => {
-//     event.preventDefault();
-//     const form = event.target;
-//     const formData = new FormData();
-//     formData.append("targeted_location", getMarkerLocation());
-//     console.log("targeted_location", getMarkerLocation());
-//     const res = await fetch("/play-game/:id", {
-//       method: "POST",
-//       body: formData,
-//     });
-//     const result = await res.json();
-//     console.log(result);
-//     form.reset();
-// window.location = "/";
-/*if (result.success) {
-      // await loadGames();
+// >>>>>> Join Room <<<<<<< //
 
-    }*/
-// });
+socket.emit("join-room", id);
+
+// >>>>>> Leave Room <<<<<< //
+// socket.emit("leave-room",id)
+
+//  >>>>> Room setup <<<<< //
+let input = document.querySelector("#chat-input");
+let messages = document.querySelector("#messages");
+let chatroom = document.querySelector("#chatroom-container");
+
+// >>>>>>> submit message 上 server
+document
+  .querySelector("#chat-form")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (input.value) {
+      socket.emit("chat message", input.value);
+      input.value = "";
+    }
+  });
+// >>>>>>> socket.on => get the message broadcasted from server = (msg)
+
+socket.emit("userName", async (name) => {
+  const res = await fetch("/user");
+  const result = await res.json();
+  name = result.user.name;
+});
+
+//room-Update
+
+//message-Update
+socket.on("chat message", async function (img, msg) {
+  let msgContainer = document.createElement("div");
+  let getImg = document.createElement("img");
+  let item = document.createElement("div");
+  if (img != null) {
+    getImg.src = img;
+  } else {
+    getImg.src = "anonymous.png";
+  }
+  item.textContent = msg;
+  msgContainer.classList.add("msgContainer");
+
+  // console.log("getImg.src", getImg);
+  // console.log("item", item);
+
+  msgContainer.appendChild(getImg);
+  msgContainer.appendChild(item);
+
+  messages.appendChild(msgContainer);
+
+  //scroll to button
+  messages.scrollTop = messages.scrollHeight;
+});
 
 document
   .querySelector("#play-game-form")
@@ -214,7 +185,7 @@ document
     }
 
     // console.log(body);
-    const res = await fetch(`/play-game/${id}`, {
+    const res = await fetch(`/game/record/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -527,106 +498,3 @@ function deg2rad(deg) {
 function getMarkerLocation() {
   return `${marker.position.lat()}, ${marker.position.lng()}`;
 }
-
-// Get current location
-// const getCurrentLocation = navigator.geolocation.watchPosition((position) => {
-//   const { latitude, longitude } = position.coords;
-//   // console.log(position.coords.latitude);
-//   // console.log(position.coords.longitude);
-//   // Show a map centered at latitude / longitude.
-// });
-// function stopCurrentLocation() {
-//   // Cancel the updates when the user clicks a button.
-//   navigator.geolocation.clearWatch(watchId);
-// }
-// async function getUserGameStatus() {
-
-//   // const res1 = await fetch("/user");
-//   // const result1 = await res1.json();
-//   // // console.log('result1', result1.user.id);
-//   const res = await fetch(`/getUSerGameStatus`, {
-//     method: "POST"
-//   })
-
-//   const gameStatusResults = await res.json()
-// for(let gameStatusResult of gameStatusResults){
-//   if(gameStatusResult.completion=="true"){
-//     document.querySelector("answer-submit").classList.add("hide")
-//   }
-// }
-// }
-// async function getCompletedGame() {
-//   const res = await fetch("/getCompletedGame");
-//   const results = await res.json();
-//   let closedGame=[];
-//   for(let result of results){
-//     closedGame.push(result.game_id)
-
-// if(closedGame.includes(result.game_id)){
-//   document.querySelector(`.answer-submit`).classList.add("hide")
-// }
-
-//   }
-// }
-
-// async function getCompletedGame() {
-//   const res = await fetch("/getCompletedGame");
-//   const results = await res.json();
-//   let closedGame=[];
-//   for(let result of results){
-//     closedGame.push(result.game_id)
-
-// if(closedGame.includes(result.game_id)){
-//   document.querySelector(`submitId-${result.game_id}`).classList.add("hide")
-// }
-
-//   }
-// }
-
-//******** nav js
-
-// ----------- get current user
-// async function getCurrentUser() {
-//   const res = await fetch("/user");
-//   const result = await res.json();
-//   // console.log('result', result.user);
-//   const signinDiv = document.querySelector("#signin-btn");
-//   const logoutDiv = document.querySelector("#logout-btn");
-//   const adminDiv = document.querySelector("#admin-btn");
-//   const userInfoDiv = document.querySelector("#current-user");
-
-//   if (result.user) {
-//     signinDiv.classList.remove("show");
-//     signinDiv.classList.add("hide");
-
-//     logoutDiv.classList.remove("hide");
-//     logoutDiv.classList.add("show");
-
-//     userInfoDiv.innerHTML = "你好 " + (result.user.name || result.user.email);
-//   } else {
-//     signinDiv.classList.remove("hide");
-//     signinDiv.classList.add("show");
-
-//     logoutDiv.classList.remove("show");
-//     logoutDiv.classList.add("hide");
-
-//     userInfoDiv.innerHTML = "";
-//   }
-//   if (result.user.role == 9) {
-//     adminDiv.classList.remove("hide");
-//     adminDiv.classList.add("show");
-//   } else {
-//     adminDiv.classList.remove("show");
-//     adminDiv.classList.add("hide");
-//   }
-// }
-// //----------  logout btn DOM ------------//
-// document
-//   .querySelector("#logout-btn")
-//   .addEventListener("click", async (event) => {
-//     const res = await fetch("/logout");
-//     const result = await res.json();
-//     if (result.success) {
-//       window.location = "/";
-//     }
-//   });

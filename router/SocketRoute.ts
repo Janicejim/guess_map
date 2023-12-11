@@ -24,10 +24,6 @@ export function chatRoomIO(value: socketIO.Server) {
     if ((socket.request as express.Request).session["user"]) {
       let user = (socket.request as express.Request).session["user"];
 
-      // io.emit('chat message',`<img src="${user.profile_image}"></img>`)
-      // io.emit('chat message',user.profile_image,user.name + "  is connected")
-
-      // io.emit('chat message',socket.id+"is connected")
       socket.on("join-room", (id: any) => {
         // console.log('id', id);
         socket.join(`Room-${id}`);

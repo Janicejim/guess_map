@@ -1,0 +1,113 @@
+{"input":"# Visualize on https://quick-erd.surge.sh\n#\n# Relationship Types\n#  -    - one to one\n#  -<   - one to many\n#  >-   - many to one\n#  >-<  - many to many\n#  -0   - one to zero or one\n#  0-   - zero or one to one\n#  0-0  - zero or one to zero or one\n#  -0<  - one to zero or many\n#  >0-  - zero or many to one\n#\n////////////////////////////////////\n\n\nusers\n----\nid pk\nname varchar(64) null\nemail varchar(100)not null\npassword varchar(200) not null\nprofile_image varchar(255) null\ndescription text null\nrole enum ('admin','user')\ncreated_at timestamp\nupdated_at timestamp\n\n\n\ngame\n----\nid pk\nuser_id integer fk >- users.id\nmedia varchar(200)\ntarget_location point \nhints_1 text\nhints_2 text\ncreated_at timestamp\nupdated_at timestamp\nstatus enum('active','inactive','completed')\n\nlike_dislike\n----\nid pk\ngame_id integer fk >- game.id\nuser_id integer fk >- users.id\ncreated_at timestamp\nupdated_at timestamp\n\n\ngame_history\n----\nid pk\ngame_id integer fk >- game.id\nuser_id integer fk >- users.id\nguess_location point\nattempts integer\nis_win boolean\ncreated_at timestamp\nupdated_at timestamp\n\nstore_record\n----\nid pk\ngame_id integer fk >- game.id\ncreated_at timestamp\nupdated_at timestamp\n\n\nscore_description\n----\nid pk\ndescription text\ncreated_at timestamp\nupdated_at timestamp\n\n\nscore_record\n----\nid pk\nuser_id integer fk >- users.id\nscore_change integer\nscore_description_id integer fk >- score_description.id\ncreated_at timestamp\nupdated_at timestamp\n\n\nlevel\n----\nid pk\nname varchar(100)\nmax_score integer\nmin_score integer\ncreated_at timestamp\nupdated_at timestamp\n\n\n# view: (2, 0)\n# users (825, 54)\n# game (805, 404)\n# like_dislike (458, 458)\n# game_history (438, 5)\n# level (103, 231)\n# score_record (0, 0)\n# store_record (76, 517)\n# score_description (0, 0)","zoom":1,"view:x":{"_value":2,"key":"view:x","defaultValue":0},"view:y":{"_value":0,"key":"view:y","defaultValue":0},"users-x":{"_value":825,"key":"users-x","defaultValue":0},"users-y":{"_value":54,"key":"users-y","defaultValue":0},"game-x":{"_value":805,"key":"game-x","defaultValue":0},"game-y":{"_value":404,"key":"game-y","defaultValue":0},"like_dislike-x":{"_value":458,"key":"like_dislike-x","defaultValue":0},"like_dislike-y":{"_value":458,"key":"like_dislike-y","defaultValue":0},"game_history-x":{"_value":438,"key":"game_history-x","defaultValue":0},"game_history-y":{"_value":5,"key":"game_history-y","defaultValue":0},"level-x":{"_value":103,"key":"level-x","defaultValue":0},"level-y":{"_value":231,"key":"level-y","defaultValue":0},"score_record-x":{"_value":0,"key":"score_record-x","defaultValue":0},"score_record-y":{"_value":0,"key":"score_record-y","defaultValue":0},"store_record-x":{"_value":76,"key":"store_record-x","defaultValue":0},"store_record-y":{"_value":517,"key":"store_record-y","defaultValue":0},"score_description-x":{"_value":0,"key":"score_description-x","defaultValue":0},"score_description-y":{"_value":0,"key":"score_description-y","defaultValue":0}}
+
+# Visualize on https://quick-erd.surge.sh
+#
+# Relationship Types
+#  -    - one to one
+#  -<   - one to many
+#  >-   - many to one
+#  >-<  - many to many
+#  -0   - one to zero or one
+#  0-   - zero or one to one
+#  0-0  - zero or one to zero or one
+#  -0<  - one to zero or many
+#  >0-  - zero or many to one
+#
+////////////////////////////////////
+
+
+users
+----
+id pk
+name varchar(64) null
+email varchar(100)not null
+password varchar(200) not null
+profile_image varchar(255) null
+description text null
+role enum ('admin','user')
+created_at timestamp
+updated_at timestamp
+
+
+
+game
+----
+id pk
+user_id integer fk >- users.id
+media varchar(200)
+target_location point 
+hints_1 text
+hints_2 text
+status enum('active','inactive','completed')
+created_at timestamp
+updated_at timestamp
+
+
+like_dislike
+----
+id pk
+game_id integer fk >- game.id
+user_id integer fk >- users.id
+type enum ('like','dislike')
+created_at timestamp
+updated_at timestamp
+
+
+game_history
+----
+id pk
+game_id integer fk >- game.id
+user_id integer fk >- users.id
+attempts integer
+is_win boolean
+created_at timestamp
+updated_at timestamp
+
+store_record
+----
+id pk
+game_id integer fk >- game.id
+user_id integer fk >- users.id
+amount_change integer
+created_at timestamp
+updated_at timestamp
+
+
+score_description
+----
+id pk
+description text
+created_at timestamp
+updated_at timestamp
+
+
+score_record
+----
+id pk
+user_id integer fk >- users.id
+score_change integer
+score_description_id integer fk >- score_description.id
+created_at timestamp
+updated_at timestamp
+
+
+level
+----
+id pk
+name varchar(100)
+max_score integer
+min_score integer
+created_at timestamp
+updated_at timestamp
+
+
+# view: (2, -1)
+# users (825, 54)
+# game (805, 404)
+# like_dislike (458, 458)
+# game_history (438, 5)
+# store_record (95, 658)
+# score_description (67, 216)
+# score_record (0, 0)
+# level (47, 411)
+# zoom: 0.656

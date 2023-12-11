@@ -1,3 +1,7 @@
+//load navbar
+$(function () {
+  $("#navbar").load("/navigation/navigation.html");
+});
 const err = new URL(window.location.href).searchParams.get("err");
 if (err) {
   alert(err);
@@ -31,24 +35,20 @@ async function loadDailyRank() {
   dailyScores = await res.json();
   const dailyRankDiv = document.querySelector(".rank-table");
   dailyRankDiv.innerHTML = "";
-  let i=0
+  let i = 0;
   for (let dailyScore of dailyScores) {
-    i++
-    if(i<=10){
-
-    updateDailyRankDiv(dailyScore, dailyRankDiv);
-  }
+    i++;
+    if (i <= 10) {
+      updateDailyRankDiv(dailyScore, dailyRankDiv);
     }
-
   }
-
+}
 
 function updateDailyRankDiv(dailyScore, dailyRankDiv) {
-
   dailyRankDiv.innerHTML += `
   <tr>
       <th class="rank-different-period"scope="row">${
-        dailyScores.length++ -10
+        dailyScores.length++ - 10
       }</th>
       <td class="player-name">${dailyScore.name}</td>
       <td class="score-different-period">${dailyScore.score_change}</td>
@@ -62,13 +62,13 @@ async function loadWeeklyRank() {
   weeklyScores = await res.json();
   const weeklyRankDiv = document.querySelector(".rank-table");
   weeklyRankDiv.innerHTML = "";
-  let i=0
+  let i = 0;
   for (let weeklyScore of weeklyScores) {
-    i++
-    if(i<=10){
-    updateWeeklyRankDiv(weeklyScore, weeklyRankDiv);
+    i++;
+    if (i <= 10) {
+      updateWeeklyRankDiv(weeklyScore, weeklyRankDiv);
     }
-}
+  }
 }
 
 function updateWeeklyRankDiv(weeklyScore, weeklyRankDiv) {
@@ -89,13 +89,13 @@ async function loadMonthlyRank() {
   monthlyScores = await res.json();
   const monthlyRankDiv = document.querySelector(".rank-table");
   monthlyRankDiv.innerHTML = "";
-  let i=0
+  let i = 0;
   for (let monthlyScore of monthlyScores) {
-    i++
-    if(i<=10){
-    updateMonthlyRankDiv(monthlyScore, monthlyRankDiv);
+    i++;
+    if (i <= 10) {
+      updateMonthlyRankDiv(monthlyScore, monthlyRankDiv);
+    }
   }
-}
 }
 
 function updateMonthlyRankDiv(monthlyScore, monthlyRankDiv) {
@@ -116,13 +116,13 @@ async function loadTotalRank() {
   totalScores = await res.json();
   const totalRankDiv = document.querySelector(".rank-table");
   totalRankDiv.innerHTML = "";
-  let i=0
+  let i = 0;
   for (let totalScore of totalScores) {
-    i++
-    if(i<=10){
-    updateTotalRankDiv(totalScore, totalRankDiv);
+    i++;
+    if (i <= 10) {
+      updateTotalRankDiv(totalScore, totalRankDiv);
+    }
   }
-}
 }
 
 function updateTotalRankDiv(totalScore, totalRankDiv) {

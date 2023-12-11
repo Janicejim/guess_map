@@ -1,3 +1,8 @@
+//load navbar
+$(function () {
+  $("#navbar").load("/navigation/navigation.html");
+});
+//get err
 const err = new URL(window.location.href).searchParams.get("err");
 if (err) {
   alert(err);
@@ -12,7 +17,7 @@ window.onload = () => {
 };
 
 async function loadAllGames() {
-  const res = await fetch("/getAllGames");
+  const res = await fetch("/games");
   games = await res.json();
   const gameBoardDiv = document.querySelector(".all-game-board");
   gameBoardDiv.innerHTML = "";
@@ -27,9 +32,9 @@ async function loadAllGames() {
     updateGameEvent(games[idx]);
   }
   // link to profile
-  getUserDisliked();
-  getUserLiked();
-  getCompletedGame();
+  // getUserDisliked();
+  // getUserLiked();
+  // getCompletedGame();
 
   setTimeout(function () {
     $(".game-status").addClass("loaded");
@@ -82,63 +87,13 @@ function updateGameDiv(game, gameBoardDiv) {
   // link to profile
 }
 
-async function getUserGameStatus() {
-  const res1 = await fetch("/user");
-  const result1 = await res1.json();
-  // console.log('result1', result1.user.id);
-  const res2 = await fetch(`/getUserGameStatus/${result1.user.id}`, {
-    method: "POST",
-  });
-  const gameStatusResults = await res2.json(res2);
-  // console.table(gameStatusResults);
-  // console.table(gameStatusResults);
-
-  const allGames = document.querySelectorAll(".game-board");
-  for (let resGame of gameStatusResults) {
-    // console.log("resGame", resGame.completion);
-    const gameStatus = document.querySelector(
-      `#game-status-id-${resGame.game_id}`
-    );
-
-    // console.log('resGame', resGame.game_id);
-    // console.log('gameStatus', gameStatus);
-
-    if (resGame.completion == true && resGame.score_completion == 0) {
-      for (let allGame of allGames) {
-        // console.log("allGame", allGame);
-        const allGameID = allGame.id.split("-")[1];
-        // console.log("allGameID", allGameID);
-        if (allGameID == resGame.game_id) {
-          gameStatus.outerHTML = `<div data-foo="你輸左啦" id="game-status-id-${allGameID}"class="game-status-str" ></div>`;
-        }
-      }
-    } else if (resGame.completion == false && resGame.score_completion == 0) {
-      for (let allGame of allGames) {
-        const allGameID = allGame.id.split("-")[1];
-        if (allGameID == resGame.game_id) {
-          gameStatus.outerHTML = `<div data-foo="遊玩中" id="game-status-id-${allGameID}"class="game-status-str" ></div>`;
-        }
-      }
-    } else if (resGame.completion == true && resGame.score_completion == 100) {
-      for (let allGame of allGames) {
-        const allGameID = allGame.id.split("-")[1];
-        if (allGameID == resGame.game_id) {
-          gameStatus.outerHTML = `<div data-foo="你贏左啦" id="game-status-id-${allGameID}"class="game-status-str" ></div>`;
-        }
-      }
-    } else {
-      gameStatus.outerHTML = `<div data-foo="新遊戲" id="game-status-id-${allGameID}"class="game-status-str" ></div>`;
-    }
-  }
-}
-
 function updateGameEvent(game) {
   //like click event
   document
     .querySelector(`#like-${game.id}`)
     .addEventListener("click", async (event) => {
       const id = event.target.id.split("-")[1];
-      const res = await fetch(`/like/game/${id}`, {
+      const res = await fetch(`/game/like/${id}`, {
         method: "POST",
       });
       // console.log("clicked")
@@ -149,7 +104,7 @@ function updateGameEvent(game) {
     .querySelector(`#dislike-${game.id}`)
     .addEventListener("click", async (event) => {
       const id = event.target.id.split("-")[1];
-      const res = await fetch(`/dislike/game/${id}`, {
+      const res = await fetch(`/game/dislike/${id}`, {
         method: "POST",
       });
       //  console.log("clicked")
@@ -158,7 +113,7 @@ function updateGameEvent(game) {
 
 //get user like record
 async function getUserLiked() {
-  const res = await fetch("/liked_game");
+  const res = await fetch("/game/like");
   const likeRecords = await res.json();
 
   // for (let likeRecord of likeRecords) {
@@ -184,7 +139,7 @@ async function getUserLiked() {
 }
 //get user like record
 async function getUserDisliked() {
-  const res = await fetch("/disliked_game");
+  const res = await fetch("/game/dislike");
   const dislikeRecords = await res.json();
   for (let dislikeRecord of dislikeRecords) {
     let dislikeDiv = document.querySelector(
@@ -197,7 +152,7 @@ async function getUserDisliked() {
 }
 
 async function getCompletedGame() {
-  const res = await fetch("/getCompletedGame");
+  const res = await fetch("/game/completed");
   const results = await res.json();
   let closedGame = [];
   for (let result of results) {

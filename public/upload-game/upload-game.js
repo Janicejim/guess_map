@@ -1,3 +1,7 @@
+//load navbar
+$(function () {
+  $("#navbar").load("/navigation/navigation.html");
+});
 let result = document.querySelector(".result");
 upload = document.querySelector("#file-input");
 
@@ -41,7 +45,7 @@ document
       // console.log("form.hints_2.value", form.hints_2.value);
       formData.append("targeted_location", getMarkerLocation());
       // console.log("targeted_location", getMarkerLocation());
-      const res = await fetch("/upload-game", {
+      const res = await fetch("/game", {
         method: "POST",
         body: formData,
       });

@@ -30,7 +30,6 @@
       integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/navigation.css" />
 
     <link rel="stylesheet" href="./rules.css" />
     <link rel="icon" href="./favicon_group5.svg" type="image/svg+xml" />
@@ -38,85 +37,11 @@
   </head>
 
   <body>
-    <!--header -->
-    <nav id="overlay">
-      <img
-        src="/close_black_24dp.svg"
-        alt="menu"
-        class="close-button"
-        id="close-menu"
-      />
-      <ul>
-        <li>
-          <a href="/">主頁</a>
-          <span>返屋企啦喂！</span>
-        </li>
-
-        <li>
-          <a href="/upload-game">上載</a>
-          <span>上載你鍾意既地方！</span>
-        </li>
-
-        <li>
-          <a href="/rank">排名</a>
-          <span>睇下自己既最新排名。</span>
-        </li>
-
-        <li>
-          <a href="/rules">玩法</a>
-          <span>隻game點玩架？</span>
-        </li>
-
-        <li id="signin-btn" class="show">
-          <a href="/login.html">登入</a>
-          <span>登入同D friend一齊玩！</span>
-        </li>
-
-        <li id="profile-btn" class="hide">
-          <a href="/profile.html">個人檔案</a>
-          <span>修改個人資料</span>
-        </li>
-
-        <li id="logout-btn" class="hide">
-          <a>登出</a>
-          <span>唔玩住！</span>
-        </li>
-
-        <li id="admin-btn" class="hide">
-          <a href="/admin.html">控制台</a>
-          <span>管理員專用</span>
-        </li>
-      </ul>
-    </nav>
-    <header>
-      <a href="/" class="logo">估你吾島</a>
-      <img
-        src="/menu_black_24dp.svg"
-        alt="menu"
-        class="menu-btn"
-        id="open-menu"
-      />
-    </header>
-    <div id="current-user">歡迎</div>
-
+    <div id="navbar"></div>
     <div class="rules-container">
       <div class="rules-area">
         <div class="rules-inside-layout">
           <div class="rules-text">
-            <ul>
-              <div class="plus">+</div>
-              <span class="rules-subtitle">答問題</span>
-              <p>
-                進入遊戲室，然後在Google Map中指出圖中內容的所在位置
-              </p>
-              <p>每個玩家有三次機會作答</p>
-              <p>
-                一旦指出範圍在圖片坐標500米範圍內就可即時獲得<span
-                  class="score-text"
-                  >100分</span
-                >作答獎賞
-              </p>
-            </ul>
             <ul>
               <div class="plus">+</div>
               <span class="rules-subtitle">問問題</span>
@@ -132,9 +57,22 @@
                 >創建獎賞分
               </p>
               <!-- <p>如果成功作答的玩家遞交答案時，本人身處的位置就在正確答案坐標的100米範圍內，就可額外獎賞<span class="score-text">50分</span>額外獎賞分</p> -->
+              <p>有人作答成功創建者可以瓜分一半該遊戲室的累積獎金</p>
+            </ul>
+            <ul>
+              <div class="plus">+</div>
+              <span class="rules-subtitle">答問題</span>
+              <p>進入遊戲室，然後在Google Map中指出圖中內容的所在位置</p>
               <p>
-                創建獎賞分和額外獎賞分會在有人作答成功、遊戲室關閉後發放至創建者帳戶
+                每個玩家有三次機會作答，最後作答失敗就會扣100分作該遊戲室的累積獎金
               </p>
+              <p>
+                一旦指出範圍在圖片坐標500米範圍內就可獲得一半<span
+                  class="score-text"
+                  >累積獎金</span
+                >
+              </p>
+              <p>一旦玩家的分數低於100分就不可以作答問題</p>
             </ul>
             <ul>
               <div class="plus">+</div>
@@ -159,30 +97,21 @@
     />
 
     <!-- footer -->
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
 
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
       crossorigin="anonymous"
     ></script>
-    <script src="/navigation.js"></script>
-    <script src="./play-game.js"></script>
+
+    <script>
+      //load navbar
+      $(function () {
+        $("#navbar").load("/navigation/navigation.html");
+      });
+    </script>
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxyRkG3uTFkabgXE_Z_bCav-NhVYej7P8&callback=initMap&libraries=&v=weekly"
-      async
-    ></script>
   </body>
 </html>

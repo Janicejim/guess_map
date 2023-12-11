@@ -1,15 +1,15 @@
 import express, { Request, Response } from "express";
-import { client } from "./db";
-import { isLoggedIn } from "./guard";
-import { logger } from "./logger";
+import { client } from "../utils/db";
+import { isLoggedIn } from "../utils/guard";
+import { logger } from "../utils/logger";
 
-const scoreRoutes = express.Router();
+const rankRoutes = express.Router();
 
 //score route
-scoreRoutes.get("/rank/daily", isLoggedIn, getDailyRank);
-scoreRoutes.get("/rank/weekly", isLoggedIn, getWeeklyRank);
-scoreRoutes.get("/rank/monthly", isLoggedIn, getMonthlyRank);
-scoreRoutes.get("/rank/total", isLoggedIn, getTotalRank);
+rankRoutes.get("/rank/daily", isLoggedIn, getDailyRank);
+rankRoutes.get("/rank/weekly", isLoggedIn, getWeeklyRank);
+rankRoutes.get("/rank/monthly", isLoggedIn, getMonthlyRank);
+rankRoutes.get("/rank/total", isLoggedIn, getTotalRank);
 
 //daily rank function
 async function getDailyRank(req: Request, res: Response) {
@@ -32,7 +32,7 @@ async function getDailyRank(req: Request, res: Response) {
     }, {});
 
     let record = Object.values(answer);
-
+    //@ts-ignore
     let recordDesc = record.sort(compare("score_change"));
 
     res.json(recordDesc);
@@ -62,7 +62,7 @@ async function getWeeklyRank(req: Request, res: Response) {
     }, {});
 
     let record = Object.values(answer);
-
+    //@ts-ignore
     let recordDesc = record.sort(compare("score_change"));
 
     res.json(recordDesc);
@@ -92,7 +92,7 @@ async function getMonthlyRank(req: Request, res: Response) {
     }, {});
 
     let record = Object.values(answer);
-
+    //@ts-ignore
     let recordDesc = record.sort(compare("score_change"));
 
     res.json(recordDesc);
@@ -122,7 +122,7 @@ async function getTotalRank(req: Request, res: Response) {
     }, {});
 
     let record = Object.values(answer);
-
+    //@ts-ignore
     let recordDesc = record.sort(compare("score_change"));
     return recordDesc;
 
@@ -135,16 +135,16 @@ async function getTotalRank(req: Request, res: Response) {
 }
 
 //function for compare user score
-function compare(value: string) {
+function compare(value: any) {
   // order by desc
   return function (key1: string, key2: string): number {
-    let user1 = key1[value];
-    let user2 = key2[value];
+    let user1 = +key1[value];
+    let user2 = +key2[value];
     return user2 - user1;
   };
 }
 
-export default scoreRoutes;
+export default rankRoutes;
 
 // Command to run test: npm run score
 
