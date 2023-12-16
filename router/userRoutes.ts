@@ -141,9 +141,24 @@ async function logout(req: Request, res: Response) {
 async function getProfile(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const userPro = await knex.select("*").from("users").where("id", id);
+    const userInfo = (
+      await knex.raw(
+        `select users.id,name,email,profile_image ,description ,role,total_score from users full join (select user_id,sum(score_change) as total_score from score_record group by user_id) as score on users.id=score.user_id where users.id=?
+    `,
+        [id]
+      )
+    ).rows[0];
+    if (!userInfo.total_score) {
+      userInfo.total_score = 0;
+    }
+    const level = (
+      await knex.raw(
+        `select name as level from level where min_score<=? and max_score>=?`,
+        [userInfo.total_score, userInfo.total_score]
+      )
+    ).rows[0].level;
 
-    res.json(userPro[0]);
+    res.json({ userInfo, level });
   } catch (error) {
     logger.error("error: ", error);
   }

@@ -65,6 +65,10 @@ export async function seed(knex: Knex): Promise<void> {
           target_location: " (22.312423386583422,114.21697854995728)",
           hints_1: "係觀塘",
           hints_2: "有花有草有水有人有狗",
+          answer_name: "觀塘海濱花園",
+          answer_address: "觀塘海濱道80號觀塘海濱花園",
+          answer_description:
+            "園內海濱步道全長約一公里。遊人在步道上不但可以近距離欣賞東九龍新地標── 啟德郵輪碼頭和跑道公園，更可遠眺港島東的璀璨夜景，飽覽維多利亞港和鯉魚門的風光。",
         },
       ])
       .returning("id");
@@ -119,13 +123,13 @@ export async function seed(knex: Knex): Promise<void> {
     let descriptionIds = await txn("score_description")
       .insert([
         {
-          description: "創建房間獎勵",
+          description: "創建遊戲獎勵",
         },
         {
-          description: "like game 獎勵",
+          description: "其他玩家讚好遊戲獎勵",
         },
         {
-          description: "dislike game 扣減",
+          description: "其他玩家負評遊戲扣減",
         },
         {
           description: "創建者瓜分成功作答獎勵",
@@ -135,6 +139,12 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
           description: "作答成功瓜分獎勵",
+        },
+        {
+          description: "舉報遊戲獎勵",
+        },
+        {
+          description: "遊戲下架，被扣積分返回",
         },
       ])
       .returning("id");

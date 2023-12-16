@@ -1,174 +1,47 @@
 import express, { Request, Response } from "express";
-import { client } from "../utils/db";
+import { knex } from "../utils/db";
 import { isLoggedIn } from "../utils/guard";
 import { logger } from "../utils/logger";
 
 const rankRoutes = express.Router();
 
 //score route
-rankRoutes.get("/rank/daily", isLoggedIn, getDailyRank);
-rankRoutes.get("/rank/weekly", isLoggedIn, getWeeklyRank);
-rankRoutes.get("/rank/monthly", isLoggedIn, getMonthlyRank);
-rankRoutes.get("/rank/total", isLoggedIn, getTotalRank);
+rankRoutes.get("/rank", isLoggedIn, getRank);
 
-//daily rank function
-async function getDailyRank(req: Request, res: Response) {
+async function getRank(req: Request, res: Response) {
   try {
-    const results = await client.query(
-      `select users.name,score_change from score inner join users on score.user_id =users.id where score.created_at > now() - interval '1 day'`
-    );
-    let data = results.rows;
+    let { period } = req.query;
+    let result;
+    if (period === "monthly") {
+      result = (
+        await knex.raw(`select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_record.created_at > now() - interval '1 month' group by user_id,name order by score desc limit 10
 
-    const answer = data.reduce((res, item) => {
-      //combine same user and sum the score
-      let key = item.name + "_";
-      if (!res[key]) {
-        res[key] = item;
-      } else {
-        res[key].score_change =
-          Number(res[key].score_change) + Number(item.score_change) + "";
-      }
-      return res;
-    }, {});
+      `)
+      ).rows;
+    } else if (period === "weekly") {
+      result = (
+        await knex.raw(`select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_record.created_at > now() - interval '1 week' group by user_id,name order by score desc limit 10
 
-    let record = Object.values(answer);
-    //@ts-ignore
-    let recordDesc = record.sort(compare("score_change"));
+      `)
+      ).rows;
+    } else if (period === "daily") {
+      result = (
+        await knex.raw(`select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_record.created_at > now() - interval '1 day' group by user_id,name order by score desc limit 10
 
-    res.json(recordDesc);
-  } catch (error) {
-    logger.error("Err:", error);
-    res.json({ msg: "get daily rank fail" });
+      `)
+      ).rows;
+    } else {
+      result = (
+        await knex.raw(
+          `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id group by user_id,name order by score desc limit 10;`
+        )
+      ).rows;
+    }
+    res.json(result);
+  } catch (e) {
+    logger.error(e);
+    res.json({ success: false, msg: e });
   }
-}
-
-//weekly rank function
-async function getWeeklyRank(req: Request, res: Response) {
-  try {
-    const results = await client.query(
-      `select users.name,score_change from score inner join users on score.user_id =users.id where score.created_at > now() - interval '1 week' order by score.user_id `
-    );
-    let data = results.rows;
-
-    const answer = data.reduce((res, item) => {
-      let key = item.name + "_";
-      if (!res[key]) {
-        res[key] = item;
-      } else {
-        res[key].score_change =
-          Number(res[key].score_change) + Number(item.score_change) + "";
-      }
-      return res;
-    }, {});
-
-    let record = Object.values(answer);
-    //@ts-ignore
-    let recordDesc = record.sort(compare("score_change"));
-
-    res.json(recordDesc);
-  } catch (error) {
-    logger.error("Err:", error);
-    res.json({ msg: "get weekly rank fail" });
-  }
-}
-
-//monthly rank function
-async function getMonthlyRank(req: Request, res: Response) {
-  try {
-    const results = await client.query(
-      `select users.name,score_change from score inner join users on score.user_id =users.id where score.created_at > now() - interval '1 month' order by score.user_id `
-    );
-    let data = results.rows;
-
-    const answer = data.reduce((res, item) => {
-      let key = item.name + "_";
-      if (!res[key]) {
-        res[key] = item;
-      } else {
-        res[key].score_change =
-          Number(res[key].score_change) + Number(item.score_change) + "";
-      }
-      return res;
-    }, {});
-
-    let record = Object.values(answer);
-    //@ts-ignore
-    let recordDesc = record.sort(compare("score_change"));
-
-    res.json(recordDesc);
-  } catch (error) {
-    logger.error("Err:", error);
-    res.json({ msg: "get monthly rank fail" });
-  }
-}
-
-//total rank function
-async function getTotalRank(req: Request, res: Response) {
-  try {
-    const results = await client.query(
-      `select users.name,score_change from score inner join users on score.user_id =users.id order by score.user_id `
-    );
-    let data = results.rows;
-
-    const answer = data.reduce((res, item) => {
-      let key = item.name + "_";
-      if (!res[key]) {
-        res[key] = item;
-      } else {
-        res[key].score_change =
-          Number(res[key].score_change) + Number(item.score_change) + "";
-      }
-      return res;
-    }, {});
-
-    let record = Object.values(answer);
-    //@ts-ignore
-    let recordDesc = record.sort(compare("score_change"));
-    return recordDesc;
-
-    // console.log(recordDesc)
-  } catch (error) {
-    logger.error("Err:", error);
-    res.json({ msg: "get total rank fail" });
-    return;
-  }
-}
-
-//function for compare user score
-function compare(value: any) {
-  // order by desc
-  return function (key1: string, key2: string): number {
-    let user1 = +key1[value];
-    let user2 = +key2[value];
-    return user2 - user1;
-  };
 }
 
 export default rankRoutes;
-
-// Command to run test: npm run score
-
-// class Score {
-//   private creation: number;
-//   private reaction: number;
-//   private completion: number;
-
-//   constructor(creation = 100, reaction = 10, completion = 100) {
-//     this.creation = creation;
-//     this.reaction = reaction;
-//     this.completion = completion;
-//   }
-//   get = () => {
-//     return {
-//       creation: this.creation,
-//       reaction: this.reaction,
-//       completion: this.completion,
-//     };
-//   };
-// }
-//destruction object
-// const playerScore = new Score();
-// const { creation, reaction, completion } = playerScore.get();
-// console.log(creation);
-// console.log(reaction);
-// console.log(completion);

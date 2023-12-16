@@ -38,6 +38,9 @@ media varchar(200)
 target_location point 
 hints_1 text
 hints_2 text
+answer_name varchar(255)
+answer_address varchar(255)
+answer_description text
 status enum('active','inactive','completed')
 created_at timestamp
 updated_at timestamp
@@ -104,10 +107,10 @@ updated_at timestamp
 # view: (2, -1)
 # users (825, 54)
 # game (805, 404)
+# zoom: 0.656
 # like_dislike (458, 458)
 # game_history (438, 5)
 # store_record (95, 658)
 # score_description (67, 216)
-# score_record (0, 0)
+# score_record (91, 9)
 # level (47, 411)
-# zoom: 0.656

@@ -12,7 +12,6 @@ import http from "http";
 import { Server as SocketIO } from "socket.io";
 import { chatRoomIO } from "./router/SocketRoute";
 import adminRoutes from "./router/adminRoutes";
-import midRoutes from "./router/middlewares";
 
 dotenv.config();
 
@@ -73,7 +72,9 @@ app.use(express.static("site_images"));
 app.use(express.static("uploads"));
 app.use(express.static("profileUploads"));
 app.use(isAdmin, express.static("protected"));
-app.use(midRoutes);
+app.use((req, res) => {
+  res.redirect("/404.html");
+});
 
 const PORT = env.PORT;
 server.listen(PORT, () => {

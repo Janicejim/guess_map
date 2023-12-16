@@ -1,7 +1,5 @@
 import express from "express";
 import socketIO from "socket.io";
-// import { client } from "../db";
-// import { logger } from "../logger";
 
 export let io: socketIO.Server;
 
@@ -19,7 +17,7 @@ let players: player[] = [];
 
 export function chatRoomIO(value: socketIO.Server) {
   io = value;
-  // io.on("userName",name)
+
   io.on("connection", (socket: any) => {
     if ((socket.request as express.Request).session["user"]) {
       let user = (socket.request as express.Request).session["user"];
