@@ -6,9 +6,8 @@ import { io } from "./SocketRoute";
 const adminRoutes = express.Router();
 
 adminRoutes.post("/search/game", searchGame);
-adminRoutes.delete("/game", deleteGame);
-
 adminRoutes.post("/search/user", searchUser);
+adminRoutes.delete("/game", deleteGame);
 adminRoutes.put("/user", SwitchGradeUser);
 
 async function searchGame(req: Request, res: Response) {
@@ -49,7 +48,8 @@ async function searchUser(req: Request, res: Response) {
 
 async function SwitchGradeUser(req: Request, res: Response) {
   try {
-    const allEmailArray = req.body;
+    let { allEmailArray } = req.body;
+    allEmailArray = JSON.parse(allEmailArray);
     for (let i = 0; i < allEmailArray.length; i++) {
       const currentRole: any = await knex("users")
         .select("role")
@@ -66,7 +66,8 @@ async function SwitchGradeUser(req: Request, res: Response) {
     }
     return res.json({ success: true, msg: "Upgrade users success" });
   } catch (error) {
-    logger.error("Error :", error);
+    // logger.error("Error :", error);
+    console.log(error);
     return res.json({ success: false, msg: error });
   }
 }

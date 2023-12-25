@@ -1,31 +1,28 @@
 import express, { Request, Response } from "express";
 import { knex } from "../utils/db";
 import { isLoggedIn } from "../utils/guard";
-import { logger } from "../utils/logger";
 import { multerUpload } from "../utils/multer";
 
 const gameRoutes = express.Router();
 
 // Game Routes
-gameRoutes.get("/games", getAllActiveGames);
+gameRoutes.get("/games", isLoggedIn, getAllActiveGames);
 gameRoutes.post("/game", isLoggedIn, multerUpload, uploadGame);
-gameRoutes.get("/game/:id", isLoggedIn, getSingleGame);
-gameRoutes.post("/game/record/:id", isLoggedIn, playGame); //to do:all play game count need to move from frontend to backend:
+gameRoutes.get("/game", isLoggedIn, getSingleGame);
+gameRoutes.post("/game/join/:id", isLoggedIn, joinGame);
+gameRoutes.post("/game/play/:id", isLoggedIn, playGame);
 //creator record
 gameRoutes.get("/creator/games", getAllGamesCreateByUser);
 
 // player status
-gameRoutes.get("/game/status", getUserDifferentGameStatus);
-gameRoutes.post(
-  "/game/like-dislike/:id",
-  isLoggedIn,
-  likeOrDislikeGameByPlayer
-);
+gameRoutes.get("/game/record/:status", getUserDifferentGameRecordByStatus);
+gameRoutes.post("/game/like-dislike", isLoggedIn, likeOrDislikeGameByPlayer);
 gameRoutes.get(
   "/game/like_dislike",
   isLoggedIn,
   likeOrDislikeGameRecordByPlayer
 );
+gameRoutes.get("/rank", isLoggedIn, getRank);
 
 //////get game data///////
 async function getAllActiveGames(req: Request, res: Response) {
@@ -61,7 +58,8 @@ async function uploadGame(req: Request, res: Response) {
       answer_address,
       answer_description,
     } = req.body;
-    let { id } = req.session["user"];
+
+    let id = req.session["user"].id;
 
     await txn("game").insert({
       user_id: id,
@@ -72,9 +70,10 @@ async function uploadGame(req: Request, res: Response) {
       answer_description,
       hints_1,
       hints_2,
+      status: "active",
     });
 
-    let score_description_id = await getScoreDescriptionId("創建房間");
+    let score_description_id = await getScoreDescriptionId("創建遊戲");
     await txn("score_record").insert({
       user_id: id,
       score_change: 100,
@@ -86,68 +85,279 @@ async function uploadGame(req: Request, res: Response) {
     res.json({ success: true });
   } catch (err) {
     await txn.rollback();
-    logger.error("error:", err);
+    console.log("error:", err);
     res.json({ success: false, error: err });
   }
 }
 
 async function getScoreDescriptionId(keyword: string) {
-  return (
+  let result = (
     await knex
       .select("id")
       .from("score_description")
       .where("description", "ilike", `%${keyword}%`)
-      .first()
-  ).id;
+  )[0].id;
+
+  if (result) {
+    return result;
+  } else {
+    return;
+  }
 }
 
 async function getSingleGame(req: Request, res: Response) {
   try {
-    const id = req.params.id;
-    const result = (
+    const gameId = req.query.id;
+    const currentUserId = req.session["user"].id;
+    // //check user play this game history:
+    const playRecord = (
       await knex.raw(
-        `select * from game left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
-    on game.id=store.game_id where game.id=?`,
-        [id]
+        `select attempts,is_win from game_history where game_history.user_id=? and game_id=?`,
+        [currentUserId, gameId]
+      )
+    ).rows;
+    //check the game status: active,inactive or completed:
+    const gameStatus = (
+      await knex.select("status").from("game").where("id", gameId)
+    )[0].status;
+
+    //get active game data:
+    const activeData = (
+      await knex.raw(
+        `select id,user_id,media,hints_1,hints_2,status,created_at,updated_at,store_amount from game left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
+on game.id=store.game_id where game.id=?`,
+        [gameId]
       )
     ).rows;
 
-    res.json(result);
+    //inactive game don't show data:
+    if (gameStatus == "inactive") {
+      res.json({ status: "inactive" });
+    } else if (gameStatus == "active" && playRecord.length == 0) {
+      //game active and user haven't join this game:
+
+      res.json({ status: "new", data: activeData });
+    } else if (gameStatus == "active" && playRecord.length != 0) {
+      //game active and user joined this game:
+      const data = (
+        await knex.raw(
+          `select id,user_id,media,hints_1,hints_2,status,created_at,updated_at,store_amount from game left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
+      on game.id=store.game_id where game.id=?`,
+          [gameId]
+        )
+      ).rows;
+
+      res.json({ status: "joined", data, attempts: playRecord[0].attempts });
+    } else {
+      //game is completed
+      const data = (
+        await knex.raw(
+          `select * from game join (select name as winner,game_history.game_id from game_history join users on game_history.user_id=users.id where is_win=true ) as winner_info on game.id=winner_info.game_id where game.id=?`,
+          [gameId]
+        )
+      ).rows;
+
+      res.json({ status: "completed", data });
+    }
   } catch (err) {
     console.log(err);
     res.json({ msg: err });
   }
 }
-//to do
-async function playGame(req: Request, res: Response) {
+
+async function joinGame(req: Request, res: Response) {
+  let txn = await knex.transaction();
   try {
-    let { targeted_location, attempts, completion, score_completion } =
+    const gameId = req.params.id;
+    let currentUserId = req.session["user"].id;
+
+    //check where have 100 score to play the game
+    let scoreRecord = (
+      await knex.raw(
+        `select sum(score_change)as total_score from score_record where user_id=? group by user_id `,
+        [currentUserId]
+      )
+    ).rows;
+
+    // console.log({ scoreRecord });
+    let totalScore = scoreRecord.length > 0 ? scoreRecord[0].total_score : 0;
+    console.log({ totalScore });
+    if (totalScore < 100) {
+      res.json("no enough score to play, create game to earn the score");
+      return;
+    }
+
+    //insert game_history record:
+    await txn("game_history").insert({
+      user_id: currentUserId,
+      game_id: gameId,
+      attempts: 3,
+      is_win: false,
+    });
+    //deduce player score:
+    await txn("score_record").insert({
+      user_id: currentUserId,
+      score_change: -100,
+      score_description_id: await getScoreDescriptionId("參與遊戲扣減"),
+    });
+
+    //add to store:
+    await txn("store_record").insert({
+      user_id: currentUserId,
+      game_id: gameId,
+      amount_change: 100,
+    });
+
+    await txn.commit();
+    res.json("joined game");
+  } catch (err) {
+    await txn.rollback();
+    console.log(err);
+    res.json({ msg: err });
+  }
+}
+
+async function playGame(req: Request, res: Response) {
+  let txn = await knex.transaction();
+  try {
+    let { targeted_location_x, targeted_location_y, isUsePlayerLocation } =
       req.body;
-    let { id } = req.session["user"];
+    let currentUserId = req.session["user"].id;
     const game_id = req.params.id;
 
-    await knex.raw(
-      `insert into game_history(game_id, user_id, guess_location, attempts, completion, score_completion, created_at,updated_at) values
-                 ('${game_id}','${id}','(${targeted_location})', ${attempts}, ${completion}, ${score_completion}, NOW(),NOW())
-             `
+    //check game's status,not active game can't play:
+    let gameData = (
+      await knex
+        .select(
+          "status",
+          "id",
+          "user_id",
+          "target_location[0] as x",
+          "target_location[1] as y "
+        )
+        .from("game")
+        .where("id", game_id)
+    )[0];
+    if (gameData.status !== "active") {
+      res.json("game is invalid to play");
+      return;
+    }
+    if (currentUserId == gameData.user_id) {
+      res.json("creator can't play the game");
+      return;
+    }
+
+    //check user play this game before or not:
+    let game_history = await knex
+      .select("id", "attempts", "is_win")
+      .from("game_history")
+      .where("user_id", currentUserId)
+      .andWhere("game_id", game_id);
+    //handle user haven't join the game:
+    if (game_history.length == 0) {
+      res.json("join game fist");
+      return;
+    }
+
+    //user play before but no attempts or win already:
+    if (game_history[0].attempts <= 0 || game_history[0].is_win) {
+      res.json("no attempt to play");
+      return;
+    }
+
+    //compare user targeted_location and answer:
+    let distanceAfterCompare = checkDistance(
+      { x: targeted_location_x, y: targeted_location_y },
+      {
+        x: gameData.x,
+        y: gameData.y,
+      }
     );
 
-    await knex.raw(
-      `INSERT INTO score
-       (user_id, score_change, score_description, created_at, updated_at)
-       VALUES(${id}, ${score_completion}, 'Play game', 'now()', 'now()')
-     `
-    );
-    res.json({ success: true });
+    if (distanceAfterCompare > 500) {
+      //deduct user attempts:
+      await txn("game_history")
+        .update({
+          attempts: +game_history[0].attempts - 1,
+        })
+        .where("id", game_history[0].id);
+      await txn.commit();
+      res.json(`guest wrongly! more than ${distanceAfterCompare} m `);
+      return;
+    } else {
+      //1) game_history is win=true:
+      await txn("game_history")
+        .update({
+          is_win: true,
+        })
+        .where("id", game_history[0].id);
+      // 2)game.status=completed
+      await txn("game").update({ status: "completed" }).where("id", game_id);
+      //3)get the store amount and add score_record to creator and winner
+      let total_store = (
+        await txn.raw(
+          `select sum(amount_change) as store from store_record where game_id=? group by game_id`,
+          [game_id]
+        )
+      ).rows[0].store;
+
+      if (isUsePlayerLocation) {
+        total_store = total_store * 2;
+      }
+
+      let winner_description_id = await getScoreDescriptionId("作答成功瓜分");
+      let creator_description_id = await getScoreDescriptionId("創建者瓜分");
+
+      await txn("score_record").insert({
+        user_id: currentUserId,
+        score_change: total_store / 2,
+        score_description_id: winner_description_id,
+      });
+      await txn("score_record").insert({
+        user_id: gameData.user_id,
+        score_change: total_store / 2,
+        score_description_id: creator_description_id,
+      });
+      //4)deduce total store amount:
+      await txn("store_record").insert({
+        user_id: currentUserId,
+        game_id,
+        amount_change: -total_store,
+      });
+    }
+    await txn.commit();
+    res.json("you win!");
   } catch (err) {
-    logger.error("error:", err);
+    await txn.rollback();
+    console.log("error:", err);
     res.json({ success: false, error: err });
   }
 }
 
-async function getUserDifferentGameStatus(req: Request, res: Response) {
-  const userID = req.params.id;
-  const { status } = req.query;
+function checkDistance(
+  userPosition: { x: number; y: number },
+  answerPosition: { x: number; y: number }
+) {
+  let earthRadius = 6371; // Radius of the earth in km
+  let latDistance = degreesToRadians(answerPosition.x - userPosition.x); // deg2rad below
+  let lngDistance = degreesToRadians(answerPosition.y - userPosition.y);
+  let a =
+    Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
+    Math.cos(degreesToRadians(userPosition.x)) *
+      Math.cos(degreesToRadians(answerPosition.x)) *
+      Math.sin(lngDistance / 2) *
+      Math.sin(lngDistance / 2);
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  let distance = earthRadius * c; // Distance in km
+  return Math.floor(distance * 1000); //distance in m
+}
+function degreesToRadians(degrees: number) {
+  return degrees * (Math.PI / 180);
+}
+
+async function getUserDifferentGameRecordByStatus(req: Request, res: Response) {
+  const userID = req.session.user.id;
+  const { status } = req.params;
 
   let statusQuery;
   if (status == "in_progress") {
@@ -176,54 +386,111 @@ async function getUserDifferentGameStatus(req: Request, res: Response) {
   return res.json(inProgressRecord.rows);
 }
 
-// to do:like game insert data to table:
 async function likeOrDislikeGameByPlayer(req: Request, res: Response) {
+  let txn = await knex.transaction();
   try {
-    const { id } = req.params; //game id
-    let userId = req.session["user"].id; //login ed user
-    let creatorData = await knex.raw(/*sql*/ `           
-      select game.user_id from game where game.id=${id}
+    const { preferences, gameId } = req.query;
+    let currentUserId = req.session["user"].id;
+    let score_change;
+    let score_description;
+    let likeScoreDescriptionId = await getScoreDescriptionId("讚好");
+    let dislikeScoreDescriptionId = await await getScoreDescriptionId("負評");
+
+    //different preferences setting:
+    if (preferences == "like") {
+      score_change = 10;
+      score_description = likeScoreDescriptionId;
+    } else if (preferences == "dislike") {
+      score_change = -10;
+      score_description = dislikeScoreDescriptionId;
+    } else {
+      res.json("invalid preferences type");
+      return;
+    }
+    //handle creator like/dislike:
+    let creator_id = (
+      await knex.raw(/*sql*/ `           
+      select game.user_id from game where game.id=${gameId}
             
-            `);
+            `)
+    ).rows[0].user_id;
 
-    //insert like record to db
-    let creator_id = creatorData.rows[0].user_id; //find out game.user_id
-    let likeRecordBySamePlayer = await knex.raw(
-      /*sql*/ "select * from likes where game_id= $1 and user_id= $2",
-      [id, userId]
-    );
-    // let likeRecordByCreator=await knex.raw(/*sql*/ `select * from likes inner join game on likes.game_id =game.id where game.user_id =${creator_id} and likes.user_id=${userId}`);
+    if (currentUserId == creator_id) {
+      res.json("creator can't like/dislike the game");
+      return;
+    }
+    //check dislike/like before or not：
+    let previousPreferenceRecord = await knex("like_dislike")
+      .select("id", "type")
+      .where("game_id", gameId)
+      .andWhere("user_id", currentUserId);
 
-    if (likeRecordBySamePlayer.rowCount == 0 && userId != creator_id) {
-      //not allow like same game more than once and creator like his game
-      await knex.raw(/*sql*/ `
-      INSERT INTO public.likes
-      (game_id, user_id, created_at, updated_at, like_change)
-      VALUES(${id}, ${userId}, 'now()', 'now()', 1)
-      
-      `);
+    //have preference record before and choose different preferences now:
+    if (
+      previousPreferenceRecord.length > 0 &&
+      previousPreferenceRecord[0].type !== preferences
+    ) {
+      console.log("change action but haven't cancel before action");
+      res.json("cancel your previous preferences first");
+      return;
+    }
+    //handle unlike/unDislike:
+    if (
+      previousPreferenceRecord.length > 0 &&
+      previousPreferenceRecord[0].type == preferences
+    ) {
+      await txn("like_dislike")
+        .where("id", previousPreferenceRecord[0].id)
+        .del();
+      // creator score change delete record:
+      let deleteRecordId = (
+        await txn("score_record")
+          .select("id")
+          .where("user_id", creator_id)
+          .andWhere("score_description_id", score_description)
+          .orderBy("created_at", "desc")
+      )[0].id;
 
-      //insert like score to creator
-      await knex.raw(
-        `INSERT INTO score
-      (user_id, score_change, score_description, created_at, updated_at)
-      VALUES(${creator_id}, 10, 'like by other', 'now()', 'now()')
-    `
-      );
+      await txn("score_record").where("id", deleteRecordId).del();
+
+      await txn.commit();
+      res.json("cancel previous action success");
+      return;
+    }
+    //no preference record before:
+    if (previousPreferenceRecord.length == 0) {
+      await txn("like_dislike").insert({
+        game_id: gameId,
+        user_id: currentUserId,
+        type: preferences,
+      });
+
+      await txn("score_record").insert({
+        user_id: creator_id,
+        score_change,
+        score_description_id: score_description,
+      });
     }
 
+    await txn.commit();
     res.json({ success: true });
   } catch (err) {
-    logger.error("error:" + JSON.stringify(err));
+    await txn.rollback();
+    console.log(err);
     res.json({ success: false });
   }
 }
 
-//user liked record:
+//user liked/dislike record:
 async function likeOrDislikeGameRecordByPlayer(req: Request, res: Response) {
   try {
     let userId = req.session["user"].id; //login ed user
     let { preferences } = req.query;
+
+    if (!preferences) {
+      res.json("missing preferences");
+      return;
+    }
     let results = await knex.raw(
       /*sql*/ `select game.id,users.name,media,game.created_at,profile_image,like_number,dislike_number,store_amount,preferences from game
 join users on game.user_id=users.id 
@@ -234,15 +501,14 @@ on game.id=dislike_record.game_id
 left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
 on game.id=store.game_id
 left join (select game_id,type as 
-preferences from like_dislike where user_id=3) as action on game.id=action.game_id
-right join (select user_id,game_id as in_progress_id from game_history where user_id=3 and is_win=false and attempts!=0) as in_progress on game.id=in_progress.in_progress_id
-where game.user_id!=? and preferences=?`,
+preferences from like_dislike where user_id=?) as action on game.id=action.game_id
+where preferences=?`,
       [userId, preferences]
     );
 
     res.json(results.rows);
   } catch (err) {
-    logger.error("error:" + JSON.stringify(err));
+    console.log(err);
     res.json({ success: false });
   }
 }
@@ -257,8 +523,44 @@ async function getAllGamesCreateByUser(req: Request, res: Response) {
     );
     res.json(result.rows);
   } catch (err) {
-    logger.error("error:" + JSON.stringify(err));
+    console.log("error:" + JSON.stringify(err));
     res.json({ success: false });
+  }
+}
+
+async function getRank(req: Request, res: Response) {
+  try {
+    let { period } = req.query;
+    let result;
+    if (period === "monthly") {
+      result = (
+        await knex.raw(`select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_record.created_at > now() - interval '1 month' group by user_id,name order by score desc limit 10
+
+      `)
+      ).rows;
+    } else if (period === "weekly") {
+      result = (
+        await knex.raw(`select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_record.created_at > now() - interval '1 week' group by user_id,name order by score desc limit 10
+
+      `)
+      ).rows;
+    } else if (period === "daily") {
+      result = (
+        await knex.raw(`select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_record.created_at > now() - interval '1 day' group by user_id,name order by score desc limit 10
+
+      `)
+      ).rows;
+    } else {
+      result = (
+        await knex.raw(
+          `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id group by user_id,name order by score desc limit 10;`
+        )
+      ).rows;
+    }
+    res.json(result);
+  } catch (e) {
+    console.error(e);
+    res.json({ success: false, msg: e });
   }
 }
 

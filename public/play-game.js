@@ -3,9 +3,9 @@ $(function () {
   $("#navbar").load("/navigation/navigation.html");
 });
 
-let playGame;
-let attempt = 1;
-let closedGame = [];
+// let playGame;
+// let attempt = 1;
+// let closedGame = [];
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
 const err = new URL(window.location.href).searchParams.get("err");
@@ -23,9 +23,9 @@ window.onload = () => {
 
 //fetch("/game/?id=xxxx")
 async function loadSingleGame(id) {
-  const res = await fetch(`/game/${id}`);
+  const res = await fetch(`/game/?id=${id}`);
   const playGames = await res.json();
-  playGame = playGames[0];
+  let playGame = playGames[0];
   // console.log(playGame);
   const playGameBoardDiv = document.querySelector(".play-game-board");
   const chatRoomDiv = document.querySelector("#chatroom-container");
@@ -58,9 +58,7 @@ async function loadSingleGame(id) {
       <input id="chat-input" autocomplete="off"  /><button>Send</button>
   </form>`;
 }
-// ---------  Chat Room JS  --------- //
-// ---------  Chat Room JS  --------- //
-// ---------  Chat Room JS  --------- //
+// ---------  Chat Room JS  --------------------------------------------------------------------------------------//
 
 // >>>>>> Join Room <<<<<<< //
 
@@ -185,7 +183,7 @@ document
     }
 
     // console.log(body);
-    const res = await fetch(`/game/record/${id}`, {
+    const res = await fetch(`/game/play/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -496,5 +494,6 @@ function deg2rad(deg) {
 }
 
 function getMarkerLocation() {
-  return `${marker.position.lat()}, ${marker.position.lng()}`;
+  // return `${marker.position.lat()}, ${marker.position.lng()}`;
+  return { x: marker.position.lat(), y: marker.position.lng() };
 }

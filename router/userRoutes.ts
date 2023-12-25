@@ -10,12 +10,11 @@ import { isLoggedIn } from "../utils/guard";
 const userRoutes = express.Router();
 
 // ^^^^^^^^^^^^^^^^^^ for user upload profile ^^^^^^^^^^^^^^^^^^^^//
-
-userRoutes.post("/login", login);
 userRoutes.post("/register", register);
+userRoutes.post("/login", login);
 userRoutes.get("/login/google", loginGoogle);
 userRoutes.get("/user", isLoggedIn, getUser);
-userRoutes.get("/logout", logout);
+userRoutes.post("/logout", logout);
 userRoutes.get("/profile/:id", getProfile);
 userRoutes.put("/profile", multerUpload, editProfile);
 
@@ -151,16 +150,24 @@ async function getProfile(req: Request, res: Response) {
     if (!userInfo.total_score) {
       userInfo.total_score = 0;
     }
-    const level = (
+    console.log("userInfo.total_score:", userInfo.total_score);
+    let levelData = (
       await knex.raw(
         `select name as level from level where min_score<=? and max_score>=?`,
         [userInfo.total_score, userInfo.total_score]
       )
-    ).rows[0].level;
+    ).rows;
 
-    res.json({ userInfo, level });
+    if (levelData.length == 0) {
+      levelData = "level 0";
+    } else {
+      levelData = levelData[0].level;
+    }
+
+    res.json({ userInfo, level: levelData });
   } catch (error) {
     logger.error("error: ", error);
+    res.json(error);
   }
 }
 

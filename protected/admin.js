@@ -264,7 +264,7 @@ searchUserForm.addEventListener("submit", async (event) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(allEmailArray),
+        body: JSON.stringify({ allEmailArray }),
       });
       // init-box
       showUserInfo.innerText = "";

@@ -67,6 +67,7 @@ export async function seed(knex: Knex): Promise<void> {
           hints_2: "有花有草有水有人有狗",
           answer_name: "觀塘海濱花園",
           answer_address: "觀塘海濱道80號觀塘海濱花園",
+          status: "active",
           answer_description:
             "園內海濱步道全長約一公里。遊人在步道上不但可以近距離欣賞東九龍新地標── 啟德郵輪碼頭和跑道公園，更可遠眺港島東的璀璨夜景，飽覽維多利亞港和鯉魚門的風光。",
         },
@@ -135,7 +136,7 @@ export async function seed(knex: Knex): Promise<void> {
           description: "創建者瓜分成功作答獎勵",
         },
         {
-          description: "作答失敗扣減",
+          description: "參與遊戲扣減",
         },
         {
           description: "作答成功瓜分獎勵",

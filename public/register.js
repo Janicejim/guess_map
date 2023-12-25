@@ -49,7 +49,7 @@ document.querySelector("#index-signup").addEventListener("click", () => {
 document
   .querySelector("#index-logout")
   .addEventListener("click", async (event) => {
-    const res = await fetch("/logout");
+    const res = await fetch("/logout", { method: "POST" });
     const result = await res.json();
     if (result.success) {
       window.location = "/";
