@@ -1,0 +1,250 @@
+
+footer {
+  background-color: black;
+  width: 100%;
+  color: white;
+  margin-top: 20px !important;
+  padding: 20px;
+}
+
+
+#play-game-form {
+  display: flex !important;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-left: 20%;
+  padding-right: 20%;
+}
+#game-hints-chance-cont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+#game-hints-chance-cont > div {
+  width: 100%;
+}
+/* #game-hints-chance-cont > button{
+  width: 100%;
+} */
+
+.answer-submit {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  width: 120px;
+  font-size: 20px;
+}
+
+.game_container {
+  width: 550px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.google-map {
+  width:100%;
+  height: 100%;
+
+}
+
+.question-media {
+ height:100%;
+ width:100%;
+
+}
+.user-hints {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  font-size: 25px;
+  margin-left: 20px;
+}
+.guess-chance {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  font-size: 25px;
+  margin-left: 20px;
+}
+.chatroom {
+  max-width: 700px;
+  height: 400px;
+  border: solid 2px lightgrey;
+  background-color: white;
+  margin: auto;
+  margin-top: 30px;
+  border-radius: 5px;
+}
+
+/* -------  Chat Room CSS  ------- */
+/* -------  Chat Room CSS  ------- */
+/* -------  Chat Room CSS  ------- */
+
+/* #chatroom-container{
+    margin: 0; 
+    width:600px;
+    height:400px;
+    max-height:400px;
+    padding-bottom: 3rem; 
+    position: relative;
+    background-color:rgb(146, 146, 146);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    border: 0px solid transparent;
+    border-radius: 5px;
+
+} */
+#chatroom-container {
+  max-width: 700px;
+  height: 400px;
+  border: solid 2px lightgrey;
+  background-color: white;
+  margin: auto;
+  margin-bottom: 10%;
+  margin-top: 30px;
+  border-radius: 5px;
+  position: relative;
+  margin-bottom: 10%;
+}
+
+#chat-form {
+  background: rgba(73, 72, 72, 0.15);
+  padding: 0.25rem;
+  position: absolute;
+  max-width: 700px;
+  /* position:fixed;  */
+  bottom: -42px;
+  left: -2px;
+  right: 0;
+  display: flex;
+  height: 3rem;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  border-radius: 3px;
+}
+
+#chat-form > #chat-input {
+  border: none;
+  padding: 0.1rem;
+  flex-grow: 1;
+  border-radius: 2rem;
+  margin: 0.25rem;
+  border-radius: 3px;
+  outline: none;
+  color: rgb(0, 0, 0);
+}
+#chat-form > #chat-input:focus {
+  outline: none;
+}
+
+#chat-form > button {
+  background: #333;
+  border: none;
+  padding: 0.1rem;
+  margin: 0.25rem;
+  border-radius: 3px;
+  outline: none;
+  color: #fff;
+}
+
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  height: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+  scroll-behavior: auto;
+}
+#messages > div {
+  text-overflow: initial;
+  white-space: pre-line;
+  padding: 0.5rem 1rem;
+  color: black;
+}
+
+#messages > div:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* -------- Chat Room user config -------- */
+.msgContainer {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+.msgContainer > img {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  width: 50px;
+  height: 50px;
+  border: 1px solid transparent;
+  border-radius: 25px;
+  object-fit: cover;
+}
+
+.hide {
+  display: none;
+}
+
+/* -------- Chat Room user config -------- */
+
+/* ^^^^^^^^ Chat Room CSS ^^^^^^^ */
+/* ^^^^^^^^ Chat Room CSS ^^^^^^^ */
+/* ^^^^^^^^ Chat Room CSS ^^^^^^^ */
+
+.btn-warning {
+  color: white;
+  background-color: #ff0266;
+  border-radius: 3px;
+  border: transparent;
+  padding: 5px 10px 5px 10px;
+}
+.btn-warning:hover {
+  background-color: #0336ff;
+  color: white;
+}
+
+.final_text {
+  color: #0336ff;
+  font-weight: bold;
+  font-size: 3rem;
+  text-shadow: 0.15rem 0.15rem #ff0266;
+}
+
+.fa-piggy-bank{
+  font-size: 5rem;
+  color: rgb(181, 62, 81);
+}
+.middle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top:10rem;
+}
+.middle-completed{
+  margin-top:1rem;
+  font-size: 2rem;
+}
+
+.btn-success{
+  height: 5rem;
+  width: 18rem;
+  font-size: 150%;
+  border-radius: 10px
+}
+#store_amount{
+  margin-left: 2rem;
+}
+.answer-btn{
+  margin-left:5rem;
+  width: 40vw !important;
+  font-size: 150% !important;
+}

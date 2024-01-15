@@ -70,7 +70,6 @@ export function chatRoomIO(value: socketIO.Server) {
 
         socket.on("disconnect", function () {
           players = players.filter((p) => p !== player);
-          console.table(players);
         });
       });
     }

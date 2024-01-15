@@ -1,6 +1,6 @@
 //load navbar
 $(function () {
-  $("#navbar").load("/navigation/navigation.html");
+  $("#navbar").load("/navigation.html");
 });
 
 // ******** Search Game ******** //
@@ -24,7 +24,6 @@ searchGameForm.addEventListener("submit", async (event) => {
     body: JSON.stringify(gameObj),
   });
   const result = await res.json();
-  console.table("result", result);
 
   for (let i = 0; i < result.length; i++) {
     let gameContainer = document.createElement("div");
