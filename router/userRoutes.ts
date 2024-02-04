@@ -17,9 +17,8 @@ const userController = new UserController(userService);
 userRoutes.post("/register", userController.register);
 userRoutes.post("/login", userController.login);
 userRoutes.get("/login/google", userController.loginGoogle);
-userRoutes.get("/user", isLoggedIn, userController.getUser);
 userRoutes.post("/logout", userController.logout);
-userRoutes.get("/profile/:id", userController.getProfile);
+userRoutes.get("/user", userController.getUserInfo);
 userRoutes.put(
   "/profile",
   isLoggedIn,

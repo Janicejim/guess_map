@@ -3,7 +3,7 @@ import { Knex } from "knex";
 class GameService {
   constructor(private knex: Knex) {}
 
-  async getAllActiveGames() {
+  async getAllActiveGames(sorting: string) {
     return await this.knex.raw(
       `select game.id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount from game
       join users on game.user_id=users.id 
@@ -13,13 +13,15 @@ class GameService {
       on game.id=dislike_record.game_id 
       left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
       on game.id=store.game_id
-      where game.status='active'`
+      where game.status='active' order by ?`,
+      [sorting]
     );
   }
 
-  async getAllActiveGamesByUser(user_id: number) {
-    return await this.knex.raw(
-      `select game.id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount,
+  async getAllActiveGamesByUser(user_id: number, sorting: string) {
+    let activeGames = (
+      await this.knex.raw(
+        `select game.id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount,
     preferences from game
     join users on game.user_id=users.id 
     left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record 
@@ -30,9 +32,19 @@ class GameService {
     on game.id=store.game_id
     left join (select game_id,type as 
     preferences from like_dislike where user_id=?) as action on game.id=action.game_id
-    where game.user_id!=? and game.status='active'`,
-      [user_id, user_id]
-    );
+    where game.user_id!=? and game.status='active' order by ?`,
+        [user_id, user_id, sorting]
+      )
+    ).rows;
+
+    let userJoinedGames = await this.getUserAllJoinedGame(user_id);
+    let neverJoinGames = activeGames.filter((game: any) => {
+      return !userJoinedGames.some(
+        (joinedGame: any) => game.id === joinedGame.game_id
+      );
+    });
+
+    return neverJoinGames;
   }
 
   async checkUserIsCreator(user_id: number, game_id: number) {
@@ -67,28 +79,28 @@ class GameService {
     score_description_id: number;
   }) {}
 
-  async createGame(gameData: any, scoreData: any) {
-    let txn = await this.knex.transaction();
-    try {
-      await txn("game").insert(gameData);
+  async createGame(gameData: any) {
+    await this.knex("game").insert(gameData);
 
-      await txn("score_record").insert(scoreData);
-
-      await txn.commit();
-    } catch (e) {
-      await txn.rollback();
-    }
+    return;
   }
 
   async getPlayGameRecord(currentUserId: number, gameId: number) {
     return (
       await this.knex.raw(
-        `select id,attempts,is_win from game_history where user_id=? and game_id=?`,
+        `select id,game_id,attempts,is_win from game_history where user_id=? and game_id=?`,
         [currentUserId, gameId]
       )
     ).rows;
   }
 
+  async getUserAllJoinedGame(currentUserId: number) {
+    return (
+      await this.knex.raw(`select game_id from game_history where user_id=?`, [
+        currentUserId,
+      ])
+    ).rows;
+  }
   async checkGameData(gameId: number) {
     return (
       await this.knex
@@ -117,7 +129,7 @@ on game.id=store.game_id where game.id=?`,
   async getCompletedGameInfo(gameId: number) {
     return (
       await this.knex.raw(
-        `select * from game join (select name as winner,game_history.game_id from game_history join users on game_history.user_id=users.id where is_win=true ) as winner_info on game.id=winner_info.game_id where game.id=?`,
+        `select * from game left join (select name as winner,game_history.game_id from game_history join users on game_history.user_id=users.id where is_win=true ) as winner_info on game.id=winner_info.game_id where game.id=?`,
         [gameId]
       )
     ).rows;
@@ -132,30 +144,36 @@ on game.id=store.game_id where game.id=?`,
     ).rows;
   }
 
-  async joinGame(
+  async joinGame(gameHistoryData: any) {
+    //insert game_history record:
+    await this.knex("game_history").insert(gameHistoryData);
+    return;
+  }
+
+  async userAnswerWrongly(
     gameHistoryData: any,
-    scoreRecordData: any,
-    storeRecordData: any
+    game_history_id: number,
+    scoreData?: any,
+    storeData?: any
   ) {
     let txn = await this.knex.transaction();
     try {
       //insert game_history record:
-      await txn("game_history").insert(gameHistoryData);
-      //deduce player score:
-      await txn("score_record").insert(scoreRecordData);
-      //add to store:
-      await txn("store_record").insert(storeRecordData);
+      // console.log(gameHistoryData, game_history_id, scoreData, storeData);
+      await txn("game_history")
+        .update(gameHistoryData)
+        .where("id", game_history_id);
+
+      if (scoreData && storeData) {
+        await txn("score_record").insert(scoreData);
+        await txn("store_record").insert(storeData);
+      }
+
       await txn.commit();
     } catch (e) {
+      console.log(e);
       await txn.rollback();
     }
-  }
-
-  async userAnswerWrongly(gameHistoryData: any, game_history_id: number) {
-    //insert game_history record:
-    await this.knex("game_history")
-      .update(gameHistoryData)
-      .where("id", game_history_id);
   }
 
   async userAnswerCorrect(
@@ -182,9 +200,11 @@ on game.id=store.game_id where game.id=?`,
       await txn("store_record").insert(storeRecordData);
       await txn.commit();
     } catch (e) {
+      console.log(e);
       await txn.rollback();
     }
   }
+
   async checkGameTotalStore(gameId: number) {
     return (
       await this.knex.raw(
@@ -196,11 +216,12 @@ on game.id=store.game_id where game.id=?`,
 
   async getUserDifferentGameRecordByStatus(
     statusQuery: string,
-    userId: number
+    userId: number,
+    sorting: string
   ) {
     return (
       await this.knex.raw(
-        `select game.id,users.name,media,game.created_at,profile_image,like_number,dislike_number,store_amount,preferences from game
+        `select game.id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount, preferences from game
     join users on game.user_id=users.id 
     left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record 
     on game.id=like_record.game_id 
@@ -210,7 +231,7 @@ on game.id=store.game_id where game.id=?`,
     on game.id=store.game_id
     left join (select game_id,type as 
     preferences from like_dislike where user_id=?) as action on game.id=action.game_id
-    right join (select user_id,game_id as in_progress_id from game_history where user_id=? and ${statusQuery}) as in_progress on game.id=in_progress.in_progress_id    
+    right join (select user_id,game_id as in_progress_id from game_history where user_id=? and ${statusQuery}) as in_progress on game.id=in_progress.in_progress_id order by ${sorting}
     `,
         [userId, userId]
       )
@@ -231,6 +252,7 @@ on game.id=store.game_id where game.id=?`,
       await txn("score_record").where("id", deleteRecordId).del();
       await txn.commit();
     } catch (e) {
+      console.log(e);
       await txn.rollback();
     }
   }
@@ -257,6 +279,7 @@ on game.id=store.game_id where game.id=?`,
 
       await txn.commit();
     } catch (e) {
+      console.log(e);
       await txn.rollback();
     }
   }
@@ -267,7 +290,7 @@ on game.id=store.game_id where game.id=?`,
   ) {
     return (
       await this.knex.raw(
-        /*sql*/ `select game.id,users.name,media,game.created_at,profile_image,like_number,dislike_number,store_amount,preferences from game
+        /*sql*/ `select game.id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount,preferences from game
 join users on game.user_id=users.id 
 left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record 
 on game.id=like_record.game_id 
@@ -286,18 +309,18 @@ where preferences=?`,
   async getAllGamesCreateByUser(user_id: number) {
     return (
       await this.knex.raw(
-        `select game.id,users.name,media,game.created_at,profile_image,like_number,dislike_number from game left join users on game.user_id=users.id left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record on game.id=like_record.game_id left join (select game_id,count(type) as dislike_number from like_dislike where type='dislike' group by type,game_id ) as dislike_record on game.id=dislike_record.game_id left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
+        `select game.id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number from game left join users on game.user_id=users.id left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record on game.id=like_record.game_id left join (select game_id,count(type) as dislike_number from like_dislike where type='dislike' group by type,game_id ) as dislike_record on game.id=dislike_record.game_id left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
     on game.id=store.game_id where game.user_id=?`,
         [user_id]
       )
     ).rows;
   }
 
-  async getRankByPeriod(period: string) {
+  async getRankByPeriod(period: string, description_id: number) {
     let periodQuery = "";
 
     if (period == "monthly") {
-      periodQuery = `where score_record.created_at > now() - interval '1 month'`;
+      periodQuery = `where score_record.created_at > now() - interval '1 month' `;
     } else if (period == "weekly") {
       periodQuery = `where score_record.created_at > now() - interval '1 week'`;
     } else if (period == "daily") {
@@ -305,12 +328,21 @@ where preferences=?`,
     }
     let finalQuery;
     if (!periodQuery) {
-      finalQuery = `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id group by user_id,name order by score desc limit 10;`;
+      finalQuery = `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_description_id !=${description_id} group by user_id,name order by score desc limit 10;`;
     } else {
-      finalQuery = `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id ${periodQuery} group by user_id,name order by score desc limit 10;`;
+      finalQuery = `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id ${periodQuery} and score_description_id !=${description_id} group by user_id,name order by score desc limit 10;`;
     }
 
     return (await this.knex.raw(finalQuery)).rows;
+  }
+
+  async getUserScoreRecord(user_id: number) {
+    return (
+      await this.knex.raw(
+        `select description,score_record.created_at,score_change from score_record join score_description on score_record.score_description_id=score_description.id where user_id=? order by score_record.created_at desc`,
+        [user_id]
+      )
+    ).rows;
   }
 }
 

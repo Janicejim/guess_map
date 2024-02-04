@@ -6,12 +6,16 @@ import grant from "grant";
 import { env } from "./utils/env";
 import { logger } from "./utils/logger";
 import expressSession from "express-session";
-import gameRoutes from "./router/gameRoutes";
+
 import http from "http";
 import { Server as SocketIO } from "socket.io";
 import { chatRoomIO } from "./router/SocketRoute";
 import adminRoutes from "./router/adminRoutes";
-
+import awardRoutes from "./router/awardRoutes";
+import { isAdmin } from "./utils/guard";
+import GameController from "./controllers/gameController";
+import GameService from "./services/gameService";
+import { knex } from "./utils/db";
 dotenv.config();
 
 const app = express();
@@ -38,6 +42,7 @@ app.use(sessionMiddleware);
 // -----  socketIO & session config  ----- ---------------------------------------//
 const server = new http.Server(app);
 const io = new SocketIO(server);
+
 io.use((socket, next) => {
   let req = socket.request as express.Request;
   let res = req.res as express.Response;
@@ -63,14 +68,20 @@ const grantExpress = grant.express({
 //All routers here
 app.use(grantExpress as express.RequestHandler);
 app.use(userRoutes);
+export const gameService = new GameService(knex);
+export const gameController = new GameController(gameService, io);
+import gameRoutes from "./router/gameRoutes";
+
 app.use(gameRoutes);
 app.use(adminRoutes);
+app.use(awardRoutes);
 app.use(express.static("public"));
+
 app.use(express.static("public/html"));
 app.use(express.static("site_images"));
 app.use(express.static("uploads"));
 app.use(express.static("profileUploads"));
-// app.use(isAdmin, express.static("protected"));
+app.use(isAdmin, express.static("protected"));
 // app.use((req, res) => {
 //   res.redirect("/404.html");
 

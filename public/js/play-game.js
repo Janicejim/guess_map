@@ -7,12 +7,20 @@ const params = new URLSearchParams(location.search);
 const id = params.get("id");
 
 // ---------   basic socket config in js   ---------- //
-const socket = io.connect();
+socket = io.connect();
 
 window.onload = () => {
   loadSingleGame(id);
 };
 
+socket.on("update room store", () => {
+  console.log("update room store");
+  loadSingleGame(id);
+});
+socket.on("update room status", () => {
+  console.log("update room status");
+  loadSingleGame(id);
+});
 async function loadSingleGame(id) {
   const res = await fetch(`/game?id=${id}`);
   const gameInfo = await res.json();
@@ -92,11 +100,11 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
 
 async function submitAnswer(marker, isUsePlayerLocation) {
   let location = getLocationByMarker(marker);
-  if (!location && isUsePlayerLocation == true) {
+  if (!location && isUsePlayerLocation) {
     alert("請確保已開啟位置分享，以及上方地圖出現人形標示再提交");
     return;
   }
-  if (!location && isUsePlayerLocation == false) {
+  if (!location && !isUsePlayerLocation) {
     alert("請確保已在上方地圖選取位置，出現圖釘標示再提交");
     return;
   }
@@ -111,18 +119,14 @@ async function submitAnswer(marker, isUsePlayerLocation) {
   let result = await res.json();
   alert(result.msg || result.err);
   if (result.success !== undefined) {
-    loadSingleGame();
-  } else {
+    loadSingleGame(id);
+  } else if (result.success == undefined && result.reduceAttempts) {
     let attemptElm = document.querySelector("#attempts");
     let perviousAttempt = +attemptElm.textContent;
     perviousAttempt != 0
       ? (attemptElm.textContent = perviousAttempt -= 1)
       : (attemptElm.textContent = 0);
-    console.log(
-      "attemptElm.textContent:",
-      perviousAttempt,
-      attemptElm.textContent
-    );
+
     let hints_1Elm = document.querySelector(".hints_1_container");
     let hints_2Elm = document.querySelector(".hints_2_container");
     if (attemptElm.textContent == 2) {
@@ -226,177 +230,7 @@ function toggleBounce() {
 //will auto call by google script
 function initMap() {
   myLatLng = new google.maps.LatLng(22.28780558413936, 114.14833128874676);
-  // Create a new StyledMapType object, passing it an array of styles,
-  // and the name to be displayed on the map type control.
-  // const styledMapType = new google.maps.StyledMapType(
-  //   [
-  //     {
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#f5f5f5",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       elementType: "labels.icon",
-  //       stylers: [
-  //         {
-  //           visibility: "off",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#616161",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       elementType: "labels.text.stroke",
-  //       stylers: [
-  //         {
-  //           color: "#f5f5f5",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "administrative.land_parcel",
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#bdbdbd",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "poi",
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#eeeeee",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "poi",
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#757575",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "poi.park",
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#e5e5e5",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "poi.park",
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#9e9e9e",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "road",
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#ffffff",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "road.arterial",
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#757575",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "road.highway",
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#dadada",
-  //         },
-  //         {
-  //           visibility: "off",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "road.highway",
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#616161",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "road.local",
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#9e9e9e",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "transit.line",
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#e5e5e5",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "transit.station",
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#eeeeee",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "water",
-  //       elementType: "geometry",
-  //       stylers: [
-  //         {
-  //           color: "#ffde03",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       featureType: "water",
-  //       elementType: "labels.text.fill",
-  //       stylers: [
-  //         {
-  //           color: "#9e9e9e",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  //   { name: "Styled Map" }
-  // );
 
-  // Create a map object, and include the MapTypeId to add
-  // to the map type control.
   let mapElm = document.getElementById("map") || 0;
   if (!mapElm) {
     return;
@@ -407,13 +241,8 @@ function initMap() {
     zoom: 12,
     mapTypeControl: false,
     streetViewControl: false,
-    // mapTypeControlOptions: {
-    //   mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
-    // },
   });
-  //Associate the styled map with the MapTypeId and set it to display.
-  // map.mapTypes.set("styled_map", styledMapType);
-  // map.setMapTypeId("styled_map");
+
   navigator.geolocation.getCurrentPosition(setCurrentPositionMarker);
 
   google.maps.event.addListener(map, "click", function (mapsMouseEvent) {
@@ -423,41 +252,17 @@ function initMap() {
     );
     placeMarker(mapsMouseEvent.latLng);
 
-    // To add the marker to the map, call setMap();
+    // To add the marker to the map, call setMap():
     console.log({ marker });
     marker.setMap(map);
-
-    // distance = checkDistance();
-    // console.log(`You are ${distance} m away from the destination!`);
   });
 }
 
-// // Check distance from original location
-// function checkDistance() {
-//   var lat1 = marker.position.lat();
-//   var lng1 = marker.position.lng();
-//   var lat2 = playGame.targeted_location.x;
-//   var lng2 = playGame.targeted_location.y;
-
-//   var R = 6371; // Radius of the earth in km
-//   var dLat = deg2rad(lat2 - lat1); // deg2rad below
-//   var dLng = deg2rad(lng2 - lng1);
-//   var a =
-//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-//     Math.cos(deg2rad(lat1)) *
-//       Math.cos(deg2rad(lat2)) *
-//       Math.sin(dLng / 2) *
-//       Math.sin(dLng / 2);
-//   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//   var distance = R * c; // Distance in km
-//   return Math.floor(distance * 1000);
-// }
-// function deg2rad(deg) {
-//   return deg * (Math.PI / 180);
-// }
-
 function getLocationByMarker(marker) {
-  // return `${marker.position.lat()}, ${marker.position.lng()}`;
+  if (marker == undefined) {
+    return;
+  }
+
   return {
     targeted_location_x: marker.position.lat(),
     targeted_location_y: marker.position.lng(),

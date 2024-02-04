@@ -91,12 +91,12 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropSchemaIfExists("level");
-  await knex.schema.dropSchemaIfExists("score_record");
-  await knex.schema.dropSchemaIfExists("score_description");
-  await knex.schema.dropSchemaIfExists("store_record");
-  await knex.schema.dropSchemaIfExists("game_history");
-  await knex.schema.dropSchemaIfExists("like_dislike");
-  await knex.schema.dropSchemaIfExists("game");
-  await knex.schema.dropSchemaIfExists("users");
+  await knex.schema.dropTableIfExists("level");
+  await knex.schema.dropTableIfExists("score_record");
+  await knex.schema.dropTableIfExists("score_description");
+  await knex.schema.dropTableIfExists("store_record");
+  await knex.schema.dropTableIfExists("game_history");
+  await knex.schema.dropTableIfExists("like_dislike");
+  await knex.schema.dropTableIfExists("game");
+  await knex.schema.dropTableIfExists("users");
 }

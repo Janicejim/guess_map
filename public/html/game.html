@@ -25,78 +25,39 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/navigation.css" />
-    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/game.css" />
 
     <title>估你吾島</title>
   </head>
 
   <body>
-    <!-- navbar -->
     <div id="navbar"></div>
-    <!-- <div id="map" class="google-map"></div> -->
-    <div class="btn-group">
-      <div>
-        <a href="/rank.html"><button class="feature-btn">排行榜</button></a>
-        <a href="/rules.html"><button class="feature-btn">遊戲說明</button></a>
-        <a href="/award.html"><button class="feature-btn">獎品兌換</button></a>
-        <a href="/upload-game.html">
-          <button class="feature-btn">上傳你的遊戲</button></a
-        >
+
+    <div class="container-fluid">
+      <div class="row">
+        <!-- <div class="sort-container">
+          <div class="sort-btn">創建時間</div>
+          <div class="sort-btn">讚好數目</div>
+          <div class="sort-btn">累積金</div>
+        </div> -->
+        <div class="sort-container">
+          <select class="sort-select" aria-label="Default select example">
+            <option value="game.created_at asc">排列依創建時間升序</option>
+            <option value="game.created_at desc" selected>
+              排列依創建時間降序
+            </option>
+            <option value="like_number asc">排列依讚好數目升序</option>
+            <option value="like_number desc">排列依讚好數目降序</option>
+            <option value="store_amount asc">排列依累積獎金升序</option>
+            <option value="store_amount desc">排列依累積獎金降序</option>
+          </select>
+        </div>
       </div>
+      <div class="row all-game-board"></div>
     </div>
 
-    <div class="all-container">
-      <div class="row">
-        <div class="col-12">
-          <!-- new -->
-          <div class="title-group">
-            <div class="sub-title">最新遊戲</div>
-            <span class="more"
-              ><a href="/game.html?type=new"
-                >更多<i class="fas fa-angle-right"></i></a
-            ></span>
-          </div>
-
-          <div class="game-container" id="new-game"></div>
-        </div>
-        <div class="col-4 btn-container"></div>
-      </div>
-
-      <div class="row">
-        <div class="col hidden" id="in-progress">
-          <div class="title-group">
-            <div class="sub-title">參與中</div>
-            <span class="more"
-              ><a href="/game.html?type=in_progress"
-                >更多<i class="fas fa-angle-right"></i></a
-            ></span>
-          </div>
-          <div class="game-container" id="progress-game-container"></div>
-        </div>
-        <div class="col">
-          <div class="title-group">
-            <div class="sub-title">精美獎品</div>
-            <span class="more"
-              ><a href="/award.html">更多<i class="fas fa-angle-right"></i></a
-            ></span>
-          </div>
-          <div class="award-container"></div>
-        </div>
-        <div class="col">
-          <div class="title-group">
-            <div class="sub-title">排行榜</div>
-            <span class="more"
-              ><a href="/rank.html">更多<i class="fas fa-angle-right"></i></a
-            ></span>
-          </div>
-          <div class="award-container"></div>
-        </div>
-      </div>
-    </div>
-
-    <template id="game-template">
-      <!-- col-2 col-xl-4 col-sm-12 -->
-      <div class="game-board">
+    <template>
+      <div class="col-2 col-xl-4 col-sm-12 game-board">
         <a href=""
           ><img src="" alt="game_media" class="game_container img-fluid"
         /></a>
@@ -121,6 +82,7 @@
         </div>
       </div>
     </template>
+
     <img
       src="/arrow_upward_black_24dp.svg"
       onclick="topFunction()"
@@ -134,11 +96,7 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <!-- <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx_KywoJ3TbIkl5VuZuUhj0-PA1WYft-I&callback=initMap&libraries=&v=weekly"
-      async
-    ></script> -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/index.js"></script>
+
+    <script src="/js/game.js"></script>
   </body>
 </html>

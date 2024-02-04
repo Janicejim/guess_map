@@ -1,8 +1,76 @@
-//load navbar
-$(function () {
-  $("#navbar").load("/navigation.html");
-});
+/*----------------get award:-----------------------------*/
+async function getAward() {
+  let res = await fetch(`/award`);
+  let awards = await res.json();
+  if (awards.length < 1) {
+    return;
+  }
+  awardArea.innerHTML = ``;
+  for (let award of awards) {
+    createAwardDiv(award);
+  }
+}
 
+getAward();
+function createAwardDiv(award) {
+  let awardTemplate = document
+    .querySelector("#awardTemplate")
+    .content.cloneNode(true);
+  awardTemplate.querySelector("#image").src = `/${award.image}`;
+  awardTemplate.querySelector("#title").textContent = award.name;
+  awardTemplate.querySelector("#score").textContent = award.score;
+  awardTemplate.querySelector("#quantity").textContent = award.quantity;
+  awardTemplate.querySelector("#quota").textContent = award.quota;
+  let nonEditElm = awardTemplate.querySelector("#non-edit");
+  let editElm = awardTemplate.querySelector("#edit");
+  awardTemplate.querySelector(".fa-edit").addEventListener("click", () => {
+    nonEditElm.classList.toggle("hidden");
+    editElm.classList.toggle("hidden");
+  });
+
+  awardTemplate
+    .querySelector(".fa-trash-alt")
+    .addEventListener("click", async () => {
+      let res = await fetch(`/award?awardId=${award.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        getAward();
+      }
+    });
+  awardTemplate.querySelector("#edit-image").src = `/${award.image}`;
+  awardTemplate.querySelector("#edit-name").value = award.name;
+  awardTemplate.querySelector("#edit-score").value = award.score;
+  awardTemplate.querySelector("#edit-quantity").value = award.quantity;
+  let editForm = awardTemplate.querySelector("#edit-award-form");
+
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    let formData = new FormData(editForm);
+    let res = await fetch(`/award?awardId=${award.id}`, {
+      method: "PUT",
+      body: formData,
+    });
+    if (res.ok) {
+      getAward();
+    }
+  });
+
+  awardArea.appendChild(awardTemplate);
+}
+
+/*----------------create award-----------------------------*/
+createAwardForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let formData = new FormData(createAwardForm);
+  let res = await fetch(`/award`, { method: "POST", body: formData });
+  if (res.ok) {
+    let result = await res.json();
+    alert(result);
+    createAwardForm.reset();
+    getAward();
+  }
+});
 // ******** Search Game ******** //
 
 const searchGameForm = document.querySelector("#search-game");

@@ -222,6 +222,11 @@ footer {
   font-size: 5rem;
   color: rgb(181, 62, 81);
 }
+.fa-star{
+  color:rgb(213, 210, 38);
+  font-size: 5rem;
+}
+
 .middle{
   display: flex;
   justify-content: center;

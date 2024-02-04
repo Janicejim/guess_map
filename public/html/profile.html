@@ -31,69 +31,138 @@
     />
 
     <link rel="stylesheet" href="/css/profile.css" />
-    <link rel="stylesheet" href="/css/navigation.css" />
     <link rel="icon" href="./favicon_group5.svg" type="image/svg+xml" />
     <title>Profile</title>
   </head>
 
   <body>
     <div id="navbar"></div>
-
-    <div class="left-column">
-      <!-- profile image -->
-      <div id="profile-image" class="profile-image"></div>
-
-      <!-- upload profile image -->
-
-      <div class="file-upload-wrapper" data-text="上載你的照片">
-        <input name="image" type="file" class="file-upload-field" />
+    <div class="flex">
+    <div class="user-info-container" >
+      <div class="row">
+        <div class="flex profile-title">玩家證</div>
       </div>
 
-      <!-- user level -->
-      <div id="user-level"></div>
-    </div>
-    <form>
-      <div class="right-column">
-        <!-- user Info -->
+      <div class="row flex" >
+    
+        <div class="col flex">
+              <form id="edit-profile-form">
+          <div>
+            <!-- profile image -->
 
-        <div class="group">
-          <input id="user-name" name="name" type="text" placeholder="" /><span
-            class="highlight"
-          ></span
-          ><span class="bar"></span>
-          <label>名稱</label>
+            <div id="profile-image" class="profile-image flex">
+              <!-- <img src="" alt="profile-pic" class="profile-image" /> -->
+            </div>
+
+            <!-- upload profile image -->
+
+            <div class="file-upload-wrapper hidden" data-text="上載你的照片" >
+              <input name="image" type="file" class="file-upload-field" />
+            </div>
+          </div>
         </div>
-        <div class="group">
-          <input id="user-email" readonly placeholder="" /><span
-            class="highlight"
-          ></span>
-          <label id="email-label">電郵</label>
+        <div class="col flex">
+      <div class="info-container">
+<div >
+            <div class="column-title">用戶名稱：</div>
+            <input type="text" id="user-name"  readonly class="not-edit" name="name"/>
+          </div>
+
+          <div >
+            <div class="column-title">電郵：</div>
+            <input type="text" id="user-email"  readonly class="not-edit"/>
+          </div>
+          <div >
+            <div class="column-title">關於我：</div>
+
+            <input type="text" id="user-description"  readonly class="not-edit" name="description"/>
+            </div>
+          </div>
         </div>
-        <div id="des-group" class="group">
-          <textarea
-            id="user-description"
-            name="description"
-            type="string"
-            placeholder=""
-          ></textarea
-          ><span class="highlight"></span><span class="bar"></span>
-          <label>關於我</label>
+        <div class="row flex">
+          <div id="icon">
+            <i class="fas fa-user-edit"></i>
+          </div>
+         
+        </div>
+        <div id="sd-btn-container" class="hidden" >
+          <button type="submit" class="save">儲存</button>
+          <a class="discard">取消</a>
         </div>
 
-        <!-- <div id="user-name" class="wording"></div>
-                <div id="user-email" class="wording"></div> -->
-
-        <!-- user score -->
-        <div id="user-description" class="wording"></div>
-        <div id="user-created-at" class="wording"></div>
-        <div id="user-score-record" class="wording"></div>
       </div>
-      <div id="sd-btn-container">
-        <button type="submit" class="save">儲存</button>
-        <a class="discard">取消</a>
-      </div>
+ 
     </form>
+    </div>
+  </div>
+    <div class="record-nav">
 
+    </div>
+
+    <div>
+      <button class="record-btn" id="score-record-btn">積分全紀錄</button>
+      <button class="record-btn" id="award-record-btn">兌換獎品紀錄</button>
+      <button class="record-btn" id="win-record-btn">挑戰成功紀錄</button>
+      <button class="record-btn" id="loss-record-btn">挑戰失敗紀錄</button>
+      <button class="record-btn" id="create-game-record-btn">我的創建</button>
+      <!-- <button class="record-btn">參與中</button> -->
+      <!-- <button id="record-btn">我的收藏</button> -->
+      <button class="record-btn" id="reaction-record-btn">like 同dislike紀錄</button>
+    </div>
+
+    <div id="record-area"> 
+      
+    </div>
+
+    <template id="score-record">
+      <div class="main-content">
+        <div>類別：<span id="description"></span></div>
+        <div>積分：<span id="score-change"></span></div>
+      </div>
+    </template>
+     
+    <template id="award-record">
+      <div class="main-content">
+        <img id="award-img" src="" alt="" />
+        <div>獎品名稱：<span id="award-name"></span></div>
+        <div>所用積分：<span id="award-score"></span></div>
+      </div>
+    </template>
+    <template id="game-record">
+      <div class="container">
+      <div class="col-2 col-xl-4 col-sm-12 game-board">
+        <a href=""
+          ><img src="" alt="game_media" class="game_container img-fluid"
+        /></a>
+        <div class="game_info">
+          <div class="user_info">
+            <img src="" alt="profile_image" class="profile_picture" />
+          </div>
+    
+          <i class="fas fa-piggy-bank"></i>
+
+          <div class="reaction-icon">
+            <div class="reaction">
+              <i id="like" class="far fa-thumbs-up"
+                ><span class="reaction_number like_number"></span
+              ></i>
+            </div>
+            <div class="reaction">
+              <i id="dislike" class="far fa-thumbs-down"
+                ><span class="reaction_number dislike_number"></span
+              ></i>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </template>
+    <img
+    src="/arrow_upward_black_24dp.svg"
+    onclick="topFunction()"
+    id="back_to_top"
+    alt="back_to_top"
+  />
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"

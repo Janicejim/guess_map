@@ -30,7 +30,9 @@ document
           document.querySelector("#Alert").innerHTML = "Password Incorrect";
         }
       }
-      if (result.user) {
+      if (result.role && result.role == "admin") {
+        window.location = "/admin.html";
+      } else if (result.role && result.role == "user") {
         window.location = "/";
       }
     } catch (error) {

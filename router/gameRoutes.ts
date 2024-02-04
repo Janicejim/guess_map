@@ -1,14 +1,10 @@
 import express from "express";
-import { knex } from "../utils/db";
+
 import { isLoggedIn } from "../utils/guard";
 import { multerUpload } from "../utils/multer";
-import GameService from "../services/gameService";
-import GameController from "../controllers/gameController";
+import { gameController } from "../server";
 
 const gameRoutes = express.Router();
-
-const gameService = new GameService(knex);
-const gameController = new GameController(gameService);
 
 // Game Routes
 gameRoutes.get("/games", gameController.getAllActiveGames);
@@ -40,5 +36,5 @@ gameRoutes.get(
   gameController.likeOrDislikeGameRecordByPlayer
 );
 gameRoutes.get("/rank", gameController.getRank);
-
+gameRoutes.get("/score/record", isLoggedIn, gameController.getUserScoreRecord);
 export default gameRoutes;

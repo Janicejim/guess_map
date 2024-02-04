@@ -3,7 +3,7 @@ $(function () {
   $("#navbar").load("/navigation.html");
 });
 let result = document.querySelector(".result");
-upload = document.querySelector("#file-input");
+let upload = document.querySelector("#file-input");
 
 // on change show image with crop options
 upload.addEventListener("change", (e) => {
@@ -34,33 +34,29 @@ document
     event.preventDefault();
     const form = event.target;
     const formData = new FormData();
-    const res_user = await fetch("/user");
-    const result_user = await res_user.json();
-    if (result_user.user) {
-      formData.append("media", form.media.files[0]);
-      // console.log("form.media.files[0]", form.media.files[0]);
-      formData.append("hints_1", form.hints_1.value);
-      // console.log("form.hints_1.value", form.hints_1.value);
-      formData.append("hints_2", form.hints_2.value);
-      // console.log("form.hints_2.value", form.hints_2.value);
-      formData.append("targeted_location", getMarkerLocation());
-      // console.log("targeted_location", getMarkerLocation());
-      const res = await fetch("/game", {
-        method: "POST",
-        body: formData,
-      });
-      const result = await res.json();
-      // console.log(result);
-      form.reset();
-      window.location = "/";
-    } else {
-      alert("login first!");
-      document.location.href = "login.html";
-    }
-    /*if (result.success) {
-      // await loadGames();
 
-    }*/
+    formData.append("image", form.image.files[0]);
+
+    formData.append("hints_1", form.hints_1.value);
+
+    formData.append("hints_2", form.hints_2.value);
+    formData.append("answer_name", form.answer_name.value);
+    formData.append("answer_address", form.answer_address.value);
+    formData.append("answer_description", form.answer_description.value);
+    formData.append("targeted_location", getMarkerLocation());
+
+    const res = await fetch("/game", {
+      method: "POST",
+      body: formData,
+    });
+    const result = await res.json();
+
+    form.reset();
+
+    if (res.ok) {
+      alert("創建遊戲成功");
+      window.location = "/";
+    }
   });
 
 var marker;
@@ -100,10 +96,6 @@ function placeMarker(location) {
       icon: "/push_pin_black_24dp.svg",
     });
     marker.addListener("click", toggleBounce);
-    document.querySelector("#reset-map").addEventListener("click", () => {
-      // console.log(marker.getMap());
-      marker.setMap(null);
-    });
   }
 }
 function toggleBounce() {
@@ -117,172 +109,6 @@ function initMap() {
   myLatLng = new google.maps.LatLng(22.28780558413936, 114.14833128874676);
   // Create a new StyledMapType object, passing it an array of styles,
   // and the name to be displayed on the map type control.
-  const styledMapType = new google.maps.StyledMapType(
-    [
-      {
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#f5f5f5",
-          },
-        ],
-      },
-      {
-        elementType: "labels.icon",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#616161",
-          },
-        ],
-      },
-      {
-        elementType: "labels.text.stroke",
-        stylers: [
-          {
-            color: "#f5f5f5",
-          },
-        ],
-      },
-      {
-        featureType: "administrative.land_parcel",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#bdbdbd",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#eeeeee",
-          },
-        ],
-      },
-      {
-        featureType: "poi",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#757575",
-          },
-        ],
-      },
-      {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#e5e5e5",
-          },
-        ],
-      },
-      {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e",
-          },
-        ],
-      },
-      {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#ffffff",
-          },
-        ],
-      },
-      {
-        featureType: "road.arterial",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#757575",
-          },
-        ],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#dadada",
-          },
-          {
-            visibility: "off",
-          },
-        ],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#616161",
-          },
-        ],
-      },
-      {
-        featureType: "road.local",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e",
-          },
-        ],
-      },
-      {
-        featureType: "transit.line",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#e5e5e5",
-          },
-        ],
-      },
-      {
-        featureType: "transit.station",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#eeeeee",
-          },
-        ],
-      },
-      {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#ffde03",
-          },
-        ],
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e",
-          },
-        ],
-      },
-    ],
-    { name: "Styled Map" }
-  );
 
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
@@ -295,9 +121,6 @@ function initMap() {
     //   mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
     // },
   });
-  //Associate the styled map with the MapTypeId and set it to display.
-  map.mapTypes.set("styled_map", styledMapType);
-  map.setMapTypeId("styled_map");
 
   google.maps.event.addListener(map, "click", function (mapsMouseEvent) {
     guessLatLng = new google.maps.LatLng(

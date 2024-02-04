@@ -30,7 +30,7 @@
 
 <!-- Whole form -->
 
-        <form name="update-game-form" id='update-game-form' method="POST" action="/upload-game" enctype="multipart/form-data">
+        <form name="update-game-form" id='update-game-form' >
 
             <div class="choose-file">
 
@@ -42,7 +42,7 @@
             <!-- input file -->
             
             <div id="file-input" class="box ">
-                <input required name="media" id="media" type="file" >
+                <input required name="image" id="media" type="file" >
             </div>
     </div>
 
@@ -55,12 +55,27 @@
 <!-- Hints Input -->
 <div class="input-group mb-3 hints-container">
   <div class="plus">+</div> <button class="btn btn-outline-secondary " type="button" id="button-addon1"> 提示 1 </button>
-  <input required placeholder="Input your Hint-1 here" name="hints_1" id="hints_1" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+  <input required  name="hints_1" id="hints_1" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
 </div>
 
 <div class="input-group mb-3 hints-container">
   <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 提示 2 </button>
-  <input required placeholder="Input your Hint-2 here" name="hints_2" id="hints_2" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+  <input required  name="hints_2" id="hints_2" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+</div>
+
+<div class="input-group mb-3 hints-container">
+  <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 答案名稱</button>
+  <input required  name="answer_name" id="answer" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+</div>
+
+<div class="input-group mb-3 hints-container">
+  <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 答案地址</button>
+  <input required  name="answer_address" id="address" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+</div>
+
+<div class="input-group mb-3 hints-container">
+  <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 答案特色簡介</button>
+  <input required  name="answer_description" id="description" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
 </div>
 
 </div>

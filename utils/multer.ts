@@ -6,8 +6,7 @@ const singleStorage = multer.diskStorage({
     cb(null, "uploads");
   },
   filename: function (req, file, cb) {
-    console.log({ file });
-    let time = new Date().toISOString();
+    let time = Date.now();
     cb(null, `media-${time}.${file.mimetype.split("/")[1]}`);
   },
 });

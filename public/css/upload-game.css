@@ -87,6 +87,9 @@ footer {
   padding: 5px 10px 5px 10px;
   /* margin: auto; */
 }
+#button-addon1{
+  width:10rem
+}
 
 .btn-warning {
   color: white;

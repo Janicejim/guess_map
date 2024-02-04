@@ -1,4 +1,4 @@
-getUserRole();
+getUserInfo();
 // Menu
 const overlay = document.getElementById("overlay");
 const closeMenu = document.getElementById("close-menu");
@@ -77,7 +77,7 @@ function hasScrolled() {
 }
 
 // ----------- get current user
-async function getUserRole() {
+async function getUserInfo() {
   const res = await fetch("/user");
   const result = await res.json();
   const signinDiv = document.querySelector("#signin-btn");
@@ -95,8 +95,9 @@ async function getUserRole() {
     logoutDiv.classList.remove("hide");
     logoutDiv.classList.add("show");
 
-    userInfoDiv.innerHTML =
-      "你好 " + (result.user[0].name || result.user[0].email);
+    userInfoDiv.innerHTML = `<div>你好 ${
+      result.user.name || result.user.email
+    }</div>     <div id="user_score">積分：${result.user.total_score}</div>`;
 
     if (result.user.role == "admin") {
       adminDiv.classList.remove("hide");
@@ -128,3 +129,9 @@ document
       window.location = "/";
     }
   });
+const socket = io.connect();
+
+socket.on("update user score", () => {
+  console.log("update user score");
+  getUserInfo();
+});

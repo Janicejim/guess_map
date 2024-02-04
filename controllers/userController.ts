@@ -22,7 +22,7 @@ class UserController {
 
       req.session["user"] = results[0];
 
-      return res.json({ user: results[0].email });
+      return res.json({ role: results[0].role });
     } catch (err) {
       console.error("err: ", err);
       return res.json({ success: false, error: err });
@@ -46,8 +46,7 @@ class UserController {
             role: "user",
           });
 
-          const createUserRowCount = createUserResult.length;
-          if (createUserRowCount === 1) {
+          if (createUserResult) {
             res.status(200).json({ msg: "register success!" });
             return;
           }
@@ -97,12 +96,6 @@ class UserController {
     return res.redirect("/");
   };
 
-  getUser = async (req: Request, res: Response) => {
-    let currentUserId = req.session["user"].id;
-    let user = await this.userService.getUserMyId(+currentUserId);
-    return res.json({ user });
-  };
-
   logout = async (req: Request, res: Response) => {
     req.session.destroy((err) => {
       if (err) {
@@ -112,10 +105,22 @@ class UserController {
     });
   };
 
-  getProfile = async (req: Request, res: Response) => {
+  getUserInfo = async (req: Request, res: Response) => {
     try {
-      const { id } = req.params;
-      const userInfo = await this.userService.getUserProfile(+id);
+      let id = 0;
+      let getCurrentUser = false;
+      if (req.query.id) {
+        id = +req.query.id;
+        getCurrentUser = false;
+      } else if (req.session["user"] !== undefined) {
+        id = +req.session["user"].id;
+        getCurrentUser = true;
+      } else {
+        res.json("haven't login");
+        return;
+      }
+
+      const userInfo = await this.userService.getUserInfo(id);
       if (!userInfo.total_score) {
         userInfo.total_score = 0;
       }
@@ -130,7 +135,7 @@ class UserController {
         levelData = levelData[0].level;
       }
 
-      res.json({ userInfo, level: levelData });
+      res.json({ user: userInfo, level: levelData, getCurrentUser });
     } catch (error) {
       console.error("error: ", error);
       res.json(error);
@@ -139,7 +144,7 @@ class UserController {
 
   editProfile = async (req: Request, res: Response) => {
     try {
-      const currentUserId = await req.session["user"].id;
+      const currentUserId = req.session["user"].id;
       const { name, description } = req.body;
       const profile_image = req.file?.filename;
 

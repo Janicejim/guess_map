@@ -7,11 +7,7 @@ class UserService {
     return await this.knex.select("*").from("users").where("email", email);
   }
 
-  async getUserMyId(id: number) {
-    return await this.knex.select("*").from("users").where("id", id);
-  }
-
-  async getUserProfile(id: number) {
+  async getUserInfo(id: number) {
     return (
       await this.knex.raw(
         `select users.id,name,email,profile_image ,description ,role,total_score from users full join (select user_id,sum(score_change) as total_score from score_record group by user_id) as score on users.id=score.user_id where users.id=?
@@ -29,6 +25,20 @@ class UserService {
       )
     ).rows;
   }
+  async getScoreDescriptionId(keyword: string) {
+    let result = (
+      await this.knex
+        .select("id")
+        .from("score_description")
+        .where("description", "ilike", `%${keyword}%`)
+    )[0].id;
+
+    if (result) {
+      return result;
+    } else {
+      return;
+    }
+  }
 
   async createUser(data: {
     name: string;
@@ -37,7 +47,22 @@ class UserService {
     password: string;
     role: string;
   }) {
-    return await this.knex("users").insert(data).returning("id");
+    let txn = await this.knex.transaction();
+    try {
+      let [{ id }] = await txn("users").insert(data).returning("id");
+
+      let newUserScoreDesId = await this.getScoreDescriptionId("新玩家");
+      await txn("score_record").insert({
+        user_id: id,
+        score_change: 100,
+        score_description_id: newUserScoreDesId,
+      });
+
+      await txn.commit();
+      return id;
+    } catch (e) {
+      await txn.rollback();
+    }
   }
 
   async updateProfile(

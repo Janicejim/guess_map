@@ -29,14 +29,14 @@
       integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="../navigation.css" />
+
     <link rel="stylesheet" href="./admin.css" />
 
     <title>Admin page</title>
   </head>
 
   <body>
-    <div id="navbar"></div>
+  
 
     <div class="filter-game-container">
       <div class="row">
@@ -111,6 +111,57 @@
           </div>
         </div>
       </div>
+
+<form id="createAwardForm">
+  <div>獎品名稱:</div>
+  <input name="name" type="text" required></input>
+  <div>獎品圖片:</div>
+  <input name="image" type="file" required></input>
+  <div>積分:</div>
+  <input name="score" type="number" required></input>
+  <div>數量:</div>
+  <input name="quantity" type="number" required></input>
+  <br>
+  <button type="submit">新增</button>
+</form>
+
+<div id="awardArea"></div>
+
+
+<template id="awardTemplate">
+  <div>
+  <div class="card" style="width: 18rem;" id="non-edit">
+    <img src="" class="card-img-top" alt="..." id="image">
+    <div class="card-body">
+      <h5 class="card-title" id="title"></h5>
+     <div>所需積分：<span  id="score"></span></div>
+     <div class="quantity">數量：<span id="quantity"></span></div>
+     <div class="quantity">庫存：<span id="quota"></span></div>
+     <i class="fas fa-edit"></i>
+     <i class="fas fa-trash-alt"></i>
+    </div>
+  </div>
+
+  <div class="card hidden" style="width: 18rem;" id="edit">
+    <img src="/ocean.jpeg" class="card-img-top" alt="..." id="edit-image">
+
+    <div class="card-body">
+      <form id="edit-award-form" >
+      <div>獎品圖片：</div>
+      <input type="file" name="image" id="edit-image-btn"/>
+      <div> 獎品標題：</div>
+<input type="text"  name="name" id="edit-name"/>
+     <div>所需積分：</div>
+     <input type="number" name="score"  id="edit-score">
+     <div class="quantity">數量：</div>
+     <input type="number" name="quantity"  id="edit-quantity">
+     <button type="submit" id="save-btn">儲存變更</button>
+    </form>
+
+    </div>
+  </div>
+</div>
+</template>
     </div>
 
     <!-- footer -->

@@ -48,14 +48,10 @@
               <p>玩家可自行創建遊戲供其他玩家猜</p>
               <p>
                 在創建問題頁面上傳供猜測的圖片，然後在Google
-                Map中指明內容所在坐標，以及設定兩個提示
+                Map中指明內容所在坐標、設定兩個提示，以及提供答案的資訊
               </p>
               <p>切記圖片內容要是香港的一處地方，並藴含指向的線索</p>
               <!-- <p>玩家所創建的問題在限時內無人作答成功，不予加分</p> -->
-              <p>
-                玩家每創建一個問題，可賺取<span class="score-text">100分</span
-                >創建獎賞分
-              </p>
               <!-- <p>如果成功作答的玩家遞交答案時，本人身處的位置就在正確答案坐標的100米範圍內，就可額外獎賞<span class="score-text">50分</span>額外獎賞分</p> -->
               <p>
                 有其他玩家成功作答，創建者可以瓜分<span class="score-text"
@@ -67,36 +63,38 @@
               <div class="plus">+</div>
               <span class="rules-subtitle">答問題</span>
               <p>
-                進入遊戲室，每個玩家按投幣鍵後就會扣<span class="score-text"
-                  >100分</span
-                >作該遊戲室的累積獎金，以此獲得<span class="score-text"
-                  >三次</span
-                >作答機會。
+                進入遊戲室，每個玩家按參與鍵後就會獲得<span class="score-text"
+                  >3次</span
+                >作答機會，猜測圖片所指地方的坐標
               </p>
               <p>
-                如玩家本來的積分<span class="score-text">低於100分</span
-                >就不可以投幣作答問題
+                如玩家本來的積分<span class="score-text">低於30分</span
+                >就不可以提交答案
               </p>
               <p>
-                玩家投幣後可選擇在Google
-                Map中指出圖中內容的所在位置作為答案，也可以自己現時身處的坐標作為答案
+                符合積分要求的玩家，可選擇以自己現時身處的坐標作為答案，也可在Google
+                Map中選擇一個坐標作為答案
               </p>
 
               <p>
-                作答後，指出範圍在答案坐標<span class="score-text"
+                作答後，指出的坐標在答案坐標<span class="score-text"
                   >200米或以內</span
-                >範圍內就可與創建者各<span class="score-text"
+                >就可得100分基本獎金，如該遊戲室有累積獎金，則另可與創建者各<span
+                  class="score-text"
                   >瓜分一半累積獎金</span
                 >
               </p>
               <p>
-                如正確答案是以玩家身處的坐標作答案，則可得到<span
+                如正確答案是以玩家身處的坐標作答案，可得到<span
                   class="score-text"
-                  >雙倍獎金</span
+                  >雙倍基本獎金和雙倍累積獎金</span
                 >
               </p>
 
-              <p>三次都答錯就無法再作答</p>
+              <p>
+                三次都答錯就會扣<span class="score-text">30分</span
+                >作該遊戲室的累積額外獎金，並且永遠無法再作答該遊戲
+              </p>
             </ul>
             <ul>
               <div class="plus">+</div>
@@ -108,22 +106,11 @@
                   >10分</span
                 >
               </p>
-              <p>
-                一旦該遊戲室有<span class="score-text">50個</span
-                >dislike將會由admin審示是否下架
-              </p>
             </ul>
-            <ul>
-              <div class="plus">+</div>
-              <span class="rules-subtitle">舉報不合規定的遊戲室</span>
-              <p>如果有玩家發現遊戲提示圖片不當，没有任何指向性線索</p>
-              <p>
-                可以按舉報鍵向admin舉報，經核實後舉報者可獲<span
-                  class="score-text"
-                  >50積分</span
-                >
-              </p>
-            </ul>
+
+            <!-- chatroom作用？ 失敗後或勝利後供玩家繼續討論？還是作答中討論題目？
+            個人模式？私人模式？ google實景？
+            -->
           </div>
         </div>
       </div>

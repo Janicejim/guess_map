@@ -61,7 +61,7 @@ export async function seed(knex: Knex): Promise<void> {
       .insert([
         {
           user_id: userIds[1].id,
-          media: "media-1628996651049",
+          media: "media-1628996651049.jpg",
           target_location: " (22.312423386583422,114.21697854995728)",
           hints_1: "係觀塘",
           hints_2: "有花有草有水有人有狗",
@@ -124,9 +124,6 @@ export async function seed(knex: Knex): Promise<void> {
     let descriptionIds = await txn("score_description")
       .insert([
         {
-          description: "創建遊戲獎勵",
-        },
-        {
           description: "其他玩家讚好遊戲獎勵",
         },
         {
@@ -136,16 +133,16 @@ export async function seed(knex: Knex): Promise<void> {
           description: "創建者瓜分成功作答獎勵",
         },
         {
-          description: "參與遊戲扣減",
+          description: "遊戲作答失敗扣減",
         },
         {
           description: "作答成功瓜分獎勵",
         },
         {
-          description: "舉報遊戲獎勵",
+          description: "新玩家初始獎勵",
         },
         {
-          description: "遊戲下架，被扣積分返回",
+          description: "兌換獎品",
         },
       ])
       .returning("id");
@@ -154,44 +151,55 @@ export async function seed(knex: Knex): Promise<void> {
     await txn("score_record").insert([
       {
         user_id: userIds[1].id,
-        score_change: 100,
+        score_change: 10,
         score_description_id: descriptionIds[0].id,
       },
       {
         user_id: userIds[1].id,
-        score_change: 10,
+        score_change: -10,
         score_description_id: descriptionIds[1].id,
       },
       {
+        user_id: userIds[3].id,
+        score_change: -30,
+        score_description_id: descriptionIds[3].id,
+      },
+      {
         user_id: userIds[1].id,
-        score_change: -10,
-        score_description_id: descriptionIds[2].id,
+        score_change: 30,
+        score_description_id: descriptionIds[4].id,
+      },
+      {
+        user_id: userIds[1].id,
+        score_change: 100,
+        score_description_id: descriptionIds[5].id,
+      },
+      {
+        user_id: userIds[2].id,
+        score_change: 100,
+        score_description_id: descriptionIds[5].id,
       },
       {
         user_id: userIds[3].id,
-        score_change: -100,
-        score_description_id: descriptionIds[4].id,
+        score_change: 100,
+        score_description_id: descriptionIds[5].id,
       },
       {
         user_id: userIds[4].id,
         score_change: 100,
         score_description_id: descriptionIds[5].id,
       },
-      {
-        user_id: userIds[1].id,
-        score_change: 100,
-        score_description_id: descriptionIds[3].id,
-      },
     ]);
 
-    //insert level:
-    await txn("level").insert([
-      {
-        name: "level 1",
-        min_score: 0,
-        max_score: 1000,
-      },
-    ]);
+    await txn
+      .insert({
+        name: "海洋公園門票一張",
+        image: "ocean.jpeg",
+        score: 50000,
+        quantity: 10,
+        status: "active",
+      })
+      .into("award");
 
     await txn.commit();
   } catch (e) {

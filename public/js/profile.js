@@ -1,117 +1,282 @@
 window.onload = () => {
   getUserProfile();
+  loadDefaultRecord();
 };
 
+//load navbar
+$(function () {
+  $("#navbar").load("/navigation.html");
+});
+// Profile content
+const profilePicDiv = document.querySelector(".profile-image");
+const userNameDiv = document.querySelector("#user-name");
+const userEmailDiv = document.querySelector("#user-email");
+const userDesDiv = document.querySelector("#user-description");
+let params = new URLSearchParams(location.search);
 async function getUserProfile() {
-  const res = await fetch("/user");
-  const result = (await res.json()).user[0];
-  // console.log("result", result);
+  let id = params.get("id");
 
-  // const userInfoDiv = document.querySelector('#current-user')
+  const res = id ? await fetch(`/user?id=${id}`) : await fetch("/user");
+  const result = await res.json();
 
-  // Profile content
-  const profilePicDiv = document.querySelector(".profile-image");
-  const userLevelDiv = document.querySelector("#user-level");
-  const userNameDiv = document.querySelector("#user-name");
-  const userEmailDiv = document.querySelector("#user-email");
-  const userDesDiv = document.querySelector("#user-description");
-  //load navbar
-  $(function () {
-    $("#navbar").load("/navigation.html");
-  });
+  profilePicDiv.style.backgroundImage = result.user.profile_image
+    ? `url(/${result.user.profile_image})`
+    : "url('anonymous.jpg')";
 
-  const userCreDiv = document.querySelector("#user-created-at");
-  const userScoreDiv = document.querySelector("#user-score-record");
-
-  // console.log(JSON.stringify(result.user))
-
-  if (result) {
-    console.log("have user", result.user, result.user);
-    if (result.profile_image) {
-      profilePicDiv.outerHTML = `<img id="profile-resize" class="profile-image" src="${result.profile_image}"/>`;
-      userNameDiv.outerHTML = `<input id="user-name" type="text" name="name" placeholder="${result.name}"  maxlength="30" size="30"/>`;
-      userEmailDiv.outerHTML = `<input  readonly id="user-email" placeholder="${result.email}" />`;
-      userDesDiv.outerHTML = `<textarea id="user-description" name="description"  type="text" placeholder="${result.description}" maxlength="300" size="300">`;
-      // userScoreDiv.innerHTML = "Total_score: " + result.user.total_score;
-      // userLevelDiv.innerHTML = "Level: " + result.user.level;
-    } else {
-      userNameDiv.outerHTML = `<input id="user-name" type="text" name="name" placeholder="${result.name}"  maxlength="30" size="30"/>`;
-      userEmailDiv.outerHTML = `<input  readonly id="user-email" placeholder="${result.email}" />`;
-      userDesDiv.outerHTML = `<textarea id="user-description" name="description"  type="text" placeholder="${result.description}" maxlength="300" size="300">`;
-      // userCreDiv.innerHTML = "Created_at: " + createdDate + " " + createdTime;
-      // userScoreDiv.innerHTML = "Total_score: " + result.user.total_score;
-      // userLevelDiv.innerHTML = "Level: " + result.user.level;
-    }
-  } else {
-    userInfoDiv.innerHTML = "";
-    userNameDiv.innerHTML = "login first";
-    userEmailDiv.innerHTML = "login first";
-    userDesDiv.innerHTML = "login first";
-    userScoreDiv.innerHTML = "login first";
-    userLevelDiv.innerHTML = "login first";
-  }
+  userNameDiv.value = result.user.name;
+  userEmailDiv.value = result.user.email;
+  userDesDiv.value = result.user.description;
 }
 
-document
-  .querySelector("#edit-profile")
-  .addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData();
-    // console.log("formData", formData);
-    // console.log("form.name.value received  =>", form.name.value);
-    // console.log("form.description.value received  =>", form.description.value);
-    // console.log("form.image.files[0] received  =>", form.image.files[0]);
+//preview new profile pic:
+let result = document.querySelector(".profile-image");
+let uploadField = document.querySelector(".file-upload-field");
 
-    formData.append("image", form.image.files[0]);
-    formData.append("name", form.name.value);
-    formData.append("description", form.description.value);
+// on change show image with crop options
+uploadField.addEventListener("change", (e) => {
+  if (e.target.files.length) {
+    // start file reader
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target.result) {
+        result.style.backgroundImage = `url(${e.target.result})`;
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  }
+});
 
-    const res = await fetch("/profile", {
-      method: "PUT",
-      body: formData,
-    });
-    const result = await res.json();
-    if (result.success) {
-      await getUserProfile();
-    }
+document.querySelector(".save").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData();
+  formData.append("image", form.image.files[0]);
+  formData.append("name", form.name.value);
+  formData.append("description", form.description.value);
+
+  const res = await fetch("/profile", {
+    method: "PUT",
+    body: formData,
   });
+  const result = await res.json();
+  if (result.success) {
+    await getUserProfile();
+  }
+});
 
 document.querySelector(".discard").addEventListener("click", () => {
   window.location = "/profile.html";
 });
 
-//----------  signin signout logout btn DOM
-
-// document.querySelector("#index-signin").addEventListener("click", () => {
-//   window.location = "/login.html";
-// });
-
-// document.querySelector("#index-signup").addEventListener("click", () => {
-//   window.location = "/register.html";
-// });
-
-// document
-//   .querySelector("#index-logout")
-//   .addEventListener("click", async (event) => {
-//     const res = await fetch("/logout");
-//     const result = await res.json();
-//     if (result.success) {
-//       window.location = "/";
-//     }
-//   });
-//^^^^^^^^^^^ signin signout logout btn DOM
-
-// ---------- upload button required javascript
-
-$("form").on("change", ".file-upload-field", function () {
-  $(this)
-    .parent(".file-upload-wrapper")
-    .attr(
-      "data-text",
-      $(this)
-        .val()
-        .replace(/.*(\/|\\)/, "")
-    );
+let editIcon = document.querySelector(".fa-user-edit");
+let editBtnContainer = document.querySelector("#sd-btn-container");
+let uploadPicContainer = document.querySelector(".file-upload-wrapper");
+editIcon.addEventListener("click", () => {
+  uploadPicContainer.classList.toggle("hidden");
+  editIcon.classList.toggle("hidden");
+  editBtnContainer.classList.toggle("hidden");
+  userNameDiv.toggleAttribute("readonly");
+  userNameDiv.classList.toggle("not-edit");
+  userDesDiv.toggleAttribute("readonly");
+  userDesDiv.classList.toggle("not-edit");
 });
-//^^^^^^^^^^^^ upload button required javascript
+
+/*
+勝利過的可以在自己google map 中加入該marker
+ */
+
+let editForm = document.querySelector("#edit-profile-form");
+editForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let formData = new FormData(editForm);
+  let res = await fetch("/profile", { method: "PUT", body: formData });
+  let result = await res.json();
+
+  if (res.ok) {
+    uploadPicContainer.classList.toggle("hidden");
+    editIcon.classList.toggle("hidden");
+    editBtnContainer.classList.toggle("hidden");
+    userNameDiv.toggleAttribute("readonly");
+    userNameDiv.classList.toggle("not-edit");
+    userDesDiv.toggleAttribute("readonly");
+    userDesDiv.classList.toggle("not-edit");
+  }
+});
+
+function loadDefaultRecord() {
+  let record = params.get("record");
+
+  if (record == undefined) {
+    getScoreRecords();
+  }
+}
+let recordAreaContainer = document.querySelector("#record-area");
+
+//click score record:
+let scoreRecordBtn = document.querySelector("#score-record-btn");
+scoreRecordBtn.addEventListener("click", () => {
+  getScoreRecords();
+});
+
+async function getScoreRecords() {
+  let res = await fetch(`/score/record`);
+  let records = await res.json();
+  recordAreaContainer.innerHTML = ``;
+  for (let record of records) {
+    let scoreTemplate = document
+      .querySelector("#score-record")
+      .content.cloneNode(true);
+    scoreTemplate.querySelector("#description").textContent =
+      record.description;
+    let scoreChange;
+
+    if (record.score_change >= 0) {
+      scoreChange = `+${record.score_change}分`;
+    } else {
+      scoreChange = `${record.score_change}分`;
+    }
+
+    scoreTemplate.querySelector("#score-change").textContent = scoreChange;
+    recordAreaContainer.appendChild(scoreTemplate);
+  }
+}
+//click award redeem record btn:
+let redeemRecordBtn = document.querySelector("#award-record-btn");
+redeemRecordBtn.addEventListener("click", () => {
+  getRedeemRecord();
+});
+
+async function getRedeemRecord() {
+  let res = await fetch(`/award/record`);
+  let records = await res.json();
+  recordAreaContainer.innerHTML = ``;
+  if (records.length < 1) {
+    recordAreaContainer.innerHTML = `<div>未有記錄</div>`;
+    return;
+  }
+
+  for (let record of records) {
+    let awardTemplate = document
+      .querySelector("#award-record")
+      .content.cloneNode(true);
+    awardTemplate.querySelector("#award-img").src = record.image;
+    awardTemplate.querySelector("#award-name").textContent = record.name;
+    awardTemplate.querySelector("#award-score").textContent = record.score;
+    recordAreaContainer.appendChild(awardTemplate);
+  }
+}
+
+//click my created game:
+
+let createdRecordBtn = document.querySelector("#create-game-record-btn");
+createdRecordBtn.addEventListener("click", () => {
+  getGameRecords("create");
+});
+
+//click win/loss record:
+let winRecordBtn = document.querySelector("#win-record-btn");
+winRecordBtn.addEventListener("click", () => {
+  getGameRecords("game", "", "win");
+});
+let lossRecordBtn = document.querySelector("#loss-record-btn");
+lossRecordBtn.addEventListener("click", () => {
+  getGameRecords("game", "", "loss");
+});
+let reactionRecordBtn = document.querySelector("#reaction-record-btn");
+reactionRecordBtn.addEventListener("click", () => {
+  getGameRecords("reaction", "like", "");
+});
+async function getGameRecords(type, preferences, status) {
+  let res;
+  if (type == "game") {
+    res = await fetch(`/game/record/${status}`);
+  } else if ((type = "create")) {
+    res = await fetch("/creator/games");
+  } else {
+    res = await fetch(`/game/like_dislike?preferences=${preferences}`);
+  }
+
+  let records = await res.json();
+  recordAreaContainer.innerHTML = ``;
+  if (records.length == 0) {
+    recordAreaContainer.innerHTML = `<div class="container">没有紀錄</div>`;
+    return;
+  }
+  // let containerDiv = document
+  //   .createElement("div")
+  //   .classList.toggle("record-container");
+  for (let record of records) {
+    let gameTemplate = document
+      .querySelector("#game-record")
+      .content.cloneNode(true);
+
+    if (!record.profile_image) {
+      record.profile_image = "/anonymous.jpg";
+    }
+
+    gameTemplate.querySelector(".fa-piggy-bank").textContent =
+      record.store_amount;
+    gameTemplate.querySelector("a").href = `/play-game.html?id=${record.id}`;
+    gameTemplate.querySelector(".game_container").src = record.media;
+    gameTemplate.querySelector(".profile_picture").src = record.profile_image;
+    let likeNumberElm = gameTemplate.querySelector(".like_number");
+    likeNumberElm.textContent = record.like_number;
+
+    let dislikeNumberElm = gameTemplate.querySelector(".dislike_number");
+    dislikeNumberElm.textContent = record.dislike_number;
+    let likeIcon = gameTemplate.querySelector(".fa-thumbs-up");
+    let dislikeIcon = gameTemplate.querySelector(".fa-thumbs-down");
+
+    if (record.preferences == "like") {
+      likeIcon.classList.toggle(`clicked-icon-like`);
+    } else if (record.preferences == "dislike") {
+      dislikeIcon.classList.toggle(`clicked-icon-dislike`);
+    }
+    clickPreferenceEvent(
+      record.id,
+      likeIcon,
+      "like",
+      dislikeIcon,
+      "dislike",
+      likeNumberElm
+    );
+    clickPreferenceEvent(
+      record.id,
+      dislikeIcon,
+      "dislike",
+      likeIcon,
+      "like",
+      dislikeNumberElm
+    );
+
+    recordAreaContainer.appendChild(gameTemplate);
+  }
+}
+
+function clickPreferenceEvent(
+  gameId,
+  targetElement,
+  preference,
+  oppositeElement,
+  oppositePreference,
+  numberElm
+) {
+  targetElement.addEventListener("click", async () => {
+    await fetch(
+      `/game/like-dislike?preferences=${preference}&gameId=${gameId}`,
+      { method: "POST" }
+    );
+
+    if (
+      oppositeElement.classList.contains(`clicked-icon-${oppositePreference}`)
+    ) {
+      return;
+    }
+    if (targetElement.classList.contains(`clicked-icon-${preference}`)) {
+      numberElm.textContent = +numberElm.textContent - 1;
+    } else {
+      numberElm.textContent = +numberElm.textContent + 1;
+    }
+    targetElement.classList.toggle(`clicked-icon-${preference}`);
+  });
+}

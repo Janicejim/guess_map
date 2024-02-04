@@ -1,8 +1,6 @@
 import express from "express";
 import socketIO from "socket.io";
 
-export let io: socketIO.Server;
-
 type players = player[];
 
 type player = {
@@ -15,9 +13,7 @@ let players: player[] = [];
 
 // ---- socket io chatroom test ---- //
 
-export function chatRoomIO(value: socketIO.Server) {
-  io = value;
-
+export function chatRoomIO(io: socketIO.Server) {
   io.on("connection", (socket: any) => {
     if ((socket.request as express.Request).session["user"]) {
       let user = (socket.request as express.Request).session["user"];

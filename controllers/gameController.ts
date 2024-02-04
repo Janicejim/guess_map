@@ -1,20 +1,37 @@
 import GameService from "../services/gameService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
+import { Server as SocketIO } from "socket.io";
 class GameController {
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private io: SocketIO) {}
 
   //////get game data///////
   getAllActiveGames = async (req: Request, res: Response) => {
     let user_id = req.session.user?.id || 0;
     let results;
-    if (user_id) {
-      results = await this.gameService.getAllActiveGamesByUser(user_id);
-    } else {
-      results = await this.gameService.getAllActiveGames();
+    let sorting = req.query.sorting;
+
+    if (!sorting) {
+      sorting = `game.created_at desc`;
     }
 
-    res.json(results.rows);
+    if (user_id) {
+      results = await this.gameService.getAllActiveGamesByUser(
+        user_id,
+        sorting.toString()
+      );
+      if (req.query.limit) {
+        results = results.slice(0, 5);
+      }
+      res.json(results);
+    } else {
+      results = (await this.gameService.getAllActiveGames(sorting.toString()))
+        .rows;
+      if (req.query.limit) {
+        results = results.slice(0, 5);
+      }
+      res.json(results);
+    }
   };
 
   uploadGame = async (req: Request, res: Response) => {
@@ -31,28 +48,17 @@ class GameController {
 
       let id = req.session["user"].id;
 
-      let score_description_id = await this.gameService.getScoreDescriptionId(
-        "創建遊戲"
-      );
-
-      await this.gameService.createGame(
-        {
-          user_id: id,
-          media,
-          target_location: targeted_location,
-          answer_name,
-          answer_address,
-          answer_description,
-          hints_1,
-          hints_2,
-          status: "active",
-        },
-        {
-          user_id: id,
-          score_change: 100,
-          score_description_id,
-        }
-      );
+      await this.gameService.createGame({
+        user_id: id,
+        media,
+        target_location: targeted_location,
+        answer_name,
+        answer_address,
+        answer_description,
+        hints_1,
+        hints_2,
+        status: "active",
+      });
 
       res.json({ success: true });
     } catch (err) {
@@ -121,39 +127,12 @@ class GameController {
       const gameId = req.params.id;
       let currentUserId = req.session["user"].id;
 
-      //check where have 100 score to play the game
-      let scoreRecord = await this.gameService.checkUserScore(currentUserId);
-
-      let totalScore = scoreRecord.length > 0 ? scoreRecord[0].total_score : 0;
-      if (totalScore < 100) {
-        res.json({
-          msg: "唔够積分參與遊戲，建立遊戲賺左積分先la!",
-          success: false,
-        });
-        return;
-      }
-      let score_description_id = await this.gameService.getScoreDescriptionId(
-        "參與遊戲扣減"
-      );
-
-      await this.gameService.joinGame(
-        {
-          user_id: currentUserId,
-          game_id: gameId,
-          attempts: 3,
-          is_win: false,
-        },
-        {
-          user_id: currentUserId,
-          score_change: -100,
-          score_description_id,
-        },
-        {
-          user_id: currentUserId,
-          game_id: gameId,
-          amount_change: 100,
-        }
-      );
+      await this.gameService.joinGame({
+        user_id: currentUserId,
+        game_id: gameId,
+        attempts: 3,
+        is_win: false,
+      });
 
       res.json({ msg: "參與成功", success: true });
     } catch (err) {
@@ -205,6 +184,15 @@ class GameController {
         res.json({ msg: "用晒3次機會la" });
         return;
       }
+      //check where have 100 score to play the game
+      let scoreRecord = await this.gameService.checkUserScore(currentUserId);
+      let totalScore = scoreRecord.length > 0 ? scoreRecord[0].total_score : 0;
+      if (totalScore < 30) {
+        res.json({
+          msg: "至少要有30積分先可以提交答案，賺左積分先la!",
+        });
+        return;
+      }
 
       //compare user targeted_location and answer:
       let distanceAfterCompare = checkDistance(
@@ -216,14 +204,55 @@ class GameController {
       );
 
       if (distanceAfterCompare > 200) {
-        //deduct user attempts:
+        let score_description_id = await this.gameService.getScoreDescriptionId(
+          "作答失敗"
+        );
+        //if attempts only 1 and still wrong,deduce 100 to store:
+        // console.log(
+        //   "attempts:",
+        //   game_history[0].attempts,
+        //   "is_win:",
+        //   game_history[0].is_win
+        // );
+        if (game_history[0].attempts == 1 && game_history[0].is_win == false) {
+          await this.gameService.userAnswerWrongly(
+            {
+              attempts: +game_history[0].attempts - 1,
+            },
+            game_history[0].id,
+            {
+              user_id: currentUserId,
+              score_change: -30,
+              score_description_id,
+            },
+            {
+              user_id: currentUserId,
+              game_id,
+              amount_change: 30,
+            }
+          );
+          this.io.to(`Room-${game_id}`).emit("update room store");
+          this.io.emit("update game store");
+          this.io.emit("update user score");
+          res.json({ msg: "都係估錯，三次機會用晒，已扣30分作為累積獎金！" });
+          return;
+        }
+        console.log(
+          "attempts:",
+          game_history[0].attempts,
+          "id:",
+          game_history[0].id
+        );
         await this.gameService.userAnswerWrongly(
           {
             attempts: +game_history[0].attempts - 1,
           },
           game_history[0].id
         );
-        res.json({ msg: `估錯左! 同正確坐標相差 ${distanceAfterCompare} m ` });
+        res.json({
+          msg: `估錯左! 同正確坐標相差 ${distanceAfterCompare} m `,
+          reduceAttempts: true,
+        });
         return;
       } else {
         //get the store amount and add score_record to creator and winner
@@ -247,7 +276,7 @@ class GameController {
           +game_id,
           {
             user_id: currentUserId,
-            score_change: total_store / 2,
+            score_change: 100 + total_store / 2,
             score_description_id: winner_description_id,
           },
           {
@@ -262,7 +291,10 @@ class GameController {
           }
         );
       }
-      res.json({ msg: "恭喜晒！你答啱左la！獎賞已發放", success: true });
+      this.io.to(`Room-${game_id}`).emit("update room status");
+      this.io.emit("update game status");
+      this.io.emit("update user score");
+      res.json({ msg: `恭喜晒！你答啱左la！獎賞已發放`, success: true });
     } catch (err) {
       console.log("error:", err);
       res.json({ err: "系統出現問題" });
@@ -272,7 +304,10 @@ class GameController {
   getUserDifferentGameRecordByStatus = async (req: Request, res: Response) => {
     const userID = req.session.user.id;
     const { status } = req.params;
-
+    let sorting = req.query.sorting;
+    if (!sorting) {
+      sorting = `game.created_at desc`;
+    }
     let statusQuery;
     if (status == "in_progress") {
       statusQuery = "is_win=false and attempts!=0";
@@ -282,10 +317,15 @@ class GameController {
       statusQuery = "is_win=true";
     }
 
-    const record = await this.gameService.getUserDifferentGameRecordByStatus(
+    let record = await this.gameService.getUserDifferentGameRecordByStatus(
       statusQuery,
-      userID
+      userID,
+      sorting.toString()
     );
+
+    if (req.query.limit != undefined) {
+      record = record.slice(0, 3);
+    }
     res.json(record);
   };
 
@@ -354,7 +394,8 @@ class GameController {
           previousPreferenceRecord[0].id,
           deleteRecordId
         );
-
+        this.io.emit("update reaction", "update");
+        this.io.emit("update user score");
         res.json("cancel previous action success");
         return;
       }
@@ -372,7 +413,8 @@ class GameController {
             score_description_id: score_description,
           }
         );
-
+        this.io.emit("update reaction");
+        this.io.emit("update user score");
         res.json({ success: true });
       }
     } catch (err) {
@@ -421,7 +463,26 @@ class GameController {
         res.json("missing query");
         return;
       }
-      let result = await this.gameService.getRankByPeriod(period.toString());
+      let redeemedDescriptionId = await this.gameService.getScoreDescriptionId(
+        "兌換"
+      );
+      let result = await this.gameService.getRankByPeriod(
+        period.toString(),
+        redeemedDescriptionId
+      );
+
+      res.json(result);
+    } catch (e) {
+      console.error(e);
+      res.json({ success: false, msg: e });
+    }
+  };
+
+  getUserScoreRecord = async (req: Request, res: Response) => {
+    try {
+      let userId = req.session["user"].id;
+
+      let result = await this.gameService.getUserScoreRecord(userId);
 
       res.json(result);
     } catch (e) {

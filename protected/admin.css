@@ -473,8 +473,22 @@ width:300px;
   border-radius:50%;
   animation:larger 2s linear infinite;
 } 
+.hidden{
+    display:none
+}
 
+body,
+html {
+  font-family: "Noto Sans TC", sans-serif;
+  text-decoration: none !important;
+  background-color: #ffde03;
+  padding-top: 40px;
+  /* // same as header height */
+}
 
-
+body a,
+html a {
+  text-decoration: none;
+}
 
 /* loading  css*/
