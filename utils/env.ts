@@ -13,4 +13,8 @@ export const env = {
   SALT_ROUNDS: +process.env.SALT_ROUNDS!,
   LOGGING_LEVEL: process.env.LOGGING_LEVEL,
   NODE_ENV: process.env.NODE_ENV,
+  POSTGRES_HOST: "",
+  POSTGRES_USER: "",
+  POSTGRES_PASSWORD: "",
+  POSTGRES_DB: "",
 };
