@@ -1,7 +1,7 @@
 import express from "express";
 import userRoutes from "./router/userRoutes";
 import dotenv from "dotenv";
-// import { isAdmin } from "./utils/guard";
+
 import grant from "grant";
 import { env } from "./utils/env";
 import { logger } from "./utils/logger";
@@ -12,7 +12,7 @@ import { Server as SocketIO } from "socket.io";
 import { chatRoomIO } from "./router/SocketRoute";
 import adminRoutes from "./router/adminRoutes";
 import awardRoutes from "./router/awardRoutes";
-import { isAdmin } from "./utils/guard";
+
 import GameController from "./controllers/gameController";
 import GameService from "./services/gameService";
 import { knex } from "./utils/db";
@@ -81,7 +81,7 @@ app.use(express.static("public/html"));
 app.use(express.static("site_images"));
 app.use(express.static("uploads"));
 app.use(express.static("profileUploads"));
-app.use(isAdmin, express.static("protected"));
+app.use(express.static("protected"));
 // app.use((req, res) => {
 //   res.redirect("/404.html");
 

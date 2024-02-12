@@ -12,8 +12,8 @@ const awardController = new AwardController(awardService, gameService);
 
 awardRoutes.get("/award", awardController.getAward);
 awardRoutes.post("/award", isAdmin, multerUpload, awardController.createAward);
-awardRoutes.put("/award", multerUpload, awardController.editAward);
-awardRoutes.delete("/award", awardController.inactiveAward);
+awardRoutes.put("/award", isAdmin, multerUpload, awardController.editAward);
+awardRoutes.delete("/award", isAdmin, awardController.inactiveAward);
 awardRoutes.get("/award/record", isLoggedIn, awardController.getAwardRecord);
 awardRoutes.post(
   "/award/record",
