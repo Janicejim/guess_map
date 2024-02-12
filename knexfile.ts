@@ -43,6 +43,7 @@ const config: { [key: string]: Knex.Config } = {
       database: env.POSTGRES_DB,
       user: env.POSTGRES_USER,
       password: env.POSTGRES_PASSWORD,
+      port: 5433,
     },
     pool: {
       min: 2,
