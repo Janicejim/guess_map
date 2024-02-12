@@ -41,7 +41,7 @@ const config: { [key: string]: Knex.Config } = {
     connection: {
       host: env.POSTGRES_HOST,
       database: env.POSTGRES_DB,
-      user: "postgres",
+      user: env.POSTGRES_USER,
       password: env.POSTGRES_PASSWORD,
       port: 5433,
     },

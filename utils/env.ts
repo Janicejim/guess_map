@@ -14,7 +14,7 @@ export const env = {
   LOGGING_LEVEL: process.env.LOGGING_LEVEL,
   NODE_ENV: process.env.NODE_ENV,
   POSTGRES_HOST: "",
-  POSTGRES_USER: "",
-  POSTGRES_PASSWORD: "",
-  POSTGRES_DB: "",
+  POSTGRES_USER: process.env.POSTGRES_USER,
+  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+  POSTGRES_DB: process.env.POSTGRES_DB,
 };
