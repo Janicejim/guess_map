@@ -13,8 +13,7 @@ class GameService {
       on game.id=dislike_record.game_id 
       left join(select game_id,sum(amount_change) as store_amount from store_record group by game_id) as store
       on game.id=store.game_id
-      where game.status='active' order by ?`,
-      [sorting]
+      where game.status='active' order by ${sorting}`
     );
   }
 
@@ -32,8 +31,8 @@ class GameService {
     on game.id=store.game_id
     left join (select game_id,type as 
     preferences from like_dislike where user_id=?) as action on game.id=action.game_id
-    where game.user_id!=? and game.status='active' order by ?`,
-        [user_id, user_id, sorting]
+    where game.user_id!=? and game.status='active' order by ${sorting}`,
+        [user_id, user_id]
       )
     ).rows;
 
@@ -164,7 +163,7 @@ on game.id=store.game_id where game.id=?`,
         .update(gameHistoryData)
         .where("id", game_history_id);
 
-      if (scoreData && storeData) {
+      if (scoreData && storeData && scoreData.score_change != 0) {
         await txn("score_record").insert(scoreData);
         await txn("store_record").insert(storeData);
       }

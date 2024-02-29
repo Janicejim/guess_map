@@ -1,12 +1,14 @@
 import { Knex } from "knex";
 import { hashPassword } from "../utils/hash";
+import xlsx from "xlsx";
+import path from "path";
 
 export async function seed(knex: Knex): Promise<void> {
   let txn = await knex.transaction();
   try {
     // truncate ALL existing entries
     let tables = [
-      "level",
+      "award",
       "score_record",
       "score_description",
       "store_record",
@@ -19,187 +21,64 @@ export async function seed(knex: Knex): Promise<void> {
       await txn.raw(`truncate table ${table} restart identity cascade`);
     }
 
+    //get all the excel data:
+    let dataWorkbook = xlsx.readFile(path.resolve("utils", "seed.xls"));
+    let userData: any = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["users"]);
+    let gameData = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["game"]);
+    let likeDislikeData = xlsx.utils.sheet_to_json(
+      dataWorkbook.Sheets["like_dislike"]
+    );
+    let gameHistoryData = xlsx.utils.sheet_to_json(
+      dataWorkbook.Sheets["game_history"]
+    );
+    let storeRecordData = xlsx.utils.sheet_to_json(
+      dataWorkbook.Sheets["store_record"]
+    );
+    let scoreDescriptionData = xlsx.utils.sheet_to_json(
+      dataWorkbook.Sheets["score_description"]
+    );
+    let scoreRecordData = xlsx.utils.sheet_to_json(
+      dataWorkbook.Sheets["score_record"]
+    );
+    let awardData = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["award"]);
+    // console.log(
+    //   userData[0],
+    //   gameData[0],
+    //   likeDislikeData[0],
+    //   gameHistoryData[0],
+    //   storeRecordData[0],
+    //   scoreDescriptionData[0],
+    //   scoreRecordData[0],
+    //   awardData[0]
+    // );
+
     // Inserts users
 
-    let userIds = await txn("users")
-      .insert([
-        {
-          name: "admin",
-          email: "admin@admin",
-          password: await hashPassword("admin"),
-          role: "admin",
-        },
-        {
-          name: "user1",
-          email: "user1@user",
-          password: await hashPassword("user"),
-          role: "user",
-        },
-        {
-          name: "user2",
-          email: "user2@user",
-          password: await hashPassword("user"),
-          role: "user",
-        },
-        {
-          name: "user3",
-          email: "user3@user",
-          password: await hashPassword("user"),
-          role: "user",
-        },
-        {
-          name: "user4",
-          email: "user4@user",
-          password: await hashPassword("user"),
-          role: "user",
-        },
-      ])
-      .returning("id");
+    for (let user of userData) {
+      user["password"] = await hashPassword(user.password);
+    }
 
-    // Inserts game
-    let gameIds = await txn("game")
-      .insert([
-        {
-          user_id: userIds[1].id,
-          media: "media-1628996651049.jpg",
-          target_location: " (22.312423386583422,114.21697854995728)",
-          hints_1: "係觀塘",
-          hints_2: "有花有草有水有人有狗",
-          answer_name: "觀塘海濱花園",
-          answer_address: "觀塘海濱道80號觀塘海濱花園",
-          status: "active",
-          answer_description:
-            "園內海濱步道全長約一公里。遊人在步道上不但可以近距離欣賞東九龍新地標── 啟德郵輪碼頭和跑道公園，更可遠眺港島東的璀璨夜景，飽覽維多利亞港和鯉魚門的風光。",
-        },
-      ])
-      .returning("id");
+    await txn("users").insert(userData);
 
-    //insert like and dislike record
-    await txn("like_dislike").insert([
-      {
-        user_id: userIds[2].id,
-        game_id: gameIds[0].id,
-        type: "like",
-      },
-      { user_id: userIds[3].id, game_id: gameIds[0].id, type: "dislike" },
-    ]);
+    // // Inserts game
+    await txn("game").insert(gameData);
 
-    //insert game_history:
-    await txn("game_history").insert([
-      {
-        user_id: userIds[2].id,
-        game_id: gameIds[0].id,
-        attempts: 2,
-        is_win: false,
-      },
-      {
-        user_id: userIds[3].id,
-        game_id: gameIds[0].id,
-        attempts: 0,
-        is_win: false,
-      },
-      {
-        user_id: userIds[4].id,
-        game_id: gameIds[0].id,
-        attempts: 1,
-        is_win: true,
-      },
-    ]);
+    // //insert like and dislike record
+    await txn("like_dislike").insert(likeDislikeData);
 
-    //insert store_record:
-    await txn("store_record").insert([
-      {
-        user_id: userIds[0].id,
-        game_id: gameIds[0].id,
-        amount_change: 100,
-      },
-      {
-        user_id: userIds[3].id,
-        game_id: gameIds[0].id,
-        amount_change: 100,
-      },
-    ]);
+    // //insert game_history:
+    await txn("game_history").insert(gameHistoryData);
 
-    //insert score_description:
-    let descriptionIds = await txn("score_description")
-      .insert([
-        {
-          description: "其他玩家讚好遊戲獎勵",
-        },
-        {
-          description: "其他玩家負評遊戲扣減",
-        },
-        {
-          description: "創建者瓜分成功作答獎勵",
-        },
-        {
-          description: "遊戲作答失敗扣減",
-        },
-        {
-          description: "作答成功瓜分獎勵",
-        },
-        {
-          description: "新玩家初始獎勵",
-        },
-        {
-          description: "兌換獎品",
-        },
-      ])
-      .returning("id");
+    // //insert store_record:
+    await txn("store_record").insert(storeRecordData);
 
-    //insert score_record:
-    await txn("score_record").insert([
-      {
-        user_id: userIds[1].id,
-        score_change: 10,
-        score_description_id: descriptionIds[0].id,
-      },
-      {
-        user_id: userIds[1].id,
-        score_change: -10,
-        score_description_id: descriptionIds[1].id,
-      },
-      {
-        user_id: userIds[3].id,
-        score_change: -30,
-        score_description_id: descriptionIds[3].id,
-      },
-      {
-        user_id: userIds[1].id,
-        score_change: 30,
-        score_description_id: descriptionIds[4].id,
-      },
-      {
-        user_id: userIds[1].id,
-        score_change: 100,
-        score_description_id: descriptionIds[5].id,
-      },
-      {
-        user_id: userIds[2].id,
-        score_change: 100,
-        score_description_id: descriptionIds[5].id,
-      },
-      {
-        user_id: userIds[3].id,
-        score_change: 100,
-        score_description_id: descriptionIds[5].id,
-      },
-      {
-        user_id: userIds[4].id,
-        score_change: 100,
-        score_description_id: descriptionIds[5].id,
-      },
-    ]);
+    // //insert score_description:
+    await txn("score_description").insert(scoreDescriptionData);
 
-    await txn
-      .insert({
-        name: "海洋公園門票一張",
-        image: "ocean.jpeg",
-        score: 50000,
-        quantity: 10,
-        status: "active",
-      })
-      .into("award");
+    // //insert score_record:
+    await txn("score_record").insert(scoreRecordData);
+    //insert award:
+    await txn("award").insert(awardData);
 
     await txn.commit();
   } catch (e) {

@@ -68,7 +68,7 @@ let currentLocationForMarker;
 const getCurrentLocation = navigator.geolocation.watchPosition((position) => {
   const { latitude, longitude } = position.coords;
   currentLocation = position;
-  console.log("current location:", currentLocation);
+  // console.log("current location:", currentLocation);
   // console.log(currentLocation.coords.latitude);
   // console.log(currentLocation.coords.longitude);
   // Show a map centered at latitude / longitude.
@@ -97,6 +97,7 @@ function placeMarker(location) {
     });
     marker.addListener("click", toggleBounce);
   }
+  console.log(`marker: ${marker.position.lat()}, ${marker.position.lng()}`);
 }
 function toggleBounce() {
   if (marker.getAnimation() !== null) {
@@ -127,20 +128,11 @@ function initMap() {
       mapsMouseEvent.latLng.lat(),
       mapsMouseEvent.latLng.lng()
     );
+
     placeMarker(mapsMouseEvent.latLng);
 
     // To add the marker to the map, call setMap();
     marker.setMap(map);
-    // DOM Events
-    // document.getElementById("hint_1").innerHTML = `Hint1: You are ${Math.floor(
-    //   distance * 1000
-    // )}m away from the destination!`;
-    // document.getElementById(
-    //   "original_coordinate"
-    // ).innerHTML = `Coordinate: ${myLatLng}`;
-    // document.getElementById(
-    //   "coordinate"
-    // ).innerHTML = `Coordinate: ${guessLatLng}`;
   });
 }
 

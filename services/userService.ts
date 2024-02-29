@@ -17,14 +17,6 @@ class UserService {
     ).rows[0];
   }
 
-  async getLevel(min_score: number, max_score: number) {
-    return (
-      await this.knex.raw(
-        `select name as level from level where min_score<=? and max_score>=?`,
-        [min_score, max_score]
-      )
-    ).rows;
-  }
   async getScoreDescriptionId(keyword: string) {
     let result = (
       await this.knex

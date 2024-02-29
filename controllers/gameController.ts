@@ -13,23 +13,26 @@ class GameController {
 
     if (!sorting) {
       sorting = `game.created_at desc`;
+    } else {
+      sorting = sorting.toString().replace(/%20/g, " ");
     }
 
     if (user_id) {
       results = await this.gameService.getAllActiveGamesByUser(
         user_id,
-        sorting.toString()
+        sorting
       );
       if (req.query.limit) {
-        results = results.slice(0, 5);
+        results = results.slice(0, 4);
       }
+
       res.json(results);
     } else {
-      results = (await this.gameService.getAllActiveGames(sorting.toString()))
-        .rows;
+      results = (await this.gameService.getAllActiveGames(sorting)).rows;
       if (req.query.limit) {
-        results = results.slice(0, 5);
+        results = results.slice(0, 4);
       }
+
       res.json(results);
     }
   };

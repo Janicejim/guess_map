@@ -344,6 +344,6 @@ function clickPreferenceEvent(
 
 function loginGuard(targetElement) {
   targetElement.addEventListener("click", () => {
-    alert("login first");
+    alert("請先登入");
   });
 }

@@ -80,7 +80,7 @@ app.use(express.static("public"));
 app.use(express.static("public/html"));
 app.use(express.static("site_images"));
 app.use(express.static("uploads"));
-app.use(express.static("profileUploads"));
+app.use(express.static("image"));
 app.use(express.static("protected"));
 // app.use((req, res) => {
 //   res.redirect("/404.html");

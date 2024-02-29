@@ -124,18 +124,8 @@ class UserController {
       if (!userInfo.total_score) {
         userInfo.total_score = 0;
       }
-      let levelData = await this.userService.getLevel(
-        userInfo.total_score,
-        userInfo.total_score
-      );
 
-      if (levelData.length == 0) {
-        levelData = "level 0";
-      } else {
-        levelData = levelData[0].level;
-      }
-
-      res.json({ user: userInfo, level: levelData, getCurrentUser });
+      res.json({ user: userInfo, getCurrentUser });
     } catch (error) {
       console.error("error: ", error);
       res.json(error);
