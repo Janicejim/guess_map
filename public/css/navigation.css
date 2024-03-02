@@ -1,9 +1,8 @@
-body,
-html {
+header {
   font-family: "Noto Sans TC", sans-serif;
   text-decoration: none !important;
   background-color: #ffde03;
-  padding-top: 40px;
+  /* padding-top: 40px; */
   /* // same as header height */
 }
 
@@ -13,9 +12,9 @@ html a {
 }
 
 header {
-  height: 40px;
-  position: fixed;
-  top: 0;
+  height: 8rem;
+  /* position: fixed;
+  top: 0; */
   transition: top 0.2s ease-in-out;
   width: 100%;
   display: flex;

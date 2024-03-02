@@ -8,6 +8,10 @@ export async function seed(knex: Knex): Promise<void> {
   try {
     // truncate ALL existing entries
     let tables = [
+      "collection",
+      "check_in",
+      "check_in_image",
+      "user_award",
       "award",
       "score_record",
       "score_description",

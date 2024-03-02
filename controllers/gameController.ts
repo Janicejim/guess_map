@@ -22,19 +22,14 @@ class GameController {
         user_id,
         sorting
       );
-      if (req.query.limit) {
-        results = results.slice(0, 4);
-      }
-
-      res.json(results);
     } else {
       results = (await this.gameService.getAllActiveGames(sorting)).rows;
-      if (req.query.limit) {
-        results = results.slice(0, 4);
-      }
-
-      res.json(results);
     }
+    if (req.query.limit) {
+      results = results.slice(0, 4);
+    }
+
+    res.json(results);
   };
 
   uploadGame = async (req: Request, res: Response) => {
@@ -240,12 +235,12 @@ class GameController {
           res.json({ msg: "都係估錯，三次機會用晒，已扣30分作為累積獎金！" });
           return;
         }
-        console.log(
-          "attempts:",
-          game_history[0].attempts,
-          "id:",
-          game_history[0].id
-        );
+        // console.log(
+        //   "attempts:",
+        //   game_history[0].attempts,
+        //   "id:",
+        //   game_history[0].id
+        // );
         await this.gameService.userAnswerWrongly(
           {
             attempts: +game_history[0].attempts - 1,

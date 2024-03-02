@@ -72,12 +72,6 @@ class GameService {
     }
   }
 
-  async createScoreRecord(data: {
-    user_id: number;
-    score_change: number;
-    score_description_id: number;
-  }) {}
-
   async createGame(gameData: any) {
     await this.knex("game").insert(gameData);
 
@@ -338,7 +332,7 @@ where preferences=?`,
   async getUserScoreRecord(user_id: number) {
     return (
       await this.knex.raw(
-        `select description,score_record.created_at,score_change from score_record join score_description on score_record.score_description_id=score_description.id where user_id=? order by score_record.created_at desc`,
+        `select description,score_record.created_at,score_record.score_change from score_record join score_description on score_record.score_description_id=score_description.id where user_id=? order by score_record.created_at desc`,
         [user_id]
       )
     ).rows;

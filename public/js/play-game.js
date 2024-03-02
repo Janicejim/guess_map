@@ -8,19 +8,23 @@ const id = params.get("id");
 
 // ---------   basic socket config in js   ---------- //
 socket = io.connect();
-
+let isChecked;
 window.onload = () => {
+  checkCheckedInOrNot(id);
   loadSingleGame(id);
 };
 
 socket.on("update room store", () => {
-  console.log("update room store");
   loadSingleGame(id);
 });
 socket.on("update room status", () => {
-  console.log("update room status");
   loadSingleGame(id);
 });
+let gameStatus;
+let answerLocation;
+let answerMarker;
+let checkInId;
+
 async function loadSingleGame(id) {
   const res = await fetch(`/game?id=${id}`);
   const gameInfo = await res.json();
@@ -48,6 +52,7 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
       : document.querySelector(`#${status}-template`).content.cloneNode(true);
   node.querySelector(".question-media").src = gameInfo.data[0].media;
   if (status == "new") {
+    gameStatus = "new";
     node.querySelector("#store_amount").textContent =
       gameInfo.data[0].store_amount;
     node.querySelector("#join-game-btn").addEventListener("click", async () => {
@@ -64,6 +69,7 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
       }
     });
   } else if (status == "joined") {
+    gameStatus = "joined";
     node.querySelector("#store_amount").textContent =
       gameInfo.data[0].store_amount;
     node.querySelector("#attempts").textContent = gameInfo.attempts;
@@ -85,8 +91,61 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
     });
   } else if (status == "completed" || status == "creator") {
     if (status == "creator") {
+      gameStatus = "creator";
       document.querySelector("#chatroom-container").toggleAttribute("hidden");
+    } else {
+      gameStatus = "completed";
+      answerLocation = gameInfo.data[0].target_location;
     }
+
+    // console.log({ isChecked });
+    if (!isChecked) {
+      node.querySelector("#completed-map-container").removeAttribute("hidden");
+      node.querySelector("#check-in-button").removeAttribute("hidden");
+      node
+        .querySelector("#check-in-button")
+        .addEventListener("click", async () => {
+          let location = getLocationByMarker(currentLocationMarker);
+          if (!location) {
+            alert("請等待地圖出現人形圖案再提交");
+            return;
+          }
+          let result = await checkIn(location, gameInfo.data[0].id);
+
+          if (result.success) {
+            checkInId = result.recordId;
+
+            Swal.fire({
+              title: "打卡成功",
+              text: "留下更多足跡吧！",
+              html: `<div  >
+              <div>留言：   <input type="test" id="check-in-message"></input></div>
+              <div>合照：<input type="file" id="file"></input></div>
+              <button  onClick="submitCheckInData()">提交</button>
+              <button   onClick="closeSweetAlert()">取消</button>
+            </div>`,
+              icon: "success",
+              showConfirmButton: false,
+              showCancelButton: false,
+              allowOutsideClick: true,
+            });
+            document
+              .querySelector("#completed-map-container")
+              .toggleAttribute("hidden");
+            document
+              .querySelector("#check-in-button")
+              .toggleAttribute("hidden");
+          } else {
+            Swal.fire({
+              title: "提交失敗",
+              text: result.msg,
+              icon: "error",
+              confirmButtonText: "關閉",
+            });
+          }
+        });
+    }
+
     node.querySelector("#winner").textContent = gameInfo.data[0].winner;
     node.querySelector("#address").textContent =
       gameInfo.data[0].answer_address;
@@ -229,8 +288,8 @@ function toggleBounce() {
 
 //will auto call by google script
 function initMap() {
-  myLatLng = new google.maps.LatLng(22.28780558413936, 114.14833128874676);
-
+  // myLatLng = new google.maps.LatLng(22.28780558413936, 114.14833128874676);
+  myLatLng = new google.maps.LatLng(22.283047923532244, 114.15359294197071);
   let mapElm = document.getElementById("map") || 0;
   if (!mapElm) {
     return;
@@ -245,16 +304,31 @@ function initMap() {
 
   navigator.geolocation.getCurrentPosition(setCurrentPositionMarker);
 
-  google.maps.event.addListener(map, "click", function (mapsMouseEvent) {
-    guessLatLng = new google.maps.LatLng(
-      mapsMouseEvent.latLng.lat(),
-      mapsMouseEvent.latLng.lng()
-    );
-    placeMarker(mapsMouseEvent.latLng);
+  if (gameStatus == "completed") {
+    answerLocation = new google.maps.LatLng(answerLocation.x, answerLocation.y);
 
-    // To add the marker to the map, call setMap():
-    console.log({ marker });
-    marker.setMap(map);
+    answerMarker = new google.maps.Marker({
+      position: answerLocation,
+      map: map,
+      draggable: false,
+      icon: {
+        url: "/push_pin_black_24dp.svg",
+        scaledSize: new google.maps.Size(40, 40),
+      },
+    });
+    answerMarker.setMap(map);
+  }
+
+  google.maps.event.addListener(map, "click", function (mapsMouseEvent) {
+    if (gameStatus == "joined") {
+      guessLatLng = new google.maps.LatLng(
+        mapsMouseEvent.latLng.lat(),
+        mapsMouseEvent.latLng.lng()
+      );
+      placeMarker(mapsMouseEvent.latLng);
+
+      marker.setMap(map);
+    }
   });
 }
 
@@ -283,4 +357,65 @@ function setCurrentPositionMarker(position) {
     },
   });
   currentLocationMarker.setMap(map);
+}
+
+//------------------------------check in----------------
+async function checkIn(location, gameId) {
+  let res = await fetch(`/check-in?gameId=${gameId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(location),
+  });
+  let result = await res.json();
+  return result;
+}
+
+async function checkCheckedInOrNot(gameId) {
+  let res = await fetch(`/check-in/game?gameId=${gameId}`);
+  let result = await res.json();
+  isChecked = result.checked;
+  // console.log("after fetch:", { isChecked });
+}
+//-----------------------gallery-----------------
+let swiper = new Swiper(".mySwiper", {
+  spaceBetween: 10,
+  slidesPerView: 4,
+  freeMode: true,
+  watchSlidesProgress: true,
+});
+let swiper2 = new Swiper(".mySwiper2", {
+  spaceBetween: 10,
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+  thumbs: {
+    swiper: swiper,
+  },
+});
+
+async function submitCheckInData() {
+  let formData = new FormData();
+  formData.append("message", document.querySelector("#check-in-message").value);
+  formData.append("image", document.querySelector("#file").files[0]);
+
+  let res = await fetch(`/check-in?id=${checkInId}`, {
+    method: "PATCH",
+    body: formData,
+  });
+  let result = await res.json();
+  Swal.close();
+  Swal.fire({
+    title: "上傳成功",
+    icon: "success",
+    showConfirmButton: false,
+    showCancelButton: true,
+    confirmButtonText: "關閉",
+  });
+}
+
+function closeSweetAlert() {
+  Swal.close();
 }

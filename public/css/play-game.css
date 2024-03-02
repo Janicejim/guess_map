@@ -62,8 +62,7 @@ footer {
   display: flex;
   justify-content: center;
   margin: auto;
-  font-size: 25px;
-  margin-left: 20px;
+
 }
 .guess-chance {
   display: flex;
@@ -212,17 +211,17 @@ footer {
 }
 
 .final_text {
-  color: #0336ff;
+  color: #282828;
   font-weight: bold;
-  font-size: 3rem;
-  text-shadow: 0.15rem 0.15rem #ff0266;
+  font-size: 2rem;
+  /* text-shadow: 0.15rem 0.15rem #ff0266; */
 }
 
 .fa-piggy-bank{
   font-size: 5rem;
   color: rgb(181, 62, 81);
 }
-.fa-star{
+.fa-coins{
   color:rgb(213, 210, 38);
   font-size: 5rem;
 }
@@ -253,3 +252,81 @@ footer {
   width: 40vw !important;
   font-size: 150% !important;
 }
+.plus{
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size:3rem
+}
+#play-map-container{
+  height: 30rem;
+  width: 100%;
+  margin-bottom: 5rem;
+}
+
+#completed-map-container{
+  height: 30rem;
+  width: 50%;
+  margin-bottom: 5rem;
+  margin-top: 5rem;
+}
+/* 
+test */
+
+
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.swiper {
+  width: 50%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiper-slide {
+  background-size: cover;
+  background-position: center;
+}
+
+.mySwiper2 {
+  height: 80%;
+  width: 50%;
+}
+
+.mySwiper {
+  height: 20%;
+  box-sizing: border-box;
+  padding: 10px 0;
+}
+
+.mySwiper .swiper-slide {
+  width: 25%;
+  height: 100%;
+  opacity: 0.4;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* 
+test */

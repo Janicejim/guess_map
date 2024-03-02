@@ -38,21 +38,21 @@
     <div id="navbar"></div>
     <div class="sort-container">
       <select class="sort-select" aria-label="Default select example">
-  
-        <option value="like_number asc" selected>排列依積分數目升序</option>
-        <option value="like_number desc">排列依積分數目降序</option>
-     
+        <option value="score asc">排列依積分數目升序</option>
+        <option value="score desc" selected>排列依積分數目降序</option>
       </select>
     </div>
+
     <div id="awardArea"></div>
     <template id="awardTemplate">
-      <div>
-      <div class="card" style="width: 18rem;" id="non-edit">
-        <img src="" class="card-img-top" alt="..." id="image">
-        <div class="card-body">
-          <h5 class="card-title" id="title"></h5>
-         <div>所需積分：<span  id="score"></span></div>
-<button id="redeem-btn">兌換</button>
+      <div id="award-container">
+        <div class="card" id="award">
+          <img src="" class="card-img-top" alt="..." id="image" />
+          <div class="card-body">
+            <h5 class="card-title" id="title"></h5>
+            <div>所需積分：<span id="score"></span></div>
+            <button id="redeem-btn">兌換</button>
+          </div>
         </div>
       </div>
     </template>

@@ -10,8 +10,16 @@ class AwardController {
 
   getAward = async (req: Request, res: Response) => {
     try {
-      let limited = req.query;
-      let awards = await this.awardService.getAward(+limited);
+      let { sorting } = req.query;
+      if (!sorting) {
+        sorting = "score desc";
+      }
+
+      let awards = await this.awardService.getAward(sorting.toString());
+
+      if (req.query.limited) {
+        awards = awards.slice(0, +req.query.limited);
+      }
       res.json(awards);
     } catch (e) {
       console.log(e);
@@ -85,6 +93,7 @@ class AwardController {
   getAwardRecord = async (req: Request, res: Response) => {
     try {
       let user_id = req.session.user.id;
+
       let awardRecords = await this.awardService.getAwardRecords(user_id);
       res.json(awardRecords);
     } catch (e) {

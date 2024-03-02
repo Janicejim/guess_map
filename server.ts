@@ -71,10 +71,12 @@ app.use(userRoutes);
 export const gameService = new GameService(knex);
 export const gameController = new GameController(gameService, io);
 import gameRoutes from "./router/gameRoutes";
+import collectionCheckInRoutes from "./router/collectionCheckInRoutes";
 
 app.use(gameRoutes);
 app.use(adminRoutes);
 app.use(awardRoutes);
+app.use(collectionCheckInRoutes);
 app.use(express.static("public"));
 
 app.use(express.static("public/html"));

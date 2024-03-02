@@ -4,7 +4,8 @@ $(function () {
 });
 
 async function getAward() {
-  let res = await fetch(`/award`);
+  let sorting = document.querySelector(".sort-select").value;
+  let res = await fetch(`/award?sorting=${sorting}`);
   let awards = await res.json();
   awardArea.innerHTML = ``;
   for (let award of awards) {
@@ -41,3 +42,7 @@ function createAwardDiv(award) {
 
   awardArea.appendChild(awardTemplate);
 }
+
+document.querySelector(".sort-select").addEventListener("change", () => {
+  getAward();
+});

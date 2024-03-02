@@ -183,3 +183,29 @@ align-items: center;
   .hidden{
     display: none;
   }
+
+  /* check in card */
+
+
+    .swiper {
+      width: 240px;
+      height: 320px;
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #ff0266;
+    }
+
+   #check-in-image{
+    width:100%;
+    height:100%
+
+   }
+    /* */

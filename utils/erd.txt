@@ -1,5 +1,6 @@
-{"input":"users\n----\nid pk\nname varchar(64) null\nemail varchar(100)not null\npassword varchar(200) not null\nprofile_image varchar(255) null\ndescription text null\nrole enum ('admin','user')\ncreated_at timestamp\nupdated_at timestamp\n\n\n\ngame\n----\nid pk\nuser_id integer fk >- users.id\nmedia varchar(200)\ntarget_location point \nhints_1 text\nhints_2 text\nanswer_name varchar(255)\nanswer_address varchar(255)\nanswer_description text\nstatus enum('active','inactive','completed')\ncreated_at timestamp\nupdated_at timestamp\n\n\nlike_dislike\n----\nid pk\ngame_id integer fk >- game.id\nuser_id integer fk >- users.id\ntype enum ('like','dislike')\ncreated_at timestamp\nupdated_at timestamp\n\n\ngame_history\n----\nid pk\ngame_id integer fk >- game.id\nuser_id integer fk >- users.id\nattempts integer\nis_win boolean\ncreated_at timestamp\nupdated_at timestamp\n\nstore_record\n----\nid pk\ngame_id integer fk >- game.id\nuser_id integer fk >- users.id\namount_change integer\ncreated_at timestamp\nupdated_at timestamp\n\n\nscore_description\n----\nid pk\ndescription text\ncreated_at timestamp\nupdated_at timestamp\n\n\nscore_record\n----\nid pk\nuser_id integer fk >- users.id\nscore_change integer\nscore_description_id integer fk >- score_description.id\ncreated_at timestamp\nupdated_at timestamp\n\naward\n----\nid pk\nname varchar(255)\nimage varchar (255)\nscore integer\nquantity integer\nstatus enum('active','inactive')\ncreated_at timestamp\nupdated_at timestamp\n\n\nuser_award\n----\nid pk\naward_id integer fk >- award.id\nuser_id integer fk >- users.id\ncreated_at timestamp\nupdated_at timestamp\n\n\n\n\n\n\n\n# view: (-201, -29)\n# users (1467, 161)\n# game (1559, 681)\n# zoom: 1.278\n# like_dislike (1161, 850)\n# game_history (1064, 14)\n# store_record (246, 519)\n# score_description (771, 506)\n# score_record (423, 98)\n# award (0, 0)\n# user_award (0, 0)","zoom":1.278,"view:x":{"_value":-201,"key":"view:x","defaultValue":0},"view:y":{"_value":-29,"key":"view:y","defaultValue":0},"users-x":{"_value":1467,"key":"users-x","defaultValue":0},"users-y":{"_value":161,"key":"users-y","defaultValue":0},"game-x":{"_value":1559,"key":"game-x","defaultValue":0},"game-y":{"_value":681,"key":"game-y","defaultValue":0},"like_dislike-x":{"_value":1161,"key":"like_dislike-x","defaultValue":0},"like_dislike-y":{"_value":850,"key":"like_dislike-y","defaultValue":0},"game_history-x":{"_value":1064,"key":"game_history-x","defaultValue":0},"game_history-y":{"_value":14,"key":"game_history-y","defaultValue":0},"store_record-x":{"_value":246,"key":"store_record-x","defaultValue":0},"store_record-y":{"_value":519,"key":"store_record-y","defaultValue":0},"score_description-x":{"_value":771,"key":"score_description-x","defaultValue":0},"score_description-y":{"_value":506,"key":"score_description-y","defaultValue":0},"score_record-x":{"_value":423,"key":"score_record-x","defaultValue":0},"score_record-y":{"_value":98,"key":"score_record-y","defaultValue":0},"award-x":{"_value":0,"key":"award-x","defaultValue":0},"award-y":{"_value":0,"key":"award-y","defaultValue":0},"user_award-x":{"_value":0,"key":"user_award-x","defaultValue":0},"user_award-y":{"_value":0,"key":"user_award-y","defaultValue":0}}
+
 # Visualize on https://quick-erd.surge.sh
+
 users
 ----
 id pk
@@ -100,27 +101,42 @@ created_at timestamp
 updated_at timestamp
 
 
+collection
+----
+id pk
+user_id integer fk >- users.id
+game_id integer fk >- game.id
+status enum('active','inactive')
+created_at timestamp
+updated_at timestamp
+
+check_in
+----
+id pk
+user_id integer fk >- users.id
+game_id integer fk >- game.id
+status enum('active','inactive')
+image varchar(255)
+message varchar(255)
+created_at timestamp
+updated_at timestamp
 
 
 
 
-
-# view: (182, 119)
+# view: (-109, -21)
 # users (1467, 161)
 # game (1559, 681)
 # zoom: 1.278
 # like_dislike (1005, 840)
 # game_history (1064, 14)
 # store_record (246, 519)
-# score_description (771, 506)
+# score_description (529, 868)
 # score_record (423, 98)
 # award (19, 17)
 # user_award (-76, 433)
-
-
-
-
-
+# collection (974, 490)
+# check_in (45, 867)
 
 
 

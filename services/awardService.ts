@@ -3,19 +3,11 @@ import { Knex } from "knex";
 class AwardService {
   constructor(private knex: Knex) {}
 
-  async getAward(limited: number) {
-    if (limited) {
-      return await this.knex
-        .select("*")
-        .from("award")
-        .where("status", "active")
-        .limit(limited)
-        .orderBy("created_at", "desc");
-    }
+  async getAward(sorting: string) {
     return (
       await this.knex.raw(
         `select id,image,name,score,quantity,status ,created_at ,(quantity-coalesce(count,0))as quota from award left join (select count(award_id)  as count,award_id from user_award group by award_id) as award_count on award.id=award_count.award_id
-        where status='active' order by award.created_at desc`
+        where status='active' order by ${sorting}`
       )
     ).rows;
   }
