@@ -280,3 +280,8 @@ function clickPreferenceEvent(
     targetElement.classList.toggle(`clicked-icon-${preference}`);
   });
 }
+
+let swiper = new Swiper(".mySwiper", {
+  effect: "cards",
+  grabCursor: true,
+});

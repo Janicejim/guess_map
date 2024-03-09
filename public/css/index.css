@@ -2,20 +2,27 @@
     width: 80vw;
     height: 35rem;
 }
-.game-container{
-    border: 1px solid rgb(141, 21, 41) !important;
-    width: 100%;
-    height: 70%;
-    background-color: rgba(255, 255, 255, 0.266);
-    border-radius: 1rem;
-
+.sub-title-icon{
+  width: 3rem;
+  height: 3rem;
 }
-.award-container{
-    border: 1px solid rgb(141, 21, 41) !important;
-    width: 100%;
-    height: 10rem;
-    background-color: rgba(255, 255, 255, 0.266);
-    border-radius: 1rem;
+.fa-plus-circle{
+  font-size:3.5rem;
+  color:orange
+}
+.game-board img{
+  border-radius:1rem 1rem 0 0;
+}
+
+
+.award-group{
+  width: 100% !important;
+  height: auto;
+  flex-wrap: wrap;
+}
+
+#award-area{
+margin-left:2rem
 }
 
 .google-map {
@@ -25,31 +32,49 @@
     /* border: 1px solid rgba(141, 21, 41, 0.284) !important; */
   }
 .all-container{
-    margin:5rem
+    margin:1.5rem
 }
 .feature-btn{
-background-color: rgb(246,3,102);
-width: 10rem;
-height: 8rem;
+
+width: 6rem;
+height: 6rem;
 border-radius: 1rem;
-border: none;
-margin: 1rem;
+border:0.2rem rgba(206, 167, 28, 0.381) solid;
+background-color: white;
+margin-top: 1.5rem;
+margin-right: 0.5rem;
+      box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
 }
+
+.feature-btn:hover{
+
+  border:0.2rem rgb(20, 173, 122) solid;
+  color:rgb(20, 173, 122)
+}
+
 .award-image{
-    width: 10rem;
-    height: 10rem;
-    border-radius: 0.5rem;
+    width: 40%;
+    height: auto;
+    border-radius: 1rem ;
+    box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+    margin:0.5rem
 }
 .sub-title{
-    color: #0336ff;
+    color: #151517;
     font-weight: bold;
     font-size: 2rem;
     margin-top: 4rem;
     margin-left: 1rem;
 
 }
+a{
+  color: #151517c5
+}
 .more{
     margin-top: 4rem;
+    margin-right:1rem;
+  
+    
 }
 .title-group{
     display: flex;
@@ -61,40 +86,43 @@ margin: 1rem;
     display: flex;
 justify-content: space-evenly;
 align-items: center;
-
+margin: 2rem;
+margin-left: 2rem;
     
 }
-#new-game{
-    display: flex;
-    flex-wrap: wrap;
-}
-
-
-
-/* .btn-container{
-    display: flex;
-    margin: auto;
-    align-items: center;
-    justify-content: center;
-} */
 
 .game-board {
-    width: 400px;
-    height: 500px;
+width: 400px;
+height:450px;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 0px;
     background-color: white;
-    border: 0.1rem #0336ff solid;
-    border-radius: 0 0 0.5rem 0.5rem;
+    border: 0.1rem #807b7c27 solid;
+    border-radius: 1rem ;
     box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
     margin-left:2rem;
+    position: relative;
   }
   
   .game-board:hover {
     transform: scale(1.01);
+    border:0.1rem rgb(20, 173, 122) solid;
   }
-  
+  .reaction-icon {
+    display: flex;
+    position: absolute;
+    top:5px;
+    right:0px
+  }
+  .fa-piggy-bank{
+    color: pink;
+    font-size: 2.5rem;
+  }
+  .fa-piggy-bank span{
+    margin-right: 1rem;
+    margin-left:0.5rem
+  }
   .game_container {
     width: 100%;
     height: 75%;
@@ -114,19 +142,26 @@ align-items: center;
   
   .user_info {
     display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
+    /* flex-wrap: nowrap;
+    flex-direction: column; */
     align-items: center;
-    margin-left: 3px;
+    margin-left: 2rem;
     width: 50px;
+    justify-content: center;
   }
   
   .profile_picture {
     margin-top: 5px;
-    aspect-ratio: 1/1;
-    width: 50px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
     border-radius: 50%;
     object-fit: cover;
+ 
+  }
+  .username{
+    color:grey;
+    font-size:0.9rem;
+margin-left: 0.5rem;
   }
   .profile_picture:hover {
     transform: scale(1.3) !important;
@@ -147,13 +182,11 @@ align-items: center;
   .reaction {
     margin-right: 1rem;
     font-size: 2rem;
-    color: lightgrey;
+    color: rgb(254, 254, 254);
   
   }
   
-  .reaction-icon {
-    display: flex;
-  }
+
   
   .far:hover {
     transform: scale(1.2);
@@ -172,10 +205,7 @@ align-items: center;
   .reaction_number {
     font-family: "Noto Sans TC";
   }
-  .fa-piggy-bank{
-    color: pink;
-    font-size: 2.5rem;
-  }
+
   .fa-star{
     color:rgb(213, 210, 38);
     font-size: 2.5rem;
@@ -187,25 +217,80 @@ align-items: center;
   /* check in card */
 
 
-    .swiper {
-      width: 240px;
-      height: 320px;
-    }
-
-    .swiper-slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 18px;
-      font-size: 22px;
-      font-weight: bold;
-      color: #fff;
-      background-color: #ff0266;
-    }
-
    #check-in-image{
     width:100%;
     height:100%
 
    }
     /* */
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .game-swiper .swiper-slide {
+      width: 23rem !important;
+    height: 510px;
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+    }
+
+
+    .sub-title i{
+      color: orange;
+      margin-right: 1rem;
+    }
+    td img{
+      width: 2rem;
+      height: 2rem;
+      margin-right: 1rem;
+    }
+    
+    th:nth-child(1){
+      width:5rem;
+    }
+    th:nth-child(2){
+      width:10rem;
+
+    }
+    td{
+      height: 5rem;
+      margin-left:5rem;
+  
+    }
+    table{
+      /* border-radius: 1rem ; */
+      box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+      width:90%;
+      margin-left:2rem;
+      border-radius: 5%;
+      padding-top: 20px;
+    }
+    table th:first-child,
+    table td:first-child {
+      text-align: center;
+
+    }
+    thead {
+    height:3rem;
+    color:grey
+    }
+    .ranking-sub-title{
+      text-align: center;
+      margin:2rem;
+      font-weight: bold;
+      font-size:1.5rem
+      ;color:grey
+    }
+
+    .feature-icon-container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }

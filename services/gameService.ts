@@ -128,6 +128,38 @@ on game.id=store.game_id where game.id=?`,
     ).rows;
   }
 
+  async getAllCompletedGame(sorting: string) {
+    return (
+      await this.knex
+        .raw(`select game.id,game.status,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(check_in_number,0) as check_in_number from game
+    join users on game.user_id=users.id 
+    left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record 
+    on game.id=like_record.game_id 
+    left join (select game_id,count(type) as dislike_number from like_dislike where type='dislike' group by type,game_id ) as dislike_record 
+    on game.id=dislike_record.game_id 
+    left join(select game_id,count (game_id) as check_in_number from check_in where status='active' group by game_id) as check_in_record
+    on game.id=check_in_record.game_id
+    where game.status='completed' order by ${sorting}`)
+    ).rows;
+  }
+
+  async getAllCompletedGameUserNotCheckIn(user_id: number, sorting: string) {
+    return (
+      await this.knex.raw(
+        `select game.id,game.status,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(check_in_number,0) as check_in_number from game
+    join users on game.user_id=users.id 
+    left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record 
+    on game.id=like_record.game_id 
+    left join (select game_id,count(type) as dislike_number from like_dislike where type='dislike' group by type,game_id ) as dislike_record 
+    on game.id=dislike_record.game_id 
+    left join(select user_id,game_id,count (game_id) as check_in_number from check_in where status='active' group by game_id,user_id) as check_in_record
+    on game.id=check_in_record.game_id
+    where game.status='completed' and check_in_record.user_id !=? order by ${sorting}`,
+        [user_id]
+      )
+    ).rows;
+  }
+
   async checkUserScore(currentUserId: number) {
     return (
       await this.knex.raw(
@@ -321,9 +353,9 @@ where preferences=?`,
     }
     let finalQuery;
     if (!periodQuery) {
-      finalQuery = `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id where score_description_id !=${description_id} group by user_id,name order by score desc limit 10;`;
+      finalQuery = `select name,sum(score_change)as score,profile_image from score_record join users on users.id =score_record.user_id where score_description_id !=${description_id} group by user_id,name,profile_image order by score desc limit 10;`;
     } else {
-      finalQuery = `select name,sum(score_change)as score from score_record join users on users.id =score_record.user_id ${periodQuery} and score_description_id !=${description_id} group by user_id,name order by score desc limit 10;`;
+      finalQuery = `select name,sum(score_change)as score,profile_image from score_record join users on users.id =score_record.user_id ${periodQuery} and score_description_id !=${description_id} group by user_id,name,profile_image order by score desc limit 10;`;
     }
 
     return (await this.knex.raw(finalQuery)).rows;

@@ -26,7 +26,7 @@ class GameController {
       results = (await this.gameService.getAllActiveGames(sorting)).rows;
     }
     if (req.query.limit) {
-      results = results.slice(0, 4);
+      results = results.slice(0, req.query.limit);
     }
 
     res.json(results);
@@ -476,11 +476,61 @@ class GameController {
     }
   };
 
+  getCompletedGame = async (req: Request, res: Response) => {
+    try {
+      // let result = [];
+      // if (req.session["user"]) {
+      //   let userId = req.session["user"].id;
+      // }
+
+      // result = await this.gameService.getRankByPeriod(
+      //   period.toString(),
+      //   redeemedDescriptionId
+      // );
+
+      res.json({});
+    } catch (e) {
+      console.error(e);
+      res.json({ success: false, msg: e });
+    }
+  };
+
   getUserScoreRecord = async (req: Request, res: Response) => {
     try {
       let userId = req.session["user"].id;
 
       let result = await this.gameService.getUserScoreRecord(userId);
+
+      res.json(result);
+    } catch (e) {
+      console.error(e);
+      res.json({ success: false, msg: e });
+    }
+  };
+
+  getCompletedGamesForCheckIn = async (req: Request, res: Response) => {
+    try {
+      let result: any = [];
+      let sorting = req.query.sorting;
+
+      if (!sorting) {
+        sorting = `game.created_at desc`;
+      } else {
+        sorting = sorting.toString().replace(/%20/g, " ");
+      }
+      if (req.session["user"]) {
+        let userId = req.session["user"].id;
+
+        result = await this.gameService.getAllCompletedGameUserNotCheckIn(
+          userId,
+          sorting
+        );
+      } else {
+        result = await this.gameService.getAllCompletedGame(sorting);
+      }
+      if (req.query.limit) {
+        result = result.slice(0, req.query.limit);
+      }
 
       res.json(result);
     } catch (e) {

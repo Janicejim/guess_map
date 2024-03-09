@@ -1,6 +1,6 @@
 import { Knex } from "knex";
 
-export class CollectionCheckInService {
+export class CheckInService {
   constructor(private knex: Knex) {}
 
   async getCollectionByUser(user_id: number) {
@@ -82,4 +82,4 @@ export class CollectionCheckInService {
   }
 }
 
-export default CollectionCheckInService;
+export default CheckInService;

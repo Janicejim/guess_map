@@ -1,9 +1,10 @@
 header {
   font-family: "Noto Sans TC", sans-serif;
   text-decoration: none !important;
-  background-color: #ffde03;
-  /* padding-top: 40px; */
-  /* // same as header height */
+
+  background-color:rgb(255, 199, 45);
+  box-shadow: 0px 3px 6px 2px rgba(11, 6, 6, 0.134);
+
 }
 
 body a,
@@ -29,13 +30,12 @@ header {
 }
 
 header .logo {
-  margin-top: 4vh;
-  margin-left: 2vw;
-  color: #0336ff;
-  font-weight: 700;
-  font-size: 5vh;
-  border-bottom: 10px solid #ff0266;
-  line-height: 15px;
+  margin-top: 2rem;
+  width: 15rem;
+  height: 10rem;
+
+
+
 }
 
 header .logo:hover {
@@ -49,6 +49,9 @@ header .menu-btn {
   width: 5vh;
   float: right;
   cursor: pointer;
+  color:rgb(20, 173, 122);
+  font-size:3rem
+
 }
 
 header .menu-btn:hover {
@@ -63,7 +66,7 @@ nav {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  background: #ff0266;
+  background:rgb(20, 173, 122);
   padding: 1em;
   width: 100%;
   height: 100%;
@@ -114,7 +117,7 @@ nav ul {
 
 nav ul a {
   /* color: #0336ff; */
-  color: #0336ff;
+  color: rgb(255, 199, 45);
   font-weight: bold;
   font-size: 2em;
   text-decoration: none !important;

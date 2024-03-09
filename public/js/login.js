@@ -1,7 +1,7 @@
 //load navbar
-$(function () {
-  $("#navbar").load("/navigation.html");
-});
+// $(function () {
+//   $("#navbar").load("/navigation.html");
+// });
 
 //login form
 document

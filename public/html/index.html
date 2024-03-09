@@ -37,112 +37,218 @@
   <body>
     <!-- navbar -->
     <div id="navbar"></div>
-    <!-- <div id="map" class="google-map"></div> -->
-    <div class="btn-group">
-      <div>
-        <a href="/rank.html"><button class="feature-btn">排行榜</button></a>
-        <a href="/rules.html"><button class="feature-btn">遊戲說明</button></a>
-        <a href="/award.html"><button class="feature-btn">獎品兌換</button></a>
-        <a href="/upload-game.html">
-          <button class="feature-btn">上傳你的遊戲</button></a
-        >
+    <div class="container">
+      <!-- feature button -->
+      <div class="btn-group">
+        <div class="row">
+          <div class="col-lg-2 col-md-2 col-sm-4 col-6 feature-icon-container">
+            <a href="/rules.html"
+              ><button class="feature-btn">
+                <div>
+                  <img
+                    class="sub-title-icon"
+                    src="https://cdn-icons-png.flaticon.com/512/7610/7610947.png"
+                    alt=""
+                  />
+                  <div>遊戲說明</div>
+                </div>
+              </button></a
+            >
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-4 col-6 feature-icon-container">
+            <a href="/upload-game.html">
+              <button class="feature-btn">
+                <div>
+                  <!-- <i class="fas fa-plus-circle"></i> -->
+                  <img
+                    class="sub-title-icon"
+                    src="https://cdn3.iconfinder.com/data/icons/social-messaging-ui-color-line/254000/97-512.png"
+                    alt=""
+                  />
+
+                  <div>創建遊戲</div>
+                </div>
+              </button></a
+            >
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-4 col-6 feature-icon-container">
+            <a href="/game.html"
+              ><button class="feature-btn">
+                <div>
+                  <img
+                    class="sub-title-icon"
+                    src="http://vectips.com/wp-content/uploads/2017/11/tutorial-preview-small.png"
+                    alt=""
+                  />
+
+                  <div>玩遊戲</div>
+                </div>
+              </button></a
+            >
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-4 col-6 feature-icon-container">
+            <a href="/game.html"
+              ><button class="feature-btn">
+                <div>
+                  <img
+                    class="sub-title-icon"
+                    src="https://icons.iconarchive.com/icons/iconarchive/outline-camera/512/Flat-Red-Big-Camera-icon.png"
+                    alt=""
+                  />
+                  <div>打卡區</div>
+                </div>
+              </button></a
+            >
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-4 col-6 feature-icon-container">
+            <a href="/award.html"
+              ><button class="feature-btn">
+                <div>
+                  <img
+                    class="sub-title-icon"
+                    src="https://cdn-icons-png.flaticon.com/512/3726/3726484.png"
+                    alt=""
+                  />
+                  <div>獎品兌換</div>
+                </div>
+              </button></a
+            >
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-4 col-6 feature-icon-container">
+            <a href="/rank.html"
+              ><button class="feature-btn">
+                <div>
+                  <img
+                    class="sub-title-icon"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGZutHxP9nSmQtu_HLV9pOnXLofQwWgJDbiQ&usqp=CAU"
+                    alt=""
+                  />
+                  <div>排行榜</div>
+                </div>
+              </button></a
+            >
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="all-container">
-      <div class="row">
-        <div class="col-12">
-          <!-- new -->
-          <div class="title-group">
-            <div class="sub-title">最新遊戲</div>
-            <span class="more"
-              ><a href="/game.html?type=new"
-                >更多<i class="fas fa-angle-right"></i></a
-            ></span>
-          </div>
+      <!-- new game -->
+      <div class="title-group">
+        <div class="sub-title"><i class="fas fa-gamepad"></i>最新遊戲</div>
+        <span class="more"
+          ><a href="/game.html?type=new"
+            >更多<i class="fas fa-angle-right"></i></a
+        ></span>
+      </div>
 
-          <div class="game-container" id="new-game"></div>
-        </div>
-        <div class="col-4 btn-container"></div>
+      <div class="swiper game-swiper">
+        <div class="swiper-wrapper" id="new-game"></div>
       </div>
 
       <div class="row">
-        <div class="col hidden" id="in-progress">
-          <div class="title-group">
-            <div class="sub-title">參與中</div>
-            <span class="more"
-              ><a href="/game.html?type=in_progress"
-                >更多<i class="fas fa-angle-right"></i></a
-            ></span>
+        <div class="col-md-8 col-sm-12">
+          <!-- in progress game-->
+          <div id="in-progress" class="hidden">
+            <div class="title-group">
+              <div class="sub-title"><i class="fas fa-spinner"></i>參與中</div>
+              <span class="more"
+                ><a href="/game.html?type=in_progress"
+                  >更多<i class="fas fa-angle-right"></i></a
+              ></span>
+            </div>
+            <div class="game-container" id="progress-game-container"></div>
           </div>
-          <div class="game-container" id="progress-game-container"></div>
-        </div>
-        <div class="col">
-          <div class="title-group">
-            <div class="sub-title">精美獎品</div>
-            <span class="more"
-              ><a href="/award.html">更多<i class="fas fa-angle-right"></i></a
-            ></span>
+          <!-- check in -->
+          <div id="check-in">
+            <div class="title-group">
+              <div class="sub-title"><i class="far fa-images"></i>打卡位</div>
+              <span class="more"
+                ><a href="/game.html?type=in_progress"
+                  >更多<i class="fas fa-angle-right"></i></a
+              ></span>
+            </div>
+            <div class="game-container" id="progress-game-container"></div>
           </div>
-          <div class="award-container"></div>
+          <!-- award -->
+          <div class="award-container">
+            <div class="title-group">
+              <div class="sub-title"><i class="fas fa-gifts"></i>獎品</div>
+              <span class="more"
+                ><a href="/award.html">更多<i class="fas fa-angle-right"></i></a
+              ></span>
+            </div>
+
+            <div class="award-group"><div id="award-area"></div></div>
+          </div>
         </div>
-        <div class="col">
+
+        <div class="col-md-4 col-sm-12">
+          <!-- ranking -->
           <div class="title-group">
-            <div class="sub-title">排行榜</div>
+            <div class="sub-title"><i class="fas fa-trophy"></i>排行榜</div>
             <span class="more"
               ><a href="/rank.html">更多<i class="fas fa-angle-right"></i></a
             ></span>
           </div>
-          <div class="award-container"></div>
+          <div class="ranking-container">
+            <table>
+              <tr>
+                <div class="ranking-sub-title">總積分排名</div>
+                <thead>
+                  <th>排名</th>
+                  <th>用家</th>
+                  <th>積分</th>
+                </thead>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- game template -->
     <template id="game-template">
-      <!-- col-2 col-xl-4 col-sm-12 -->
-      <div class="game-board">
-        <a href=""
-          ><img src="" alt="game_media" class="game_container img-fluid"
-        /></a>
-        <div class="game_info">
-          <div class="user_info">
-            <img src="" alt="profile_image" class="profile_picture" />
-          </div>
-          <i class="fas fa-piggy-bank"></i>
-
-          <div class="reaction-icon">
-            <div class="reaction">
-              <i id="like" class="far fa-thumbs-up"
-                ><span class="reaction_number like_number"></span
-              ></i>
+      <div class="swiper-slide">
+        <div class="game-board">
+          <a href=""
+            ><img src="" alt="game_media" class="game_container img-fluid"
+          /></a>
+          <div class="game_info">
+            <div class="user_info">
+              <img src="" alt="profile_image" class="profile_picture" />
+              <div class="username"></div>
             </div>
-            <div class="reaction">
-              <i id="dislike" class="far fa-thumbs-down"
-                ><span class="reaction_number dislike_number"></span
-              ></i>
+            <i class="fas fa-piggy-bank"><span></span></i>
+
+            <div class="reaction-icon">
+              <div class="reaction">
+                <i id="like" class="far fa-thumbs-up"
+                  ><span class="reaction_number like_number"></span
+                ></i>
+              </div>
+              <div class="reaction">
+                <i id="dislike" class="far fa-thumbs-down"
+                  ><span class="reaction_number dislike_number"></span
+                ></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </template>
+    <!-- award template -->
+    <template id="award-template">
+      <a href="/award.html"><img src="" alt="" class="award-image" /></a>
+    </template>
 
-    <div class="swiper mySwiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <a href="/play-game.html?id=2"
-            ><img id="check-in-image" src="/1673.jpeg" alt=""
-          /></a>
-        </div>
-        <div class="swiper-slide">Slide 2</div>
-        <div class="swiper-slide">Slide 3</div>
-        <div class="swiper-slide">Slide 4</div>
-        <div class="swiper-slide">Slide 5</div>
-        <div class="swiper-slide">Slide 6</div>
-        <div class="swiper-slide">Slide 7</div>
-        <div class="swiper-slide">Slide 8</div>
-        <div class="swiper-slide">Slide 9</div>
-      </div>
-    </div>
+    <template id="ranking-template">
+      <tr>
+        <td class="rank-number">1</td>
+        <td class="rank-picture">
+          <img src="/anonymous.jpg" /><span class="rank-user"></span>
+        </td>
+        <td class="rank-score">10000</td>
+      </tr>
+    </template>
 
     <img
       src="/arrow_upward_black_24dp.svg"
@@ -157,10 +263,7 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <!-- <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx_KywoJ3TbIkl5VuZuUhj0-PA1WYft-I&callback=initMap&libraries=&v=weekly"
-      async
-    ></script> -->
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="/js/index.js"></script>

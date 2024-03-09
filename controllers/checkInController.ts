@@ -1,15 +1,13 @@
-import CollectionCheckInService from "../services/collectionCheckInService";
+import CheckInService from "../services/checkInService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
-class CollectionCheckInController {
-  constructor(private collectionCheckInService: CollectionCheckInService) {}
+class CheckInController {
+  constructor(private checkInService: CheckInService) {}
 
   getCollectionByUser = async (req: Request, res: Response) => {
     try {
       let userId = req.session.user.id;
-      let result = await this.collectionCheckInService.getCollectionByUser(
-        userId
-      );
+      let result = await this.checkInService.getCollectionByUser(userId);
 
       res.json(result);
     } catch (e) {
@@ -27,20 +25,19 @@ class CollectionCheckInController {
         return;
       }
 
-      let oldRecord =
-        await this.collectionCheckInService.checkOldCollectionRecord(
-          userId,
-          +gameId
-        );
+      let oldRecord = await this.checkInService.checkOldCollectionRecord(
+        userId,
+        +gameId
+      );
       if (oldRecord.length == 0) {
-        await this.collectionCheckInService.addCollection(userId, +gameId);
+        await this.checkInService.addCollection(userId, +gameId);
       } else if (oldRecord.length > 0 && oldRecord[0].status == "inactive") {
-        await this.collectionCheckInService.updatedCollectionRecordStatus(
+        await this.checkInService.updatedCollectionRecordStatus(
           oldRecord[0].id,
           "active"
         );
       } else if (oldRecord.length > 0 && oldRecord[0].status == "active") {
-        await this.collectionCheckInService.updatedCollectionRecordStatus(
+        await this.checkInService.updatedCollectionRecordStatus(
           oldRecord[0].id,
           "inactive"
         );
@@ -65,7 +62,7 @@ class CollectionCheckInController {
         res.json("missing query");
         return;
       }
-      let oldRecord = await this.collectionCheckInService.checkOldCheckInRecord(
+      let oldRecord = await this.checkInService.checkOldCheckInRecord(
         user_id,
         +gameId
       );
@@ -77,7 +74,7 @@ class CollectionCheckInController {
         return;
       }
 
-      let gameData = await this.collectionCheckInService.checkGameData(+gameId);
+      let gameData = await this.checkInService.checkGameData(+gameId);
 
       //compare user targeted_location and answer:
       let distanceAfterCompare = checkDistance(
@@ -96,7 +93,7 @@ class CollectionCheckInController {
         return;
       }
 
-      let id = await this.collectionCheckInService.addCheckInRecord({
+      let id = await this.checkInService.addCheckInRecord({
         user_id: +user_id,
         game_id: +gameId,
         status: "active",
@@ -135,7 +132,7 @@ class CollectionCheckInController {
         return;
       }
 
-      await this.collectionCheckInService.updateCheckInData(data);
+      await this.checkInService.updateCheckInData(data);
 
       res.json("success");
     } catch (e) {
@@ -146,8 +143,7 @@ class CollectionCheckInController {
   getCheckInRecordByUser = async (req: Request, res: Response) => {
     try {
       let userId = req.session.user.id;
-      let result =
-        await this.collectionCheckInService.getAllCheckInRecordOfUser(userId);
+      let result = await this.checkInService.getAllCheckInRecordOfUser(userId);
 
       res.json(result);
     } catch (e) {
@@ -163,7 +159,7 @@ class CollectionCheckInController {
         res.json("missing query");
         return;
       }
-      let result = await this.collectionCheckInService.checkOldCheckInRecord(
+      let result = await this.checkInService.checkOldCheckInRecord(
         userId,
         +gameId
       );
@@ -180,4 +176,4 @@ class CollectionCheckInController {
   };
 }
 
-export default CollectionCheckInController;
+export default CheckInController;

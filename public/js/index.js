@@ -16,9 +16,9 @@ socket.on("update game status", () => {
 });
 
 async function getAward() {
-  let res = await fetch(`/award?limited=5`);
+  let res = await fetch(`/award?limited=4`);
   let awards = await res.json();
-  let awardArea = document.querySelector(".award-container");
+  let awardArea = document.querySelector("#award-area");
   for (let award of awards) {
     createAwardDiv(award, awardArea);
   }
@@ -27,15 +27,16 @@ async function getAward() {
 getAward();
 
 function createAwardDiv(award, awardArea) {
-  let element = document.createElement("img");
-  element.classList.add("award-image");
+  const awardTemplate = document
+    .querySelector("#award-template")
+    .content.cloneNode(true);
+  let element = awardTemplate.querySelector(".award-image");
   element.src = `/${award.image}`;
-  element.alt = "";
-  awardArea.appendChild(element);
+  awardArea.appendChild(awardTemplate);
 }
 //load game
 async function loadGames() {
-  const res = await fetch("/games?limit=true");
+  const res = await fetch("/games?limit=12");
   let games = await res.json();
   let newGamesDiv = document.querySelector("#new-game");
   newGamesDiv.innerHTML = ``;
@@ -76,11 +77,14 @@ function createEachGameDiv(game, gameBoardDiv) {
   gameMediaDiv.src = `/${game.media}`;
   let userProfilePigDiv = gameTemplate.querySelector(".profile_picture");
   userProfilePigDiv.src = `/${game.profile_image}`;
+
+  gameTemplate.querySelector(".username").textContent = game.name;
   let likeNumberElm = gameTemplate.querySelector(".like_number");
   likeNumberElm.textContent = game.like_number;
   let dislikeNumberElm = gameTemplate.querySelector(".dislike_number");
   dislikeNumberElm.textContent = game.dislike_number;
-  gameTemplate.querySelector(".fa-piggy-bank").textContent = game.store_amount;
+  gameTemplate.querySelector(".fa-piggy-bank span").textContent =
+    game.store_amount;
   let likeIcon = gameTemplate.querySelector(".fa-thumbs-up");
   let dislikeIcon = gameTemplate.querySelector(".fa-thumbs-down");
   if ("preferences" in game) {
@@ -150,7 +154,45 @@ function loginGuard(targetElement) {
   });
 }
 
-let swiper = new Swiper(".mySwiper", {
-  effect: "cards",
-  grabCursor: true,
+let gameSwiper = new Swiper(".game-swiper", {
+  slidesPerView: 2,
+  spaceBetween: 30,
 });
+
+// let awardSwiper = new Swiper(".award-swiper", {
+//   slidesPerView: 2,
+//   grid: {
+//     rows: 2,
+//   },
+//   spaceBetween: 30,
+//   pagination: {
+//     el: ".swiper-pagination",
+//     clickable: true,
+//   },
+// });
+
+async function loadRank() {
+  const res = await fetch(`/rank?period=all`);
+  let records = await res.json();
+  const rankDiv = document.querySelector("table");
+  let i = 0;
+  for (let record of records) {
+    i++;
+    updateRankDiv(record, rankDiv, i);
+  }
+}
+function updateRankDiv(record, rankDiv, number) {
+  let rankTemplate = document
+    .querySelector("#ranking-template")
+    .content.cloneNode(true);
+
+  rankTemplate.querySelector(".rank-number").textContent = number;
+
+  rankTemplate.querySelector("img").src = record.profile_image
+    ? `/${record.profile_image}`
+    : "/anonymous.jpg";
+  rankTemplate.querySelector(".rank-user").textContent = `${record.name}`;
+  rankTemplate.querySelector(".rank-score").textContent = `${record.score}`;
+  rankDiv.appendChild(rankTemplate);
+}
+loadRank();
