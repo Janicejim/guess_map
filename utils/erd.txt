@@ -1,6 +1,5 @@
 
 # Visualize on https://quick-erd.surge.sh
-
 users
 ----
 id pk
@@ -66,6 +65,7 @@ score_description
 id pk
 description text
 score_change integer
+image varchar(255)
 created_at timestamp
 updated_at timestamp
 
@@ -157,18 +157,29 @@ updated_at timestamp
 
 
 
+-----------仍待完成部分：----------------
+[]profile.html-->打卡紀錄
+[]index.html-->打卡區--》更多
+[]profile.html-->review (for other user )
+[]index.html-->排行榜--》＋ui
+[]ranking.html-->different ranking+ui+my ranking
+[]login.html+register.html-->google login+show error msg
+[]play-game.html-->打卡紀錄
+[]play-game.html-->ui
+[]upload-game.html-->ui
+[]admin.html--> ui
+[]login.html-->ui
+[]register.html-->ui
+[]alert-->sweetAlert
+[]backend:any type-->model.ts
 
+-----如果有時間可以：---------
+[]get record/game-->offset
 
-#打卡功能
--[]已完結遊戲圖鑑
--[]圖鑑收藏
--[]打卡
--[]勝利地圖
-
+-----------以後要加的功能：----------------
 #付費購買用品：
 -[]限定每日作答數
 -[]限定每日出題數
 -[]限定收藏數
 -[]限定打卡數
-
 #實景地圖

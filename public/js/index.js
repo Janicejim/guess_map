@@ -36,6 +36,7 @@ function createAwardDiv(award, awardArea) {
 }
 //load game
 async function loadGames() {
+  //new game
   const res = await fetch("/games?limit=12");
   let games = await res.json();
   let newGamesDiv = document.querySelector("#new-game");
@@ -46,20 +47,27 @@ async function loadGames() {
   for (let game of games) {
     createEachGameDiv(game, newGamesDiv);
   }
-
+  //in progress
   if ("preferences" in games[0]) {
     let inProgressDiv = document.querySelector("#in-progress");
     inProgressDiv.classList.remove("hidden");
     let processRes = await fetch("/game/record/in_progress?limit=true");
     let progressGames = await processRes.json();
-    let progressGameDiv = document.querySelector("#progress-game-container");
+    let progressGameDiv = document.querySelector(
+      ".in-progress-swiper .swiper-wrapper"
+    );
     if (progressGames.length < 1) {
-      progressGameDiv.innerHTML = `<div>未有進行中的記錄</div>`;
+      progressGameDiv.innerHTML = `<div class="no-record-container"><div class="no-record-elm"><div>未有進行中的記錄</div><a href="/game.html?type=new"><button class="btn btn-warning">按此參加遊戲！</button></a></div></div>`;
+    } else {
+      progressGameDiv.innerHTML = ``;
+      for (let progressGame of progressGames) {
+        createEachGameDiv(progressGame, progressGameDiv);
+      }
     }
-    progressGameDiv.innerHTML = ``;
-    for (let progressGame of progressGames) {
-      createEachGameDiv(progressGame, progressGameDiv);
-    }
+  } else {
+    document
+      .querySelector("#check-in")
+      .classList.remove("col-md-6", "col-sm-12");
   }
 }
 loadGames();
@@ -77,7 +85,9 @@ function createEachGameDiv(game, gameBoardDiv) {
   gameMediaDiv.src = `/${game.media}`;
   let userProfilePigDiv = gameTemplate.querySelector(".profile_picture");
   userProfilePigDiv.src = `/${game.profile_image}`;
-
+  gameTemplate.querySelector(
+    ".profile_href"
+  ).href = `/profile.html?id=${game.user_id}`;
   gameTemplate.querySelector(".username").textContent = game.name;
   let likeNumberElm = gameTemplate.querySelector(".like_number");
   likeNumberElm.textContent = game.like_number;
@@ -139,14 +149,13 @@ function clickPreferenceEvent(
     ) {
       return;
     }
-    //   if (targetElement.classList.contains(`clicked-icon-${preference}`)) {
-    //     numberElm.textContent = +numberElm.textContent - 1;
-    //   } else {
-    //     numberElm.textContent = +numberElm.textContent + 1;
-    //   }
-    //   targetElement.classList.toggle(`clicked-icon-${preference}`);
   });
 }
+//new game swiper:
+let gameSwiper = new Swiper(".game-swiper", {
+  slidesPerView: 2,
+  spaceBetween: 30,
+});
 
 function loginGuard(targetElement) {
   targetElement.addEventListener("click", () => {
@@ -154,22 +163,7 @@ function loginGuard(targetElement) {
   });
 }
 
-let gameSwiper = new Swiper(".game-swiper", {
-  slidesPerView: 2,
-  spaceBetween: 30,
-});
-
-// let awardSwiper = new Swiper(".award-swiper", {
-//   slidesPerView: 2,
-//   grid: {
-//     rows: 2,
-//   },
-//   spaceBetween: 30,
-//   pagination: {
-//     el: ".swiper-pagination",
-//     clickable: true,
-//   },
-// });
+//rank:
 
 async function loadRank() {
   const res = await fetch(`/rank?period=all`);
@@ -196,3 +190,43 @@ function updateRankDiv(record, rankDiv, number) {
   rankDiv.appendChild(rankTemplate);
 }
 loadRank();
+
+async function loadCompletedGameForCheckIn() {
+  let res = await fetch("/game/completed?limit=10");
+  let result = await res.json();
+  let checkInDiv = document.querySelector(".checkInSwiper .swiper-wrapper");
+  checkInDiv.innerHTML = ``;
+  for (let game of result) {
+    createCheckInElm(checkInDiv, game);
+  }
+  //load completed game for check in, need to append the game first:
+  let checkInSwiper = new Swiper(".checkInSwiper", {
+    effect: "cards",
+    grabCursor: true,
+  });
+}
+
+function createCheckInElm(mainDiv, game) {
+  let checkInTemplate = document
+    .querySelector("#check-in-template")
+    .content.cloneNode(true);
+  checkInTemplate.querySelector("a").href = `/play-game.html?id=${game.id}`;
+  checkInTemplate.querySelector("img").src = `/${game.media}`;
+  checkInTemplate.querySelector(".check-in-number").textContent =
+    game.check_in_number;
+
+  mainDiv.appendChild(checkInTemplate);
+}
+
+loadCompletedGameForCheckIn();
+
+//in progress game swiper:
+let inProgressSwiper = new Swiper(".in-progress-swiper", {
+  pagination: {
+    el: ".in-progress-swiper .swiper-pagination",
+    clickable: true,
+    renderBullet: function (index, className) {
+      return '<span class="' + className + '">' + (index + 1) + "</span>";
+    },
+  },
+});

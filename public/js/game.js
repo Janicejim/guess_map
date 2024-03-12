@@ -44,7 +44,7 @@ function createEachGameDiv(game, gameBoardDiv) {
 
   gameMediaDiv.src = `/${game.media}`;
   let userProfilePigDiv = gameTemplate.querySelector(".profile_picture");
-
+  gameTemplate.querySelector(".username").textContent = game.name;
   userProfilePigDiv.src = `/${game.profile_image}`;
   let likeNumberElm = gameTemplate.querySelector(".like_number");
   likeNumberElm.textContent = game.like_number;

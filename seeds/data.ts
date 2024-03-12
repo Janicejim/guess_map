@@ -10,7 +10,6 @@ export async function seed(knex: Knex): Promise<void> {
     let tables = [
       "collection",
       "check_in",
-      "check_in_image",
       "user_award",
       "award",
       "score_record",
@@ -45,16 +44,6 @@ export async function seed(knex: Knex): Promise<void> {
       dataWorkbook.Sheets["score_record"]
     );
     let awardData = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["award"]);
-    // console.log(
-    //   userData[0],
-    //   gameData[0],
-    //   likeDislikeData[0],
-    //   gameHistoryData[0],
-    //   storeRecordData[0],
-    //   scoreDescriptionData[0],
-    //   scoreRecordData[0],
-    //   awardData[0]
-    // );
 
     // Inserts users
 

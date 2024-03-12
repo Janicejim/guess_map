@@ -35,11 +35,6 @@
 
     <div class="container-fluid">
       <div class="row">
-        <!-- <div class="sort-container">
-          <div class="sort-btn">創建時間</div>
-          <div class="sort-btn">讚好數目</div>
-          <div class="sort-btn">累積金</div>
-        </div> -->
         <div class="sort-container">
           <select class="sort-select" aria-label="Default select example">
             <option value="game.created_at asc">排列依創建時間升序</option>
@@ -53,19 +48,23 @@
           </select>
         </div>
       </div>
-      <div class="row all-game-board"></div>
+      <div class="all-game-board container"></div>
     </div>
 
-    <template>
-      <div class="col-2 col-xl-4 col-sm-12 game-board">
+    <!-- game template -->
+    <template id="game-template">
+      <div class="game-board">
         <a href=""
           ><img src="" alt="game_media" class="game_container img-fluid"
         /></a>
         <div class="game_info">
-          <div class="user_info">
-            <img src="" alt="profile_image" class="profile_picture" />
-          </div>
-          <i class="fas fa-piggy-bank"></i>
+          <a class="profile_href">
+            <div class="user_info">
+              <img src="" alt="profile_image" class="profile_picture" />
+              <div class="username"></div>
+            </div>
+          </a>
+          <i class="fas fa-piggy-bank"><span></span></i>
 
           <div class="reaction-icon">
             <div class="reaction">

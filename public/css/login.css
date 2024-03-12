@@ -1,7 +1,4 @@
 
-body{
-  background-color:rgb(255, 199, 45);
-}
 #company-icon-container{
   width: 20rem;
   height: 10rem;
@@ -212,3 +209,12 @@ footer {
   border-color: #0336ff;
   color: white;
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.left{
+  background-color: rgb(36, 155, 115);
+  height: 100vh}

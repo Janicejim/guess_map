@@ -95,7 +95,7 @@
                     src="https://icons.iconarchive.com/icons/iconarchive/outline-camera/512/Flat-Red-Big-Camera-icon.png"
                     alt=""
                   />
-                  <div>打卡區</div>
+                  <div>打卡位</div>
                 </div>
               </button></a
             >
@@ -146,28 +146,45 @@
 
       <div class="row">
         <div class="col-md-8 col-sm-12">
-          <!-- in progress game-->
-          <div id="in-progress" class="hidden">
-            <div class="title-group">
-              <div class="sub-title"><i class="fas fa-spinner"></i>參與中</div>
-              <span class="more"
-                ><a href="/game.html?type=in_progress"
-                  >更多<i class="fas fa-angle-right"></i></a
-              ></span>
+          <div class="row">
+            <!-- in progress game-->
+            <div class="col-md-6 col-sm-12 hidden" id="in-progress">
+              <div class="title-group">
+                <div class="sub-title">
+                  <i class="fas fa-spinner"></i>參與中
+                </div>
+                <span class="more"
+                  ><a href="/game.html?type=in_progress"
+                    >更多<i class="fas fa-angle-right"></i></a
+                ></span>
+              </div>
+              <div id="progress-game-container">
+                <div class="swiper in-progress-swiper">
+                  <div class="swiper-wrapper"></div>
+                  <div class="gap"></div>
+                  <div class="swiper-pagination"></div>
+                </div>
+              </div>
             </div>
-            <div class="game-container" id="progress-game-container"></div>
-          </div>
-          <!-- check in -->
-          <div id="check-in">
-            <div class="title-group">
-              <div class="sub-title"><i class="far fa-images"></i>打卡位</div>
-              <span class="more"
-                ><a href="/game.html?type=in_progress"
-                  >更多<i class="fas fa-angle-right"></i></a
-              ></span>
+            <!-- check in -->
+            <div class="col-md-6 col-sm-12" id="check-in">
+              <div class="title-group">
+                <div class="sub-title"><i class="far fa-images"></i>打卡位</div>
+                <span class="more"
+                  ><a href="/game.html?type=check-in"
+                    >更多<i class="fas fa-angle-right"></i></a
+                ></span>
+              </div>
+              <div class="check-in-container">
+                <div id="check-in-area">
+                  <div class="swiper checkInSwiper">
+                    <div class="swiper-wrapper"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="game-container" id="progress-game-container"></div>
           </div>
+
           <!-- award -->
           <div class="award-container">
             <div class="title-group">
@@ -204,8 +221,8 @@
         </div>
       </div>
     </div>
-
-    <!-- game template -->
+    <footer></footer>
+    <!-- active game template -->
     <template id="game-template">
       <div class="swiper-slide">
         <div class="game-board">
@@ -213,10 +230,12 @@
             ><img src="" alt="game_media" class="game_container img-fluid"
           /></a>
           <div class="game_info">
-            <div class="user_info">
-              <img src="" alt="profile_image" class="profile_picture" />
-              <div class="username"></div>
-            </div>
+            <a class="profile_href">
+              <div class="user_info">
+                <img src="" alt="profile_image" class="profile_picture" />
+                <div class="username"></div>
+              </div>
+            </a>
             <i class="fas fa-piggy-bank"><span></span></i>
 
             <div class="reaction-icon">
@@ -235,6 +254,7 @@
         </div>
       </div>
     </template>
+
     <!-- award template -->
     <template id="award-template">
       <a href="/award.html"><img src="" alt="" class="award-image" /></a>
@@ -242,12 +262,25 @@
 
     <template id="ranking-template">
       <tr>
-        <td class="rank-number">1</td>
+        <td class="rank-number"></td>
         <td class="rank-picture">
-          <img src="/anonymous.jpg" /><span class="rank-user"></span>
+          <img src="" /><span class="rank-user"></span>
         </td>
-        <td class="rank-score">10000</td>
+        <td class="rank-score"></td>
       </tr>
+    </template>
+    <!-- check-in template -->
+    <template id="check-in-template">
+      <div class="swiper-slide">
+        <a>
+          <img class="check-in-image" src="/air.jpeg" />
+          <div class="check-in-amount-cointer">
+            <i class="fas fa-user-ninja"
+              ><span class="check-in-number">0</span></i
+            >
+          </div>
+        </a>
+      </div>
     </template>
 
     <img

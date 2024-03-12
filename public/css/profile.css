@@ -149,7 +149,7 @@ margin-bottom: 1rem;
   color: white;
 }
 
-/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>   input css template <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
 
 
 
@@ -350,134 +350,319 @@ font-size: 1.2rem;
   background-color: white;
 }
 .record-btn{
-  border-radius: 15%;
-  border: 0.5rem solid pink;
   margin: 1rem;
-  font-size: 2rem;}
+  font-size: 1.3rem;
+margin-top: 3rem;
+color: rgb(63, 60, 60);
+cursor: pointer;
+margin-left: 1.5rem;
+}
+.record-btn:hover{
+  background-color: orange;
+}
 
 .main-content{
   background-color: white;
   width: 20rem;
   border-radius: 5px 5px 5px 5px;
   margin-top: 2rem;
-  margin-left: 50vw;
-}
-.game_container {
-  width: 100%;
-  height: 75%;
-  margin: none;
-  object-fit: cover;
-}
-
-.game_info {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  justify-content: space-between;
+  margin-left: 1rem;
+  /* display: flex;
   align-items: center;
-  margin: 1.5rem;
+  justify-content: space-evenly;
+ */
+ width: 100%;
 }
 
-.user_info {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 3px;
-  width: 50px;
+.orange-border{
+  border: 1px orange solid;
+  box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
 }
-
-.profile_picture {
-  margin-top: 5px;
-  aspect-ratio: 1/1;
-  width: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.profile_picture:hover {
-  transform: scale(1.3) !important;
-  transition: transform 0.25s ease-in-out, border 0.3s ease-in-out;
-}
-.user_name {
-  margin-top: 8px;
-  font-size: 1rem;
-  color: black;
-  width: 100px;
-  text-align: center;
-}
-.user_name:hover {
-  transform: scale(1.2) !important;
-  transition: transform 0.25s ease-in-out, border 0.3s ease-in-out;
-}
-
-.reaction {
-  margin-right: 1rem;
-  font-size: 2rem;
-  color: lightgrey;
-
-}
-
-.reaction-icon {
-  display: flex;
-}
-
-.far:hover {
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-
-.clicked-icon-like {
-  color: #0336ff !important;
-}
-
-.clicked-icon-dislike {
-  color: #ff0266 !important;
-}
-
-.reaction_number {
-  font-family: "Noto Sans TC";
-}
-.fa-piggy-bank{
-  color: pink;
-  font-size: 2.5rem;
-}
-.fa-star{
-  color:rgb(213, 210, 38);
-  font-size: 2.5rem;
-}
-.game-board {
-  width: 400px;
-  height: 500px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 0px;
-  background-color: white;
-  border: 0.1rem #0336ff solid;
-  border-radius: 0 0 0.5rem 0.5rem;
+.green-border{
+  border: 1px rgb(29, 123, 95) solid;
   box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
 }
 
-.game-board:hover {
-  transform: scale(1.01);
+
+/* .profile_picture:hover {
+  transform: scale(1.3) !important;
+  transition: transform 0.25s ease-in-out, border 0.3s ease-in-out;
 }
+ */
+
+
+
 
 #award-img{
   width: 100%;
   }
 
   .swiper {
-    width: 240px;
-    height: 320px;
+    width: 100%;
+    height: 100%;
   }
 
   .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
     display: flex;
-    align-items: center;
     justify-content: center;
-    border-radius: 18px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #ff0266;
+    align-items: center;
   }
+
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .line{
+    border-right:1px #3b31314d solid;
+    box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+
+  #side-bar{
+    background-color: white;
+    z-index:2;
+    height: 100vh;
+    border-right:1px #6f67674d solid;
+    box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+position: absolute;
+top:7px;
+left:0px;
+width:15rem
+  }
+
+  @media only screen and (max-width: 900px) {
+
+    #sub-menu{
+      position: fixed;
+      bottom: 1%;
+    left: 1%;
+      /* background-color: pink; */
+      display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.2rem; 
+    height: 3.2rem; 
+    background-color:  #0335ff17; 
+    border-radius: 50%; 
+    color:orange; 
+      position: relative;
+    }
+    #side-bar{
+    border-right:1px #6f67674d solid;
+    box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 0px;
+    left: 100px;
+    width:15rem;
+    height:auto
+    }
+  }
+
+
+  .clicked{
+    background-color: orange;
+  }
+
+
+
+
+
+
+
+
+  #open-sub-menu:hover{
+    background-color: aquamarine;
+  }
+
+
+
+    #sub-menu{
+        position: fixed;
+        bottom: 1%;
+      left: 1%;
+        background-color: pink;
+        display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 3.2rem; 
+      height: 3.2rem; 
+      background-color:  #0335ff17; 
+      border-radius: 50%; 
+      color:orange; 
+        
+      }
+  
+  .hidden{
+    display: none;
+  }
+/* 
+  --------- */
+
+.game-board {
+  width: 334px;
+  height:450px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding: 0px;
+      background-color: white;
+      border: 0.1rem #807b7c27 solid;
+      border-radius: 1rem ;
+      box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+      margin-left:2rem;
+      position: relative;
+    }
+    
+    .game-board:hover {
+      transform: scale(1.01);
+      border:0.1rem rgb(20, 173, 122) solid;
+    }
+    .reaction-icon {
+      display: flex;
+      position: absolute;
+      top:5px;
+      right:0px
+    }
+ 
+
+    .game_container {
+      width: 100%;
+      height: 75%;
+      margin: none;
+      object-fit: cover;
+      
+    }
+    .game-board img{
+      border-radius:1rem 1rem 0 0;
+    }
+    
+    .game_info {
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.5rem;
+    }
+    
+    .user_info {
+      display: flex;
+      align-items: center;
+      margin-left: 2rem;
+      width: 50px;
+      justify-content: center;
+    }
+    
+    .profile_picture {
+      margin-top: 5px;
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+   
+    }
+    .username{
+      color:grey;
+      font-size:0.9rem;
+  margin-left: 0.5rem;
+    }
+  
+    .user_name {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: black;
+      width: 100px;
+      text-align: center;
+    }
+    .user_name:hover {
+      transform: scale(1.2) !important;
+      transition: transform 0.25s ease-in-out, border 0.3s ease-in-out;
+    }
+    
+    .reaction {
+      margin-right: 1rem;
+      font-size: 2rem;
+      color: rgb(254, 254, 254);
+  font-weight: bold;
+    
+    }
+    
+  
+    
+    .far:hover {
+      transform: scale(1.2);
+      cursor: pointer;
+      color:orange
+    }
+    
+    
+    .clicked-icon-like {
+      color: #0336ff !important;
+    }
+    
+    .clicked-icon-dislike {
+      color: #ff0266 !important;
+    }
+  
+  
+  
+    .reaction_number {
+      font-family: "Noto Sans TC";
+    }
+  
+    .fa-star{
+      color:rgb(213, 210, 38);
+      font-size: 2.5rem;
+    }
+
+    .record-flex{
+      display: flex;
+      flex-wrap: wrap;
+        }
+    .hidden{
+      display: none;
+    }
+    .score-image{
+      width: 10rem;
+      height: 10rem;
+      margin-top:1rem;
+      margin-bottom: 1rem;
+
+    }
+    .score-info div{
+margin-bottom: 1rem;
+    }
+    .main-content .col-md-8, .main-content .col-md-4{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+    }
+    #score-change{
+      font-size: 2rem;
+    }
+
+    .fa-piggy-bank{
+      color: pink;
+      font-size: 2.5rem;
+    }
+    .fa-piggy-bank span{
+      margin-right: 1rem;
+      margin-left:0.5rem
+    }
+    .fa-user-ninja{
+      color: orange;
+      font-size: 2.5rem;
+    }
+    .fa-user-ninja span{
+      margin-right: 1rem;
+      margin-left:0.5rem
+    }
+    .no-record{
+      font-size: 2rem;
+      margin: 5rem;
+    }

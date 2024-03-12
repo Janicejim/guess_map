@@ -40,7 +40,7 @@
 
   <body>
     <div id="navbar"></div>
-    <div class="flex">
+    <div class="flex user-info-part">
     <div class="user-info-container" >
       <div class="row">
         <div class="flex profile-title">玩家證</div>
@@ -98,51 +98,80 @@
     </form>
     </div>
   </div>
-    <div class="record-nav">
 
-    </div>
+<div class="line">
+  <i class="fas fa-bars hidden" id="sub-menu" ></i>
+  <div id="side-bar" class="hidden">
+    <div class="record-btn" id="score-record-btn">積分紀錄</div>
+    <div class="record-btn" id="create-game-record-btn">創建紀錄</div>
+    <div class="record-btn" id="win-record-btn">挑戰成功紀錄</div>
+    <div class="record-btn" id="loss-record-btn">挑戰失敗紀錄</div>
+    <div class="record-btn" id="like-record-btn">like紀錄</div>
+    <div class="record-btn" id="dislike-record-btn">dislike紀錄</div>
+    <div class="record-btn" id="check-in-record-btn">打卡紀錄</div>
+    <div class="record-btn" id="award-record-btn">兌換獎品紀錄</div>
+  </div>
+</div>
 
-    <div>
-      <button class="record-btn" id="score-record-btn">積分全紀錄</button>
-      <button class="record-btn" id="award-record-btn">兌換獎品紀錄</button>
-      <button class="record-btn" id="win-record-btn">挑戰成功紀錄</button>
-      <button class="record-btn" id="loss-record-btn">挑戰失敗紀錄</button>
-      <button class="record-btn" id="create-game-record-btn">我的創建</button>
-      <!-- <button class="record-btn">參與中</button> -->
-      <!-- <button id="record-btn">我的收藏</button> -->
-      <button class="record-btn" id="reaction-record-btn">like 同dislike紀錄</button>
-    </div>
 
-    <div id="record-area"> 
-      
-    </div>
+<div class="row">
+  <div class="col-2" id="right-hand-side">
+  </div>
 
+  
+<div class="col-10">
+  <div class="container"> 
+    <div id="record-area" ></div>
+  </div>
+
+  </div>
+
+
+
+</div>
+</div>
+<!-- score record -->
     <template id="score-record">
-      <div class="main-content">
-        <div>類別：<span id="description"></span></div>
-        <div>積分：<span id="score-change"></span></div>
+      <div class="main-content row">
+
+<div class="col-md-4 col-sm-12">
+  <img src="" alt="" class="score-image">
+</div>
+
+<div class="col-md-8 col-sm-12">
+  <div class="score-info">               
+    <div>時間：<span id="score_created_at"></span></div> 
+    <div>類別：<span id="description"></span></div>
+    <div>積分：<span id="score-change"></span></div>
+  </div>
+</div>
+     
+
       </div>
     </template>
-     
+     <!-- award record -->
     <template id="award-record">
       <div class="main-content">
         <img id="award-img" src="" alt="" />
+
         <div>獎品名稱：<span id="award-name"></span></div>
         <div>所用積分：<span id="award-score"></span></div>
       </div>
+      <!-- active game record -->
     </template>
-    <template id="game-record">
-      <div class="container">
-      <div class="col-2 col-xl-4 col-sm-12 game-board">
+    <template id="active-game-template">
+      <div class="game-board">
         <a href=""
           ><img src="" alt="game_media" class="game_container img-fluid"
         /></a>
         <div class="game_info">
-          <div class="user_info">
-            <img src="" alt="profile_image" class="profile_picture" />
-          </div>
-    
-          <i class="fas fa-piggy-bank"></i>
+          <a class="profile_href">
+            <div class="user_info">
+              <img src="" alt="profile_image" class="profile_picture" />
+              <div class="username"></div>
+            </div>
+          </a>
+          <i class="fas fa-piggy-bank"><span></span></i>
 
           <div class="reaction-icon">
             <div class="reaction">
@@ -157,11 +186,42 @@
             </div>
           </div>
         </div>
-        </div>
       </div>
     </template>
+ <!-- completed game template -->
+ <template id="completed-game-template">
 
+    <div class="game-board">
+      <a href=""
+        ><img src="" alt="game_media" class="game_container img-fluid"
+      /></a>
+      <div class="game_info">
+        <a class="profile_href">
+          <div class="user_info">
+            <img src="" alt="profile_image" class="profile_picture" />
+            <div class="username"></div>
+          </div>
+        </a>
+        <i class="fas fa-user-ninja"><span></span></i>
 
+        <div class="reaction-icon">
+          <div class="reaction">
+            <i id="like" class="far fa-thumbs-up"
+              ><span class="reaction_number like_number"></span
+            ></i>
+          </div>
+          <div class="reaction">
+            <i id="dislike" class="far fa-thumbs-down"
+              ><span class="reaction_number dislike_number"></span
+            ></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</template>
+
+<!-- 
     <div class="swiper mySwiper">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
@@ -178,7 +238,8 @@
         <div class="swiper-slide">Slide 8</div>
         <div class="swiper-slide">Slide 9</div>
       </div>
-    </div>
+    </div> -->
+
 
 
 

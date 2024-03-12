@@ -37,9 +37,5 @@ gameRoutes.get(
 );
 gameRoutes.get("/rank", gameController.getRank);
 gameRoutes.get("/score/record", isLoggedIn, gameController.getUserScoreRecord);
-gameRoutes.get(
-  "/game/completed",
-  isLoggedIn,
-  gameController.getCompletedGamesForCheckIn
-);
+gameRoutes.get("/game/completed", gameController.getCompletedGamesForCheckIn);
 export default gameRoutes;

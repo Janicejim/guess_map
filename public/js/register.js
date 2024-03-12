@@ -30,6 +30,7 @@ document
         document.querySelector("#register-failure").innerHTML =
           "Name or Email have been used.";
       } else {
+        alert("注冊成功");
         window.location = "/login.html";
       }
       // console.log('result', result);

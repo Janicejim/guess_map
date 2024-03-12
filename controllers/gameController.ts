@@ -254,7 +254,11 @@ class GameController {
         return;
       } else {
         //get the store amount and add score_record to creator and winner
-        let total_store = await this.gameService.checkGameTotalStore(+game_id);
+        let total_store = 0;
+        let storeResult = await this.gameService.checkGameTotalStore(+game_id);
+        if (storeResult.length > 0) {
+          total_store = storeResult[0].store;
+        }
 
         if (isUsePlayerLocation) {
           total_store = total_store * 2;
