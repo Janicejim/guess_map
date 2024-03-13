@@ -33,6 +33,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="/css/profile.css" />
     <link rel="icon" href="./favicon_group5.svg" type="image/svg+xml" />
     <title>Profile</title>
@@ -221,26 +222,49 @@
 
 </template>
 
-<!-- 
-    <div class="swiper mySwiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <a href="/play-game.html?id=2"
-            ><img id="check-in-image" src="/1673.jpeg" alt=""
-          /></a>
-        </div>
-        <div class="swiper-slide">Slide 2</div>
-        <div class="swiper-slide">Slide 3</div>
-        <div class="swiper-slide">Slide 4</div>
-        <div class="swiper-slide">Slide 5</div>
-        <div class="swiper-slide">Slide 6</div>
-        <div class="swiper-slide">Slide 7</div>
-        <div class="swiper-slide">Slide 8</div>
-        <div class="swiper-slide">Slide 9</div>
+
+ <!-- check in container template -->
+ <template id=check-in-container-template>
+  <div class="row check-in-number-container">
+    <div class="check-in-number">打卡數：<span></span></div>
+  </div>
+  <div class="row" id="check-in-area-container">
+    <div class="col-md-6 col-sm-12">
+      <div class="swiper checkInSwiper">
+        <div class="swiper-wrapper"></div>
+    </div></div>
+    <div class="col-md-6 col-sm-12 message-container">
+      <div class="date"></div>
+      <!-- <div class="row">
+       <div class="col-12">    </div>
+  
+      </div> -->
+      <div class="row check-in-content">
+ <div class="col-6">
+    <img src="" alt="check in game image" />
+  </div>
+     <div class="col-6"> 
+      <div>留言：</div>
+      <div class="message"></div>
+     
+      </div> 
+      <i class="fas fa-edit"></i>
       </div>
-    </div> -->
+
+    </div>
+  </div>
 
 
+</template>
+
+ <!-- check in record template -->
+<template id="check-in-record-template">
+      <div class="swiper-slide">
+        <a>
+          <img class="check-in-image" src="" />
+        </a>
+      </div>
+</template>
 
 
 
@@ -258,6 +282,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
     <!-- DOM -->
     <script src="/js/profile.js"></script>
   </body>

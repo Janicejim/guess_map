@@ -117,7 +117,7 @@ class CheckInController {
       let { message } = req.body;
 
       if (!id) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       let data: any = { id: +id };
@@ -127,14 +127,14 @@ class CheckInController {
       if (message) {
         data["message"] = message;
       }
-      if (!image && message) {
-        res.json("no any update");
+      if (!image && !message) {
+        res.json({ success: false, msg: "沒有任何更新" });
         return;
       }
 
       await this.checkInService.updateCheckInData(data);
 
-      res.json("success");
+      res.json({ success: true, msg: "編輯成功" });
     } catch (e) {
       console.log(e);
       res.json(e);

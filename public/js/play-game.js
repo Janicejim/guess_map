@@ -119,7 +119,7 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
               title: "打卡成功",
               text: "留下更多足跡吧！",
               html: `<div  >
-              <div>留言：   <input type="test" id="check-in-message"></input></div>
+              <div>留言：   <input type="text" id="check-in-message"></input></div>
               <div>合照：<input type="file" id="file"></input></div>
               <button  onClick="submitCheckInData()">提交</button>
               <button   onClick="closeSweetAlert()">取消</button>

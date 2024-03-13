@@ -158,28 +158,39 @@ updated_at timestamp
 
 
 -----------仍待完成部分：----------------
-[]profile.html-->打卡紀錄
-[]index.html-->打卡區--》更多
-[]profile.html-->review (for other user )
+[]profile.html-->展示user戰績
+[]profile.html-->review (for other user )  其他人想睇到佢咩野呢？戰績，建立左咩遊戲，打卡左邊度
 []index.html-->排行榜--》＋ui
 []ranking.html-->different ranking+ui+my ranking
+[]play-game.html-->chatroom 幾時比人chat?
 []login.html+register.html-->google login+show error msg
+[]rules.html-->add rules +ui
+[]alert-->sweetAlert
 []play-game.html-->打卡紀錄
 []play-game.html-->ui
 []upload-game.html-->ui
 []admin.html--> ui
 []login.html-->ui
 []register.html-->ui
-[]alert-->sweetAlert
+
 []backend:any type-->model.ts
 
+
+
+[y]profile.html-->查閱打卡紀錄
+[y]profile.html-->edit打卡紀錄
+[y]game.html-->get 打卡game
 -----如果有時間可以：---------
 []get record/game-->offset
+[]game.html-->打卡game key word search
+[]backend:edit part remove old image if have new one
+[]test case
 
 -----------以後要加的功能：----------------
+#勝利地圖＋打卡地圖
 #付費購買用品：
 -[]限定每日作答數
 -[]限定每日出題數
 -[]限定收藏數
 -[]限定打卡數
-#實景地圖
+#實景地圖模式＋玩家開私人房

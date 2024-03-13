@@ -18,6 +18,8 @@ async function loadAllGames() {
   let res;
   if (gameType == "in_progress") {
     res = await fetch(`/game/record/in_progress?sorting=${sorting}`);
+  } else if (gameType == "check-in") {
+    res = await fetch(`/game/completed?sorting=${sorting}`);
   } else {
     res = await fetch(`/games?sorting=${sorting}`);
   }
@@ -33,9 +35,21 @@ async function loadAllGames() {
 }
 
 function createEachGameDiv(game, gameBoardDiv) {
-  const gameTemplate = document
-    .querySelector("template")
-    .content.cloneNode(true);
+  let gameTemplate;
+  if (game.status == "active") {
+    gameTemplate = document
+      .querySelector("#active-game-template")
+      .content.cloneNode(true);
+    gameTemplate.querySelector(".fa-piggy-bank").textContent =
+      game.store_amount;
+  } else {
+    gameTemplate = document
+      .querySelector("#completed-game-template")
+      .content.cloneNode(true);
+    gameTemplate.querySelector(".fa-user-ninja").textContent =
+      game.check_in_number;
+  }
+
   if (game.profile_image == null) {
     game.profile_image = `anonymous.jpg`;
   }
@@ -50,7 +64,7 @@ function createEachGameDiv(game, gameBoardDiv) {
   likeNumberElm.textContent = game.like_number;
   let dislikeNumberElm = gameTemplate.querySelector(".dislike_number");
   dislikeNumberElm.textContent = game.dislike_number;
-  gameTemplate.querySelector(".fa-piggy-bank").textContent = game.store_amount;
+
   let likeIcon = gameTemplate.querySelector(".fa-thumbs-up");
   let dislikeIcon = gameTemplate.querySelector(".fa-thumbs-down");
   if ("preferences" in game) {

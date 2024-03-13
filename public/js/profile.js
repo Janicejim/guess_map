@@ -273,11 +273,6 @@ async function getGameRecords(type, preferences, status) {
   }
 }
 
-let checkInRecordBtn = document.querySelector("#check-in-record-btn");
-addClickEffectOfBtn(checkInRecordBtn, () =>
-  console.log("todo:check in record")
-);
-
 function clickPreferenceEvent(
   type,
   gameId,
@@ -310,7 +305,7 @@ function clickPreferenceEvent(
     targetElement.classList.toggle(`clicked-icon-${preference}`);
   });
 }
-
+//------------sub menu bar------------------------------
 function moveClickedStyle() {
   let allBtn = document.querySelectorAll(".record-btn");
   for (let btn of allBtn) {
@@ -362,4 +357,149 @@ function formatDate(dateString) {
 
   const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
   return formattedDate;
+}
+//-----------------------check in record-------------------------
+
+let checkInRecordBtn = document.querySelector("#check-in-record-btn");
+addClickEffectOfBtn(checkInRecordBtn, () => getUserCheckInRecord());
+
+let checkInSwiper;
+let checkInRecords;
+async function getUserCheckInRecord() {
+  recordAreaContainer.innerHTML = ``;
+  let res = await fetch("/check-in/record");
+  checkInRecords = await res.json();
+
+  if (checkInRecords.length == 0) {
+    recordAreaContainer.innerHTML = `<div class="no-record"><div >未有紀錄</div><div>`;
+    return;
+  }
+
+  let checkInSwiperContainer = document
+    .querySelector("#check-in-container-template")
+    .content.cloneNode(true);
+  let wrapperDiv = checkInSwiperContainer.querySelector(".swiper-wrapper");
+
+  for (let record of checkInRecords) {
+    let swiperSlideTemplate = document
+      .querySelector("#check-in-record-template")
+      .content.cloneNode(true);
+
+    swiperSlideTemplate.querySelector(
+      ".check-in-image"
+    ).src = `/${record.media}`;
+
+    swiperSlideTemplate.querySelector(
+      "a"
+    ).href = `/play-game.html?id=${record.game_id}`;
+    wrapperDiv.appendChild(swiperSlideTemplate);
+  }
+  checkInSwiperContainer.querySelector(".check-in-number span").textContent =
+    checkInRecords.length;
+  checkInSwiperContainer.querySelector(".message").textContent =
+    checkInRecords[0].message;
+  checkInSwiperContainer.querySelector(".date").textContent = formatDate(
+    checkInRecords[0].created_at
+  );
+
+  checkInSwiperContainer.querySelector(".check-in-content img").src =
+    checkInRecords[0].image
+      ? `/${checkInRecords[0].image}`
+      : `/check_in_no_photo.jpg`;
+
+  checkInSwiperContainer
+    .querySelector(".fa-edit")
+    .addEventListener("click", () => {
+      Swal.fire({
+        title: "編輯留言記錄",
+        html: `<div class="edit-check-in">
+        <div>留言：</div>
+        <input type="text" id="check-in-message" value=${checkInRecords[0].message}></input>
+        <div>合照：</div>
+        <input type="file" id="file"></input>
+        <div class="btn-container">        <button class="submit-btn" onClick="submitEditCheckIn(${checkInRecords[0].id})">提交</button>
+        <button class="cancel-btn"  onClick="closeSweetAlert()">取消</button></div>
+
+      </div>`,
+        showConfirmButton: false,
+        showCancelButton: false,
+        allowOutsideClick: true,
+      });
+    });
+
+  recordAreaContainer.appendChild(checkInSwiperContainer);
+
+  checkInSwiper = new Swiper(".checkInSwiper", {
+    effect: "cards",
+    grabCursor: true,
+  });
+
+  checkInSwiper.on("slideChange", function () {
+    updateMessageAndDate();
+  });
+}
+
+function updateMessageAndDate() {
+  let messageElement = document.querySelector(".message");
+  let dateElement = document.querySelector(".date");
+  let gameImage = document.querySelector(".check-in-content img");
+  let record = checkInRecords[checkInSwiper.activeIndex];
+  messageElement.textContent = record.message;
+  dateElement.textContent = formatDate(record.created_at);
+  gameImage.src = record.image ? `/${record.image}` : `/check_in_no_photo.jpg`;
+  document
+    .querySelector(".check-in-content .fa-edit")
+    .addEventListener("click", () => {
+      Swal.fire({
+        title: "編輯留言記錄",
+        html: `<div class="edit-check-in">
+        <div>留言：</div>
+        <input type="text" id="check-in-message" value=${record.message}></input>
+        <div>合照：</div>
+        <input type="file" id="file"></input>
+        <button class="submit-btn" onClick="submitEditCheckIn(${record.id})">提交</button>
+        <button class="cancel-btn"  onClick="closeSweetAlert()">取消</button>
+      </div>`,
+        showConfirmButton: false,
+        showCancelButton: false,
+        allowOutsideClick: true,
+      });
+    });
+}
+
+//---------------edit check in ------------------------
+
+async function submitEditCheckIn(id) {
+  let formData = new FormData();
+  formData.append("message", document.querySelector("#check-in-message").value);
+  formData.append("image", document.querySelector("#file").files[0]);
+
+  let res = await fetch(`/check-in?id=${id}`, {
+    method: "PATCH",
+    body: formData,
+  });
+  let result = await res.json();
+  Swal.close();
+  if (result.success) {
+    Swal.fire({
+      title: result.msg,
+      icon: "success",
+      showConfirmButton: false,
+      showCancelButton: true,
+      confirmButtonText: "關閉",
+    });
+    getUserCheckInRecord();
+  } else {
+    Swal.fire({
+      title: result.msg,
+      icon: "error",
+      showConfirmButton: false,
+      showCancelButton: true,
+      confirmButtonText: "關閉",
+    });
+  }
+}
+
+function closeSweetAlert() {
+  Swal.close();
 }

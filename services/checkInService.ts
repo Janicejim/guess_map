@@ -60,10 +60,12 @@ export class CheckInService {
       .andWhere("status", "active");
   }
   async getAllCheckInRecordOfUser(user_id: number) {
-    return await this.knex("check_in")
-      .select("*")
-      .where("user_id", user_id)
-      .andWhere("status", "active");
+    return (
+      await this.knex.raw(
+        `select check_in.id,media,image,message,check_in.created_at,game_id from check_in join game on game.id=check_in.game_id where check_in.user_id=? and check_in.status='active' order by check_in.updated_at desc`,
+        [user_id]
+      )
+    ).rows;
   }
 
   async checkGameData(gameId: number) {

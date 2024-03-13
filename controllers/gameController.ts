@@ -311,8 +311,10 @@ class GameController {
       sorting = `game.created_at desc`;
     }
     let statusQuery;
+    let completedQuery = "";
     if (status == "in_progress") {
       statusQuery = "is_win=false and attempts!=0";
+      completedQuery = "where game.status!='completed'";
     } else if (status == "loss") {
       statusQuery = "is_win=false and attempts=0";
     } else {
@@ -322,7 +324,8 @@ class GameController {
     let record = await this.gameService.getUserDifferentGameRecordByStatus(
       statusQuery,
       userID,
-      sorting.toString()
+      sorting.toString(),
+      completedQuery
     );
 
     if (req.query.limit != undefined) {
@@ -480,25 +483,6 @@ class GameController {
     }
   };
 
-  getCompletedGame = async (req: Request, res: Response) => {
-    try {
-      // let result = [];
-      // if (req.session["user"]) {
-      //   let userId = req.session["user"].id;
-      // }
-
-      // result = await this.gameService.getRankByPeriod(
-      //   period.toString(),
-      //   redeemedDescriptionId
-      // );
-
-      res.json({});
-    } catch (e) {
-      console.error(e);
-      res.json({ success: false, msg: e });
-    }
-  };
-
   getUserScoreRecord = async (req: Request, res: Response) => {
     try {
       let userId = req.session["user"].id;
@@ -518,7 +502,7 @@ class GameController {
       let sorting = req.query.sorting;
 
       if (!sorting) {
-        sorting = `game.created_at desc`;
+        sorting = `game.updated_at desc`;
       } else {
         sorting = sorting.toString().replace(/%20/g, " ");
       }

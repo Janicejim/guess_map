@@ -43,6 +43,7 @@ export async function seed(knex: Knex): Promise<void> {
     let scoreRecordData = xlsx.utils.sheet_to_json(
       dataWorkbook.Sheets["score_record"]
     );
+    let checkInData = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["check_in"]);
     let awardData = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["award"]);
 
     // Inserts users
@@ -70,6 +71,8 @@ export async function seed(knex: Knex): Promise<void> {
 
     // //insert score_record:
     await txn("score_record").insert(scoreRecordData);
+    //insert check in:
+    await txn("check_in").insert(checkInData);
     //insert award:
     await txn("award").insert(awardData);
 

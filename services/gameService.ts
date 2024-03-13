@@ -5,7 +5,7 @@ class GameService {
 
   async getAllActiveGames(sorting: string) {
     return await this.knex.raw(
-      `select game.id,users.id as user_id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount ,COALESCE(check_in_number,0) as check_in_number from game
+      `select game.status,game.id,users.id as user_id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount ,COALESCE(check_in_number,0) as check_in_number from game
       join users on game.user_id=users.id 
       left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record 
       on game.id=like_record.game_id 
@@ -21,7 +21,7 @@ class GameService {
   async getAllActiveGamesByUser(user_id: number, sorting: string) {
     let activeGames = (
       await this.knex.raw(
-        `select game.id,users.id as user_id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount,
+        `select game.status,game.id,users.id as user_id,users.name,media,game.created_at,profile_image,COALESCE(like_number,0) as like_number,COALESCE(dislike_number,0) as dislike_number ,COALESCE(store_amount,0) as store_amount,
     preferences ,COALESCE(check_in_number,0) as check_in_number from game
     join users on game.user_id=users.id 
     left join (select game_id,count(type) as like_number from like_dislike where type='like' group by type,game_id ) as like_record 
@@ -245,7 +245,8 @@ on game.id=store.game_id where game.id=?`,
   async getUserDifferentGameRecordByStatus(
     statusQuery: string,
     userId: number,
-    sorting: string
+    sorting: string,
+    completedQuery?: string
   ) {
     return (
       await this.knex.raw(
@@ -260,7 +261,7 @@ on game.id=store.game_id where game.id=?`,
     left join (select game_id,type as 
     preferences from like_dislike where user_id=?) as action on game.id=action.game_id
     left join(select game_id,count (game_id) as check_in_number from check_in where status='active' group by game_id) as check_in_record on game.id=check_in_record.game_id 
-    right join (select user_id,game_id as in_progress_id from game_history where user_id=? and ${statusQuery}) as in_progress on game.id=in_progress.in_progress_id order by ${sorting}
+    right join (select user_id,game_id as in_progress_id from game_history where user_id=? and ${statusQuery}) as in_progress on game.id=in_progress.in_progress_id ${completedQuery} order by ${sorting}
     `,
         [userId, userId]
       )

@@ -322,11 +322,15 @@ font-weight: bold;
       font-size: 22px;
       font-weight: bold;
       color: #fff !important;
-      background-color: rgb(255, 255, 255);
+      background-color: rgb(173, 173, 173);
     }
     
 .check-in-image{
   position: relative;
+width: 113%;
+object-fit: cover;
+border-radius: 18px;
+height: 100%;
 }
 .check-in-amount-cointer{
   position:absolute;

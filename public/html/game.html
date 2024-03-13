@@ -45,14 +45,16 @@
             <option value="like_number desc">排列依讚好數目降序</option>
             <option value="store_amount asc">排列依累積獎金升序</option>
             <option value="store_amount desc">排列依累積獎金降序</option>
+            <option value="check_in_number asc">排列依打卡人數升序</option>
+            <option value="check_in_number desc">排列依打卡人數降序</option>
           </select>
         </div>
       </div>
       <div class="all-game-board container"></div>
     </div>
 
-    <!-- game template -->
-    <template id="game-template">
+    <!-- active game template -->
+    <template id="active-game-template">
       <div class="game-board">
         <a href=""
           ><img src="" alt="game_media" class="game_container img-fluid"
@@ -65,6 +67,37 @@
             </div>
           </a>
           <i class="fas fa-piggy-bank"><span></span></i>
+
+          <div class="reaction-icon">
+            <div class="reaction">
+              <i id="like" class="far fa-thumbs-up"
+                ><span class="reaction_number like_number"></span
+              ></i>
+            </div>
+            <div class="reaction">
+              <i id="dislike" class="far fa-thumbs-down"
+                ><span class="reaction_number dislike_number"></span
+              ></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- completed game template -->
+    <template id="completed-game-template">
+      <div class="game-board">
+        <a href=""
+          ><img src="" alt="game_media" class="game_container img-fluid"
+        /></a>
+        <div class="game_info">
+          <a class="profile_href">
+            <div class="user_info">
+              <img src="" alt="profile_image" class="profile_picture" />
+              <div class="username"></div>
+            </div>
+          </a>
+          <i class="fas fa-user-ninja"><span></span></i>
 
           <div class="reaction-icon">
             <div class="reaction">
