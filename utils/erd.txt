@@ -158,32 +158,42 @@ updated_at timestamp
 
 
 -----------仍待完成部分：----------------
-[]profile.html-->展示user戰績
-[]profile.html-->review (for other user )  其他人想睇到佢咩野呢？戰績，建立左咩遊戲，打卡左邊度
-[]index.html-->排行榜--》＋ui
-[]ranking.html-->different ranking+ui+my ranking
+
+
 []play-game.html-->chatroom 幾時比人chat?
-[]login.html+register.html-->google login+show error msg
-[]rules.html-->add rules +ui
-[]alert-->sweetAlert
-[]play-game.html-->打卡紀錄
+[]play-game.html-->show 打卡紀錄
 []play-game.html-->ui
-[]upload-game.html-->ui
+[]login.html+register.html-->google login+show error msg
+[]frontend html guard
+[]alert-->sweetAlert
+
 []admin.html--> ui
+[]upload-game.html-->ui
 []login.html-->ui
 []register.html-->ui
 
 []backend:any type-->model.ts
+[]ci cd
 
 
-
+---------------已完成部分：
 [y]profile.html-->查閱打卡紀錄
 [y]profile.html-->edit打卡紀錄
 [y]game.html-->get 打卡game
+[y]profile.html-->展示user戰績
+[y]profile.html-->review (for other user )
+[y]rules.html-->add rules +ui
+[y]index.html-->排行榜--》＋ui
+[y]ranking.html-->different ranking+ui
+
+
+
+
 -----如果有時間可以：---------
 []get record/game-->offset
 []game.html-->打卡game key word search
 []backend:edit part remove old image if have new one
+[]backend:award-->nodeMailer
 []test case
 
 -----------以後要加的功能：----------------

@@ -1,43 +1,121 @@
-.table-container {
-  width: 75vw;
-}
-.rank-title {
-  color: #0336ff;
-  font-weight: 700;
-  font-size: 3rem;
-  margin-top: -2.5rem;
-  margin-left: 1rem;
-}
 
-.plus {
-  color: #ff0266;
-  font-weight: 700;
-  font-size: 3rem;
+table img{
+  border-radius: 100%;
+  object-fit: cover;
+}
+table{
+  font-size: 1.5rem;
+  width: 50% !important;
+  box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 1.5%;
+  padding-top: 20px;
 }
 
-.table-dark {
-  --bs-table-bg: #0336ff;
-  --bs-table-striped-bg: #2c3034;
-  --bs-table-striped-color: #fff;
-  --bs-table-active-bg: #373b3e;
-  --bs-table-active-color: #fff;
-  --bs-table-hover-bg: #323539;
-  --bs-table-hover-color: #fff;
-  color: #fff;
-  border-color: #373b3e;
+
+
+@media screen and (max-width: 773px) {
+  .rank-user{
+    font-size: 1rem;
+  }
+  .ranking-container{
+    display: block !important;
+margin-left:0.5rem !important;
+  }
+  
+  table{
+    width: 98% !important;
+  }
+  .rank-user{
+    font-size: 1rem;
+  }
 }
 
-/* tbody,
-td,
-tfoot,
-th,
-thead,
-tr {
-  border-color: #ff0266;
-  border-style: solid;
-  border-width: 0;
-} */
+td img{
+  width: 2rem;
+  height: 2rem;
+  margin-right: 1rem;
+}
 
-.rank-table {
-  background-color: white !important;
+th:nth-child(1){
+  width:9rem;
+}
+th:nth-child(2){
+  width:20rem;
+}
+th:nth-child(3){
+  width:18rem;
+}
+td{
+  height: 5rem;
+  margin-left:5rem;
+
+}
+
+table th:first-child,
+table td:first-child {
+  text-align: center;
+
+}
+thead {
+height:3rem;
+color:grey
+}
+.ranking-sub-title{
+  text-align: center;
+  margin:2rem;
+  font-weight: bold;
+  font-size:1.5rem
+  ;color:rgb(54, 50, 50)
+}
+
+.ranking-other-title{
+  text-align: center;
+  margin:1rem;
+  font-weight: bold;
+  font-size:1rem;
+  color:grey
+}
+
+.swiper-slide{
+  width: 30% !important;
+  border-bottom: 0.2rem rgba(30, 185, 167, 0.604) solid;
+  height: 4.5rem;
+  text-align: center;
+  font-size: 1.4rem;
+  color: rgb(70, 67, 67);
+  font-weight: bold;
+}
+.swiper-slide:hover{
+  background-color:rgba(30, 185, 167, 0.604) ;
+  color:white
+}
+
+.swiper-container{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.clicked{
+  background-color:rgba(30, 185, 167, 0.604) ;
+  color:white
+}
+.ranking-container,.notice{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-bottom: 2rem;
+}
+#select-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 50%;
+}
+.gamePic{
+  width: 61% !important;
+  border-radius: 0% !important;
+  height: 6rem;
+  margin-top: 0.5rem;
+  margin-bottom:0.5rem
 }

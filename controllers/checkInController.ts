@@ -142,7 +142,12 @@ class CheckInController {
   };
   getCheckInRecordByUser = async (req: Request, res: Response) => {
     try {
-      let userId = req.session.user.id;
+      let userId = 0;
+      if (req.query.id) {
+        userId = +req.query.id;
+      } else {
+        userId = req.session["user"].id;
+      }
       let result = await this.checkInService.getAllCheckInRecordOfUser(userId);
 
       res.json(result);

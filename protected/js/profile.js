@@ -1,4 +1,5 @@
 window.onload = () => {
+  // isLogin();
   handleWindowResize();
   getUserProfile();
   loadDefaultRecord();
@@ -8,14 +9,34 @@ window.onload = () => {
 $(function () {
   $("#navbar").load("/navigation.html");
 });
+
+//get user is login or not:
+// async function isLogin() {
+//   let res = await fetch("/login/status");
+//   let isLogin = await res.json();
+//   if (!isLogin) {
+//     window.location = "/login.html";
+//   }
+// }
+
 // Profile content
 const profilePicDiv = document.querySelector(".profile-image");
 const userNameDiv = document.querySelector("#user-name");
 const userEmailDiv = document.querySelector("#user-email");
 const userDesDiv = document.querySelector("#user-description");
+const totalScoreDiv = document.querySelector("#total_score");
+const winLossDiv = document.querySelector("#win_loss_number");
+const checkInNumber = document.querySelector("#check_in_number");
 let params = new URLSearchParams(location.search);
 async function getUserProfile() {
   let id = params.get("id");
+  if (id) {
+    document.querySelector(".fa-user-edit").classList.add("hidden");
+    document.querySelector("#score-record-btn").classList.add("hidden");
+    document.querySelector("#award-record-btn").classList.add("hidden");
+    document.querySelector("#like-record-btn").classList.add("hidden");
+    document.querySelector("#dislike-record-btn").classList.add("hidden");
+  }
 
   const res = id ? await fetch(`/user?id=${id}`) : await fetch("/user");
   const result = await res.json();
@@ -27,6 +48,9 @@ async function getUserProfile() {
   userNameDiv.value = result.user.name;
   userEmailDiv.value = result.user.email;
   userDesDiv.value = result.user.description;
+  totalScoreDiv.textContent = result.user.total_score;
+  winLossDiv.textContent = `${result.user.win_number}勝${result.user.loss_number}敗`;
+  checkInNumber.textContent = result.user.check_in_number;
 }
 
 //preview new profile pic:
@@ -76,7 +100,6 @@ editIcon.addEventListener("click", () => {
   uploadPicContainer.classList.toggle("hidden");
   editIcon.classList.toggle("hidden");
   editBtnContainer.classList.toggle("hidden");
-  userNameDiv.toggleAttribute("readonly");
   userNameDiv.classList.toggle("not-edit");
   userDesDiv.toggleAttribute("readonly");
   userDesDiv.classList.toggle("not-edit");
@@ -110,10 +133,14 @@ let redeemRecordBtn = document.querySelector("#award-record-btn");
 let createdRecordBtn = document.querySelector("#create-game-record-btn");
 function loadDefaultRecord() {
   let record = params.get("record");
+  let id = params.get("id");
 
-  if (record == undefined) {
+  if (record == undefined && !id) {
     getScoreRecords();
     scoreRecordBtn.classList.add("clicked");
+  } else {
+    getGameRecords("create");
+    createdRecordBtn.classList.add("clicked");
   }
 }
 
@@ -193,11 +220,16 @@ addClickEffectOfBtn(dislikeRecordBtn, () =>
   getGameRecords("reaction", "dislike", "")
 );
 async function getGameRecords(type, preferences, status) {
+  let id = params.get("id");
   let res;
   if (type == "game") {
-    res = await fetch(`/game/record/${status}`);
+    res = id
+      ? await fetch(`/game/record/${status}?id=${id}`)
+      : await fetch(`/game/record/${status}`);
   } else if (type == "create") {
-    res = await fetch("/creator/games");
+    res = id
+      ? await fetch(`/creator/games?id=${id}`)
+      : await fetch("/creator/games");
   } else {
     res = await fetch(`/game/like_dislike?preferences=${preferences}`);
   }
@@ -367,7 +399,10 @@ let checkInSwiper;
 let checkInRecords;
 async function getUserCheckInRecord() {
   recordAreaContainer.innerHTML = ``;
-  let res = await fetch("/check-in/record");
+  let id = params.get("id");
+  let res = id
+    ? await fetch(`/check-in/record?id=${id}`)
+    : await fetch("/check-in/record");
   checkInRecords = await res.json();
 
   if (checkInRecords.length == 0) {

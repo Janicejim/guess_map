@@ -210,6 +210,9 @@
             <table>
               <tr>
                 <div class="ranking-sub-title">總積分排名</div>
+                <div class="ranking-other-title">
+                  (已兌換獎品的積分亦作計算)
+                </div>
                 <thead>
                   <th>排名</th>
                   <th>用家</th>
@@ -259,12 +262,12 @@
     <template id="award-template">
       <a href="/award.html"><img src="" alt="" class="award-image" /></a>
     </template>
-
+    <!-- ranking template -->
     <template id="ranking-template">
       <tr>
         <td class="rank-number"></td>
         <td class="rank-picture">
-          <img src="" /><span class="rank-user"></span>
+          <a><img src="" /><span class="rank-user"></span></a>
         </td>
         <td class="rank-score"></td>
       </tr>

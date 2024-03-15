@@ -166,7 +166,7 @@ function loginGuard(targetElement) {
 //rank:
 
 async function loadRank() {
-  const res = await fetch(`/rank?period=all`);
+  const res = await fetch(`/rank?period=all&type=score`);
   let records = await res.json();
   const rankDiv = document.querySelector("table");
   let i = 0;
@@ -187,6 +187,7 @@ function updateRankDiv(record, rankDiv, number) {
     : "/anonymous.jpg";
   rankTemplate.querySelector(".rank-user").textContent = `${record.name}`;
   rankTemplate.querySelector(".rank-score").textContent = `${record.score}`;
+  rankTemplate.querySelector("a").href = `/profile.html?id=${record.user_id}`;
   rankDiv.appendChild(rankTemplate);
 }
 loadRank();

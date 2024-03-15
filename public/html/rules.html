@@ -42,71 +42,120 @@
       <div class="rules-area">
         <div class="rules-inside-layout">
           <div class="rules-text">
-            <ul>
-              <div class="plus">+</div>
-              <span class="rules-subtitle">問問題</span>
-              <p>玩家可自行創建遊戲供其他玩家猜</p>
-              <p>
-                在創建問題頁面上傳供猜測的圖片，然後在Google
-                Map中指明內容所在坐標、設定兩個提示，以及提供答案的資訊
-              </p>
-              <p>切記圖片內容要是香港的一處地方，並藴含指向的線索</p>
-              <!-- <p>玩家所創建的問題在限時內無人作答成功，不予加分</p> -->
-              <!-- <p>如果成功作答的玩家遞交答案時，本人身處的位置就在正確答案坐標的100米範圍內，就可額外獎賞<span class="score-text">50分</span>額外獎賞分</p> -->
-              <p>
-                有其他玩家成功作答，創建者可以瓜分<span class="score-text"
-                  >一半該遊戲室的累積獎金</span
-                >
-              </p>
-            </ul>
-            <ul>
-              <div class="plus">+</div>
-              <span class="rules-subtitle">答問題</span>
-              <p>
-                進入遊戲室，每個玩家按參與鍵後就會獲得<span class="score-text"
-                  >3次</span
-                >作答機會，猜測圖片所指地方的坐標
-              </p>
-              <p>
-                如玩家本來的積分<span class="score-text">低於30分</span
-                >就不可以提交答案
-              </p>
-              <p>
-                符合積分要求的玩家，可選擇以自己現時身處的坐標作為答案，也可在Google
-                Map中選擇一個坐標作為答案
-              </p>
+            <div class="ask-question-part">
+              <ul>
+                <div class="plus">+</div>
+                <span class="rules-subtitle">問問題</span>
+                <div class="part-container">
+                  <li>玩家可自行創建遊戲供其他玩家猜</li>
+                  <li>
+                    在創建問題頁面上傳供猜測的圖片，然後在Google
+                    Map中指明內容所在坐標、設定兩個提示，以及提供答案的資訊
+                  </li>
+                  <li>切記圖片內容要是香港的一處地方，並藴含指向的線索</li>
 
-              <p>
-                作答後，指出的坐標在答案坐標<span class="score-text"
-                  >200米或以內</span
-                >就可得100分基本獎金，如該遊戲室有累積獎金，則另可與創建者各<span
-                  class="score-text"
-                  >瓜分一半累積獎金</span
-                >
-              </p>
-              <p>
-                如正確答案是以玩家身處的坐標作答案，可得到<span
-                  class="score-text"
-                  >雙倍基本獎金和雙倍累積獎金</span
-                >
-              </p>
+                  <li>
+                    有其他玩家成功作答，創建者可以瓜分<span class="score-text"
+                      >一半該遊戲室的累積獎金</span
+                    >
+                  </li>
+                </div>
+              </ul>
+            </div>
 
-              <p>
-                三次都答錯就會扣<span class="score-text">30分</span
-                >作該遊戲室的累積額外獎金，並且永遠無法再作答該遊戲
-              </p>
-            </ul>
-            <ul>
-              <div class="plus">+</div>
-              <span class="rules-subtitle">LIKE同DISLIKE</span>
-              <p>有玩家創建遊戲室後，其他玩家可以like 或者dislike該遊戲室</p>
-              <p>
-                每有一個like就會獎勵創建者<span class="score-text">10分</span
-                >，反之每有一個dislike就會扣減創建者<span class="score-text"
-                  >10分</span
-                >
-              </p>
-            </ul>
+            <div id="answer-part">
+              <ul>
+                <div class="plus">+</div>
+                <span class="rules-subtitle">答問題</span>
+                <div class="part-container">
+                  <li>
+                    進入遊戲室，每個玩家按參與鍵後就會獲得<span
+                      class="score-text"
+                      >3次</span
+                    >作答機會，猜測圖片所指地方的坐標
+                  </li>
+                  <li>
+                    如玩家本來的積分<span class="score-text">低於30分</span
+                    >就不可以提交答案
+                  </li>
+                  <li>
+                    符合積分要求的玩家，可選擇以自己現時身處的坐標作為答案，也可在Google
+                    Map中選擇一個坐標作為答案
+                  </li>
+
+                  <li>
+                    作答後，指出的坐標在答案坐標<span class="score-text"
+                      >200米或以內</span
+                    >就可得<span class="score-text">100分基本獎金</span
+                    >，如該遊戲室有累積獎金，則另可與創建者各<span
+                      class="score-text"
+                      >瓜分一半累積獎金</span
+                    >
+                  </li>
+                  <li>
+                    如正確答案是以玩家身處的坐標作答案，可得到<span
+                      class="score-text"
+                      >雙倍基本獎金和雙倍累積獎金</span
+                    >
+                  </li>
+
+                  <li>
+                    3次都答錯就會扣<span class="score-text">30分</span
+                    >作該遊戲室的累積額外獎金，並且永遠無法再作答該遊戲
+                  </li>
+                </div>
+              </ul>
+            </div>
+            <div class="reaction-part">
+              <ul>
+                <div class="plus">+</div>
+                <span class="rules-subtitle">LIKE同DISLIKE</span>
+                <div class="part-container">
+                  <li>
+                    有玩家創建遊戲室後，其他玩家可以like 或者dislike該遊戲室
+                  </li>
+                  <li>
+                    每有一個like就會獎勵創建者<span class="score-text"
+                      >10分</span
+                    >，反之每有一個dislike就會扣減創建者<span class="score-text"
+                      >10分</span
+                    >
+                  </li>
+                </div>
+              </ul>
+            </div>
+
+            <div class="check-in-part">
+              <ul>
+                <div class="plus">+</div>
+                <span class="rules-subtitle">打卡</span>
+                <div class="part-container">
+                  <li>
+                    遊戲完結後將開放打卡功能，玩家在遊戲房中可以見到正確答案、其地址和坐標
+                  </li>
+                  <li>玩家可以親身到達該地點，然後用身處的坐標打卡</li>
+                  <li>
+                    如果玩家身處的坐標和答案坐標相距<span class="score-text"
+                      >少於200米</span
+                    >就會打卡成功
+                  </li>
+                  <li>
+                    打卡成功後玩家還可以留言和上傳一張與讓地標的合照，以供留念
+                  </li>
+                </div>
+              </ul>
+            </div>
+
+            <div class="award-part">
+              <ul>
+                <div class="plus">+</div>
+                <span class="rules-subtitle">兌換獎品</span>
+                <div class="part-container">
+                  <li>在兌換獎品頁面有多項豐富禮品，玩家可以相應積分兌換</li>
+                  <li>工作人員會不定期更新和上架新獎品</li>
+                </div>
+              </ul>
+            </div>
 
             <!-- chatroom作用？ 失敗後或勝利後供玩家繼續討論？還是作答中討論題目？
             個人模式？私人模式？ google實景？

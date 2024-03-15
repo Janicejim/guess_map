@@ -72,22 +72,22 @@ export const gameService = new GameService(knex);
 export const gameController = new GameController(gameService, io);
 import gameRoutes from "./router/gameRoutes";
 import checkInRoutes from "./router/checkInRoutes";
+import { isLoggedIn } from "./utils/guard";
 
 app.use(gameRoutes);
 app.use(adminRoutes);
 app.use(awardRoutes);
 app.use(checkInRoutes);
 app.use(express.static("public"));
-
 app.use(express.static("public/html"));
 app.use(express.static("site_images"));
 app.use(express.static("uploads"));
 app.use(express.static("image"));
-app.use(express.static("protected"));
-// app.use((req, res) => {
-//   res.redirect("/404.html");
-
-// });
+app.use(isLoggedIn, express.static("protected"));
+app.use(isLoggedIn, express.static("protected/html"));
+app.use((req, res) => {
+  res.redirect("/404.html");
+});
 
 const PORT = env.PORT;
 server.listen(PORT, () => {

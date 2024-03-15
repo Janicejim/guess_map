@@ -347,7 +347,7 @@ where preferences=?`,
     ).rows;
   }
 
-  async getRankByPeriod(period: string, description_id: number) {
+  async getUserScoreRankByPeriod(period: string, description_id: number) {
     let periodQuery = "";
 
     if (period == "monthly") {
@@ -359,9 +359,82 @@ where preferences=?`,
     }
     let finalQuery;
     if (!periodQuery) {
-      finalQuery = `select name,sum(score_change)as score,profile_image from score_record join users on users.id =score_record.user_id where score_description_id !=${description_id} group by user_id,name,profile_image order by score desc limit 10;`;
+      finalQuery = `select user_id,name,sum(score_change)as score,profile_image from score_record join users on users.id =score_record.user_id where score_description_id !=${description_id} group by user_id,name,profile_image order by score desc limit 10;`;
     } else {
-      finalQuery = `select name,sum(score_change)as score,profile_image from score_record join users on users.id =score_record.user_id ${periodQuery} and score_description_id !=${description_id} group by user_id,name,profile_image order by score desc limit 10;`;
+      finalQuery = `select user_id,name,sum(score_change)as score,profile_image from score_record join users on users.id =score_record.user_id ${periodQuery} and score_description_id !=${description_id} group by user_id,name,profile_image order by score desc limit 10;`;
+    }
+
+    return (await this.knex.raw(finalQuery)).rows;
+  }
+
+  async getUserCheckInRankByPeriod(period: string) {
+    let periodQuery = "";
+
+    if (period == "monthly") {
+      periodQuery = `and check_in.created_at > now() - interval '1 month' `;
+    } else if (period == "weekly") {
+      periodQuery = `and check_in.created_at > now() - interval '1 week'`;
+    } else if (period == "daily") {
+      periodQuery = `and check_in.created_at > now() - interval '1 day'`;
+    }
+    let finalQuery;
+    if (!periodQuery) {
+      finalQuery = `select user_id,name,profile_image,count(user_id)as score from check_in right join users on check_in.user_id=users.id where user_id is not null group by user_id,name,profile_image order by score desc limit 10;
+      `;
+    } else {
+      finalQuery = `select user_id,name,profile_image,count(user_id)as score from check_in right join users on check_in.user_id=users.id where user_id is not null ${periodQuery} group by user_id,name,profile_image order by score desc limit 10;`;
+    }
+
+    return (await this.knex.raw(finalQuery)).rows;
+  }
+
+  async getGameCheckInRankByPeriod(period: string) {
+    let periodQuery = "";
+
+    if (period == "monthly") {
+      periodQuery = `and check_in.created_at > now() - interval '1 month' `;
+    } else if (period == "weekly") {
+      periodQuery = `and check_in.created_at > now() - interval '1 week'`;
+    } else if (period == "daily") {
+      periodQuery = `and check_in.created_at > now() - interval '1 day'`;
+    }
+    let finalQuery;
+    if (!periodQuery) {
+      finalQuery = `select game_id,media,count(game_id)as number from check_in right join game on check_in.game_id=game.id where game_id is not null group by game_id,media order by number desc limit 10;
+      `;
+    } else {
+      finalQuery = `select game_id,media,count(game_id)as number from check_in right join game on check_in.game_id=game.id where game_id is not null ${periodQuery} group by game_id,media order by number desc limit 10;`;
+    }
+
+    return (await this.knex.raw(finalQuery)).rows;
+  }
+
+  async getGameLikeOrDislikeRankByPeriod(period: string, reaction: string) {
+    let periodQuery = "";
+
+    if (period == "monthly") {
+      periodQuery = `and like_dislike.updated_at > now() - interval '1 month' `;
+    } else if (period == "weekly") {
+      periodQuery = `and like_dislike.updated_at > now() - interval '1 week'`;
+    } else if (period == "daily") {
+      periodQuery = `and like_dislike.updated_at > now() - interval '1 day'`;
+    }
+
+    let finalQuery;
+    if (reaction == "like") {
+      if (!periodQuery) {
+        finalQuery = `select game_id,media,count(game_id)as number from like_dislike right join game on like_dislike.game_id=game.id where game_id is not null and type='like' group by game_id,media order by number desc limit 10;
+        `;
+      } else {
+        finalQuery = `select game_id,media,count(game_id)as number from like_dislike right join game on like_dislike.game_id=game.id where game_id is not null and type='like' ${periodQuery} group by game_id,media order by number desc limit 10;`;
+      }
+    } else {
+      if (!periodQuery) {
+        finalQuery = `select game_id,media,count(game_id)as number from like_dislike right join game on like_dislike.game_id=game.id where game_id is not null and type='dislike' group by game_id,media order by number desc limit 10;
+        `;
+      } else {
+        finalQuery = `select game_id,media,count(game_id)as number from like_dislike right join game on like_dislike.game_id=game.id where game_id is not null and type='dislike' ${periodQuery} group by game_id,media order by number desc limit 10;`;
+      }
     }
 
     return (await this.knex.raw(finalQuery)).rows;

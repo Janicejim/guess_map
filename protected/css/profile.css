@@ -316,6 +316,10 @@ label {
 font-weight: bold;
 font-size: 1.2rem;
 }
+.column-title span{
+  font-size: 18px;
+  font-weight: normal;
+}
 
 .user-info-container {
   background-color: white;

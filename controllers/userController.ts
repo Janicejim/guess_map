@@ -111,7 +111,6 @@ class UserController {
       let getCurrentUser = false;
       if (req.query.id) {
         id = +req.query.id;
-        getCurrentUser = false;
       } else if (req.session["user"] !== undefined) {
         id = +req.session["user"].id;
         getCurrentUser = true;
@@ -154,6 +153,19 @@ class UserController {
     } catch (err) {
       console.error("error: ", err);
       res.json({ success: false, error: err });
+    }
+  };
+
+  isLogin = async (req: Request, res: Response) => {
+    try {
+      if (req.session["user"]) {
+        res.json(true);
+      } else {
+        res.json(false);
+      }
+    } catch (error) {
+      console.error("error: ", error);
+      res.json(error);
     }
   };
 }

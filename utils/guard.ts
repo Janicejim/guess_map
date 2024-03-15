@@ -4,7 +4,7 @@ export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     next();
   } else {
     // console.log("user haven't login");
-    res.json("請先登入");
+    res.redirect("/login.html");
   }
 };
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +16,6 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     next();
   } else {
     // console.log("no admin Permission");
-    res.json("只限admin");
+    res.redirect("/login.html");
   }
 };

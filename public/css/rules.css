@@ -83,38 +83,33 @@ body {
   font-size: 1rem;
 }
 .rules-subtitle {
-  color: #0336ff;
+  color: #2f2f30;
   font-weight: bold;
   font-size: 2rem;
   margin-top: -5rem;
   margin-left: 1rem;
 }
 .score-text {
-  color: #ff0266;
+  color: #11846b;
   font-weight: 900;
   font-size: 1.2rem;
 }
 
 .plus {
-  color: #ff0266;
+  color: orange;
   font-weight: 700;
   font-size: 3rem;
   margin-bottom: -2rem;
 }
-p {
+li {
   background-color: white;
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
-/* .text_arrangement {
-  display: flex;
-  flex-direction: column;
-} */
-/* ul {
-  background-color: white;
-  margin-top: -0.5rem;
-  padding-top: -1rem;
-} */
-/* .rules-container {
-  background-color: white;
-} */
+
+.part-container{
+border-radius: 15%;
+width: 100%;
+border: 1px orange solid;
+box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
+}

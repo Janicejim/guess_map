@@ -304,7 +304,12 @@ class GameController {
   };
 
   getUserDifferentGameRecordByStatus = async (req: Request, res: Response) => {
-    const userID = req.session.user.id;
+    let userId = 0;
+    if (req.query.id) {
+      userId = +req.query.id;
+    } else {
+      userId = req.session["user"].id;
+    }
     const { status } = req.params;
     let sorting = req.query.sorting;
     if (!sorting) {
@@ -323,7 +328,7 @@ class GameController {
 
     let record = await this.gameService.getUserDifferentGameRecordByStatus(
       statusQuery,
-      userID,
+      userId,
       sorting.toString(),
       completedQuery
     );
@@ -452,7 +457,13 @@ class GameController {
 
   getAllGamesCreateByUser = async (req: Request, res: Response) => {
     try {
-      let user_id = req.session["user"].id;
+      let user_id = 0;
+      if (req.query.id) {
+        user_id = +req.query.id;
+      } else {
+        user_id = req.session["user"].id;
+      }
+
       const result = await this.gameService.getAllGamesCreateByUser(user_id);
       res.json(result);
     } catch (err) {
@@ -463,18 +474,39 @@ class GameController {
 
   getRank = async (req: Request, res: Response) => {
     try {
-      let { period } = req.query;
-      if (!period) {
+      let { period, type } = req.query;
+      if (!period || !type) {
         res.json("missing query");
         return;
       }
       let redeemedDescriptionId = await this.gameService.getScoreDescriptionId(
         "兌換"
       );
-      let result = await this.gameService.getRankByPeriod(
-        period.toString(),
-        redeemedDescriptionId
-      );
+      let result: any = [];
+      if (type == "score") {
+        result = await this.gameService.getUserScoreRankByPeriod(
+          period.toString(),
+          redeemedDescriptionId
+        );
+      } else if (type == "user-check-in") {
+        result = await this.gameService.getUserCheckInRankByPeriod(
+          period.toString()
+        );
+      } else if (type == "game-check-in") {
+        result = await this.gameService.getGameCheckInRankByPeriod(
+          period.toString()
+        );
+      } else if (type == "like") {
+        result = await this.gameService.getGameLikeOrDislikeRankByPeriod(
+          period.toString(),
+          "like"
+        );
+      } else {
+        result = await this.gameService.getGameLikeOrDislikeRankByPeriod(
+          period.toString(),
+          "dislike"
+        );
+      }
 
       res.json(result);
     } catch (e) {

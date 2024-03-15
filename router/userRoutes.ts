@@ -17,7 +17,7 @@ const userController = new UserController(userService);
 userRoutes.post("/register", userController.register);
 userRoutes.post("/login", userController.login);
 userRoutes.get("/login/google", userController.loginGoogle);
-userRoutes.post("/logout", userController.logout);
+userRoutes.post("/logout", isLoggedIn, userController.logout);
 userRoutes.get("/user", userController.getUserInfo);
 userRoutes.put(
   "/profile",
@@ -25,5 +25,5 @@ userRoutes.put(
   multerUpload,
   userController.editProfile
 );
-
+userRoutes.get("/login/status", userController.isLogin);
 export default userRoutes;

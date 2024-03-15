@@ -11,6 +11,10 @@ body a,
 html a {
   text-decoration: none;
 }
+a:hover{
+  text-decoration:none; 
+  color: inherit;
+}
 
 header {
   height: 8rem;
