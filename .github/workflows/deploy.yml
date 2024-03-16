@@ -13,7 +13,7 @@ jobs:
         with:
           script: |
             cd guess_map
-            git pull
+            git pull origin main
             yarn install
             yarn knex migrate:latest
             pm2 restart "node index.js"
