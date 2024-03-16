@@ -19,4 +19,4 @@ jobs:
             git pull origin main --no-edit
             yarn install
             yarn knex migrate:latest
-            pm2 restart "node index.js"
+            pm2 restart 0
