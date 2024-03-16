@@ -152,28 +152,19 @@ updated_at timestamp
 
 
 
-
-
-
-
-
 -----------仍待完成部分：----------------
-
-
+[]ci cd
 []play-game.html-->chatroom 幾時比人chat?
 []play-game.html-->show 打卡紀錄
 []play-game.html-->ui
 []login.html+register.html-->google login+show error msg
-[]frontend html guard
-[]alert-->sweetAlert
-
-[]admin.html--> ui
-[]upload-game.html-->ui
 []login.html-->ui
 []register.html-->ui
-
+[]admin.html--> ui
+[]upload-game.html-->ui
+[]alert-->sweetAlert
 []backend:any type-->model.ts
-[]ci cd
+
 
 
 ---------------已完成部分：
