@@ -11,9 +11,8 @@ jobs:
       - name: ssh to pull latest version
         uses: appleboy/ssh-action@master
         with:
-          host: guess-map.ssjside.site
+          host: ${{secrets.HOST}}
           username: ubuntu
-          port: 8000
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
             cd guess_map
