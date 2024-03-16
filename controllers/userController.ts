@@ -60,6 +60,7 @@ class UserController {
   };
 
   loginGoogle = async (req: Request, res: Response) => {
+    console.log("login google");
     const accessToken = req.session?.["grant"].response.access_token;
     const fetchRes = await fetch(
       "https://www.googleapis.com/oauth2/v2/userinfo",
@@ -71,7 +72,6 @@ class UserController {
       }
     );
     const googleUserInfo: any = await fetchRes.json();
-    console.log(googleUserInfo.email);
     const users = await this.userService.getUserMyEmail(googleUserInfo.email);
     const user = users[0];
     if (!user) {

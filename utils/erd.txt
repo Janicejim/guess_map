@@ -153,11 +153,11 @@ updated_at timestamp
 
 
 -----------仍待完成部分：----------------
-[]ci cd
+[y]login.html+register.html-->google login
 []play-game.html-->chatroom 幾時比人chat?
 []play-game.html-->show 打卡紀錄
 []play-game.html-->ui
-[]login.html+register.html-->google login+show error msg
+[]login.html+register.html-->show error msg
 []login.html-->ui
 []register.html-->ui
 []admin.html--> ui
@@ -176,9 +176,8 @@ updated_at timestamp
 [y]rules.html-->add rules +ui
 [y]index.html-->排行榜--》＋ui
 [y]ranking.html-->different ranking+ui
-
-
-
+[y]ci cd
+[y]login.html+register.html-->google login
 
 -----如果有時間可以：---------
 []get record/game-->offset

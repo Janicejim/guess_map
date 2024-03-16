@@ -54,11 +54,12 @@ class UserService {
         score_change: 100,
         score_description_id: newUserScoreDesId,
       });
-
       await txn.commit();
       return id;
     } catch (e) {
+      console.log(e);
       await txn.rollback();
+      return;
     }
   }
 
