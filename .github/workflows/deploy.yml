@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ssh to pull latest version
+        uses: appleboy/ssh-action@master
+        with:
+          script: |
+            cd guess_map
+            git pull
+            yarn install
+            yarn knex migrate:latest
+            pm2 restart "node index.js"
+          host: 54.151.133.1
+          username: ubuntu
+          port: 8000
+          key: ${{secrets.SSH_PRIVATE_KEY}}
