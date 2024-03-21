@@ -1,6 +1,7 @@
 import UserService from "../services/userService";
 import { checkPassword, hashPassword } from "../utils/hash";
 import { Request, Response } from "express";
+import { GoogleUserInfo } from "../utils/model";
 class UserController {
   constructor(private userService: UserService) {}
 
@@ -11,21 +12,21 @@ class UserController {
       const results = await this.userService.getUserMyEmail(email);
 
       if (results.length == 0) {
-        console.error("Email doesn't exist");
-        return res.json({ success: false, error: "Email doesn't exist" });
+        res.json({ success: false, msg: "用戶未有註冊" });
+        return;
       }
 
       if ((await checkPassword(password, results[0].password)) == false) {
-        console.error("Password Incorrect");
-        return res.json({ success: false, error: "Password Incorrect" });
+        res.json({ success: false, msg: "電郵/密碼有錯誤" });
+        return;
       }
 
       req.session["user"] = results[0];
 
-      return res.json({ role: results[0].role });
+      res.json({ success: true, data: results[0].role });
     } catch (err) {
       console.error("err: ", err);
-      return res.json({ success: false, error: err });
+      res.json({ success: false, error: "系統出錯，請稍候再試" });
     }
   };
 
@@ -35,32 +36,30 @@ class UserController {
       const hashedPassword = await hashPassword(password);
       const checkUserRecord = await this.userService.getUserMyEmail(email);
       if (checkUserRecord.length > 0) {
-        return res.json(false);
-      } else {
-        if (email && password) {
-          const createUserResult = await this.userService.createUser({
-            name,
-            email,
-            profile_image: "anonymous.jpg",
-            password: hashedPassword,
-            role: "user",
-          });
-
-          if (createUserResult) {
-            res.status(200).json({ msg: "register success!" });
-            return;
-          }
-        }
-        return res.json(false);
+        res.json({ success: false, msg: "用戶已註冊" });
+        return;
       }
+      if (email && password) {
+        await this.userService.createUser({
+          name,
+          email,
+          profile_image: "anonymous.jpg",
+          password: hashedPassword,
+          role: "user",
+        });
+      }
+      res.json({ success: true, msg: "註冊成功" });
     } catch (err) {
       console.error("err: ", err);
-      return res.json({ success: false, msg: "system error" });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   loginGoogle = async (req: Request, res: Response) => {
-    console.log("login google");
+    if (!req.session.grant) {
+      res.json({ success: false, msg: "無法取得授權" });
+      return;
+    }
     const accessToken = req.session?.["grant"].response.access_token;
     const fetchRes = await fetch(
       "https://www.googleapis.com/oauth2/v2/userinfo",
@@ -86,7 +85,7 @@ class UserController {
 
       const createUserRowCount = createUserResult.length;
       if (createUserRowCount != 1) {
-        res.status(401).json({ msg: "insert fail" });
+        res.status(401).json({ success: false, msg: "系統出錯，請稍候再試" });
         return;
       }
     }
@@ -99,9 +98,10 @@ class UserController {
   logout = async (req: Request, res: Response) => {
     req.session.destroy((err) => {
       if (err) {
-        return res.json({ success: false });
+        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+        return;
       }
-      return res.json({ success: true });
+      return res.json({ success: true, msg: "登出成功" });
     });
   };
 
@@ -115,7 +115,7 @@ class UserController {
         id = +req.session["user"].id;
         getCurrentUser = true;
       } else {
-        res.json("haven't login");
+        res.json({ success: false, msg: "未登入" });
         return;
       }
 
@@ -124,15 +124,19 @@ class UserController {
         userInfo.total_score = 0;
       }
 
-      res.json({ user: userInfo, getCurrentUser });
+      res.json({ success: true, data: { user: userInfo, getCurrentUser } });
     } catch (error) {
       console.error("error: ", error);
-      res.json(error);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   editProfile = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       const currentUserId = req.session["user"].id;
       const { name, description } = req.body;
       const profile_image = req.file?.filename;
@@ -149,23 +153,23 @@ class UserController {
         );
       }
 
-      res.json({ success: true });
+      res.json({ success: true, msg: "修改成功" });
     } catch (err) {
       console.error("error: ", err);
-      res.json({ success: false, error: err });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   isLogin = async (req: Request, res: Response) => {
     try {
       if (req.session["user"]) {
-        res.json(true);
+        res.json({ success: true, data: true });
       } else {
-        res.json(false);
+        res.json({ success: true, data: false });
       }
     } catch (error) {
       console.error("error: ", error);
-      res.json(error);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 }

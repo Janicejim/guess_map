@@ -51,12 +51,14 @@ document
     });
     const result = await res.json();
 
-    form.reset();
-
-    if (res.ok) {
-      alert("創建遊戲成功");
-      window.location = "/";
+    if (!result.success) {
+      Swal.fire("", result.msg, result.success ? "success" : "error");
+      return;
     }
+
+    form.reset();
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    window.location = "/";
   });
 
 var marker;

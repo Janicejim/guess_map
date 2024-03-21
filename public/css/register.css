@@ -277,3 +277,10 @@ footer {
   border-color: #0336ff;
   color: white;
 }
+
+#register-failure{
+  text-align: center;
+  color:red;
+  margin-top:1rem;
+  margin-bottom:1rem
+}

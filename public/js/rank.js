@@ -2,10 +2,7 @@
 $(function () {
   $("#navbar").load("/navigation.html");
 });
-const err = new URL(window.location.href).searchParams.get("err");
-if (err) {
-  alert(err);
-}
+
 let type = "score";
 let period = "all";
 document.querySelector("#form-select").onchange = changeRankPeriod;
@@ -36,7 +33,12 @@ function clickedStyle(element) {
 
 async function loadRank(period, type) {
   const res = await fetch(`/rank?period=${period}&type=${type}`);
-  let records = await res.json();
+  let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
+  let records = result.data;
   const rankDiv = document.querySelector("table");
 
   let userRankThead = `<tr>

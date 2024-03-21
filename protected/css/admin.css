@@ -1,8 +1,5 @@
 
 
-
-
-
 /* resized response config */
 @media (max-width: 1000px ){
     .col-md-6{
@@ -11,193 +8,17 @@
     }
 }
 
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
-
-.col-md-6{
-    margin-top:100px;
-
-}
-
-.filter-game-layout{
-    min-width:300px;
-    width:auto;
-    height:350px;
-    background-color: #c5c5c5;
-    margin:auto;
-    margin-right:5%;
-    margin-right:25px;
-    border-radius: 4px;
-    margin-left:25px;
-
-}
-#searchGameInput{
-    width:400px;
-}
-#search-game-btn-container{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-#search-game-btn-container> .delete-button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin:auto;
-    margin-top:10px;
-    width:100px;
-    font-size: 20px;
-    color:white !important;
-    background-color:black !important;
-    border:1px solid transparent !important;
-    border-radius: 4px;
-    box-shadow: 1px 1px 3px rgb(44, 44, 44);
-}
-#search-game-btn-container> .delete-button:hover{
-    color:black !important;
-    background-color:white !important;
-}
-.btn-outline-success {
-    color: #000000;
-    border-color: #000000;
-}
-.filter-game-media{
-    background-color: rgb(255, 251, 227);
-    min-width:200px !important;
-    width:auto;
-    height:200px;
-    overflow-y:scroll;
-    margin:auto;
-    margin-right:10%;
-    margin-left:10%;
-    border:1px solid black;
-}
-.inside-layout{
-    padding-top:20px;
-}
-/* .delete-button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin:auto;
-    margin-top:10px;
-    width:100px;
-    font-size: 20px;
-} */
-/* .btn-warning {
-    color: rgb(197, 197, 197);
-    background-color: #000000;
-    border-color: #505050;
-} */
-/* .btn-warning:hover {
-    color: #000;
-    border-color: #a7a7a7;
-} */
-.search-game-container{
-    width:201px;
-    /* max-width:401px;
-    min-width:1001px; */
-    display: flex;
-    padding-top:20px;
-    justify-content: center;
-    margin:auto;
-}
-.search-game{
-width:300px;
-}
-
-
-#show-game-info>div{
-    text-overflow:initial;
-    white-space:pre-line;
-    padding:0.5rem 1rem;
-    color:black;
-    
-}
-
-#show-game-info div.gameContainer:nth-child(odd){
-    background:rgb(219, 219, 219);
-}
-
-
-.mediaDiv:hover{
-    border:1px solid rgb(153, 153, 153);
-    transform:scale(3.5) !important;
-    transition: transform .25s ease-in-out ,border .3s ease-in-out;
-    z-index:10;
-}
-.gameContainer{
-    display:flex;
-    justify-content:left;
-    align-items:center;
-    font-size:12px;
-    
-}
-.gameContainer:hover{
-    cursor:pointer;
-}
-
-.gameContainer > img{
-    margin-left:10px;
-    margin-right:10px;
-    margin-top:10px;
-    width:30px;
-    height:30px;
-    border:1px solid transparent;
-    border-radius: 15px;
-}
-
-.gameSelected{
-    color:white !important;
-    background-color:rgba(5, 5, 5, 0.5) !important;
-    border:1px solid white;
-    border-radius: 10px;
-    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
-}
-.gameContainer > div{
-    margin-left: 5px;
-    margin-right: 5px;
-}
-.gameContainer > .nameDiv{
-    width:120px;
-    margin-left: 5px;
-    margin-right: 5px;
-    border-right: 1px solid rgb(0, 0, 0);
-}
-.gameContainer > .gameIdDiv{
-    width:90px;
-    padding-right:20px;
-    margin-left: 5px;
-    margin-right: 5px;
-    border-right: 1px solid rgb(0, 0, 0);
-}
-.gameContainer > .game-Created-Date-Div{
-    width:163px;
-    padding-left:5px;
-    padding-right:5px;
-    
-}
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^ Search Game ^^^^^^^^^^^^^^^^^^^^^^^*/
-
-
 /* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
+
 
 .filter-user-layout{
-    min-width:300px;
-    width:auto;
-    height:350px;
-    background-color: #c5c5c5;
-    margin:auto;
-    margin-right:25px;
+    min-width: 300px;
+    width: auto;
+    height: 46rem;
+    background-color: #2f808330;
+    margin: auto;
     border-radius: 4px;
-    margin-left:25px;
-    margin-top:50px;
-
+    margin-top: 8rem;
 }
 #search-user-btn-container{
     display:flex;
@@ -236,7 +57,7 @@ width:300px;
     width:100px;
     font-size: 20px;
     color:white !important;
-    background-color:black !important;
+    background-color:#099a97 !important;
     border:1px solid transparent !important;
     border-radius: 4px;
     box-shadow: 1px 1px 3px rgb(44, 44, 44);
@@ -254,15 +75,15 @@ width:300px;
 
 
 .filter-user-Info{
-background-color: rgb(255, 251, 227);
-min-width:200px !important;
-width:auto;
-height:200px;
-overflow-y:scroll;
-margin:auto;
-margin-right:10%;
-margin-left:10%;
-border:1px solid black;
+    background-color: rgba(238, 224, 207, 0.253);
+    min-width: 200px !important;
+    width: auto;
+    height: 33rem;
+    overflow-y: scroll;
+    margin: auto;
+    margin-right: 5%;
+    margin-left: 5%;
+    border: 1px solid black;
 }
 .inside-layout{
     padding-top:20px;
@@ -270,16 +91,6 @@ border:1px solid black;
 
 
 
-/* .filter-user-layout>.btn-warning {
-    color: rgb(197, 197, 197);
-    background-color: #000000;
-    border-color: #505050;
-} */
-/* .btn-warning:hover {
-    color: #000;
-    background-color: #f1f1f1;
-    border-color: #a7a7a7;
-} */
 .search-user-container{
     width: 201px;
     display: flex;
@@ -327,9 +138,8 @@ width:300px;
 }
 .userSelected{
     color:white !important;
-    background-color:rgba(5, 5, 5, 0.5) !important;
+    background-color:rgba(49, 194, 112, 0.5) !important;
     border:1px solid white;
-    border-radius: 10px;
     transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
 }
 .userContainer > div{
@@ -474,16 +284,12 @@ width:300px;
   animation:larger 2s linear infinite;
 } 
 .hidden{
-    display:none
-}
+    display:none !important}
 
 body,
 html {
   font-family: "Noto Sans TC", sans-serif;
   text-decoration: none !important;
-  background-color: #ffde03;
-  padding-top: 40px;
-  /* // same as header height */
 }
 
 body a,
@@ -491,4 +297,175 @@ html a {
   text-decoration: none;
 }
 
-/* loading  css*/
+#header{
+    width: 100%;
+    height: 8rem;
+    background-color: orange;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    margin-top: 2rem;
+    width: 15rem;
+    height: 10rem;
+  }
+
+#logout-btn{
+    font-size: 1.5rem;
+    background-color: rgb(17, 156, 156);
+    cursor: pointer;
+    color: white;
+    width: 7rem;
+    height: 3rem;
+    border: 1px white solid;
+    border-radius: 8%;
+    margin-right: 1rem;
+}
+
+.swiper-slide{
+    width: 30% !important;
+    border-bottom: 0.2rem rgba(30, 185, 167, 0.604) solid;
+    height: 2.5rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 2rem;
+  }
+  .swiper-slide:hover{
+    background-color:rgba(30, 185, 167, 0.604) ;
+    color:white
+  }
+  
+  .swiper-container{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .clicked{
+    background-color:rgba(30, 185, 167, 0.604) ;
+    color:white
+  }
+
+  #awardArea{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: inherit;
+  }
+  .flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:auto
+  }
+  #createAwardForm{
+    font-size: 2rem;
+  }
+  #createAwardForm div, #createAwardForm input{
+    margin-top:1rem;
+    width: 100%;
+  }
+ .submit-btn{
+    font-size: 1.5rem;
+    background-color: orange;
+    cursor: pointer;
+    color: white;
+    width: 7rem;
+    height: 3rem;
+    border: 1px white solid;
+    border-radius: 8%;
+    margin-right: 1rem;
+  }
+  .upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+  
+  .btn {
+    border: 2px solid gray;
+    color: gray;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    width:100%
+  }
+  .btn:hover{
+    background-color: #31c4c188;
+  }
+  
+  .upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+
+.image-review {
+background-size: cover;
+width: 100% !important;
+height: 19rem;
+border: 1px black solid;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.card-img-top{
+    height:10rem;
+  }
+  .card-body{
+    height: 13rem;
+    /* edit mode:17rem */
+  }
+  .icon-container{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: auto;
+    height: 10%;
+  }
+
+  .fas{
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+  .card-content-container{
+    height: 90%;
+  }
+
+  .fa-edit{
+    color:#099a97
+  }
+  .fa-trash-alt{
+    color: orange;
+  }
+  #save-btn{
+    border: none;
+    background-color: #099a97;
+    border-radius: 15%;
+    color:white
+  }
+  #cancel-btn{
+    border: none;
+    background-color:orange;
+    border-radius: 15%;
+    color:white
+  }
+  #edit .icon-container{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .remind{
+    color: gray;
+    margin-top: 0.5rem;
+  }
+  .sort-container{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem;
+  }

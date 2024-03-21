@@ -153,19 +153,13 @@ updated_at timestamp
 
 
 -----------仍待完成部分：----------------
-[y]login.html+register.html-->google login
-[]play-game.html-->chatroom 幾時比人chat?
-[]play-game.html-->show 打卡紀錄
+[]upload-game.html-->ui
+[]play-game.html-->creator睇到ge畫面
+[]play-game.html-->completed-->show 打卡紀錄
 []play-game.html-->ui
-[]login.html+register.html-->show error msg
 []login.html-->ui
 []register.html-->ui
-[]admin.html--> ui
-[]upload-game.html-->ui
-[]alert-->sweetAlert
-[]backend:any type-->model.ts
-
-
+#勝利地圖＋打卡地圖
 
 ---------------已完成部分：
 [y]profile.html-->查閱打卡紀錄
@@ -178,19 +172,29 @@ updated_at timestamp
 [y]ranking.html-->different ranking+ui
 [y]ci cd
 [y]login.html+register.html-->google login
+[y]login.html+register.html-->show error msg
+[y]admin.html--> ui
+[y]admin.html--> edit user role
+[y]backend:res.json() format
+[y]alert-->sweetAlert
+[y]backend:any type-->model.ts
+
 
 -----如果有時間可以：---------
 []get record/game-->offset
 []game.html-->打卡game key word search
 []backend:edit part remove old image if have new one
 []backend:award-->nodeMailer
+[]internal mail--> user 可以sd message比其他人/admin
 []test case
 
 -----------以後要加的功能：----------------
-#勝利地圖＋打卡地圖
+
 #付費購買用品：
 -[]限定每日作答數
 -[]限定每日出題數
 -[]限定收藏數
 -[]限定打卡數
-#實景地圖模式＋玩家開私人房
+#實景地圖模式
+#玩家開私人房
+[]play-game.html-->chatroom 幾時比人chat?未完game chat,可以一齊討論，其實有冇必要chat呢？決定放在多人模式中

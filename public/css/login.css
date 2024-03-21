@@ -218,3 +218,10 @@ html, body {
 .left{
   background-color: rgb(36, 155, 115);
   height: 100vh}
+
+  #message{
+    text-align: center;
+    color:red;
+    margin-top:1rem;
+    margin-bottom:1rem
+  }

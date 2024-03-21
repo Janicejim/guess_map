@@ -22,7 +22,14 @@
       type="text/css"
       href="//fonts.googleapis.com/css?family=Open+Sans"
     />
-    <!-- CSS only -->
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css"
+/>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -32,40 +39,40 @@
 
     <link rel="stylesheet" href="/css/admin.css" />
 
-    <title>Admin page</title>
+    <title>管理員控制台</title>
   </head>
 
   <body>
   
+<div id="header">
+<img class="logo" src="/icon.png"/>
+<button id="logout-btn">登出</button>
+</div>
+<div class="container">
 
-    <div class="filter-game-container">
-      <div class="row">
-        <div id="left-column" class="col-sm-12 col-md-6">
-          <div class="filter-game-layout">
-            <form name="search-game" id="search-game">
-              <div class="search-game-container">
-                <input
-                  id="searchGameInput"
-                  class="form-control me-2 search-game"
-                  type="search"
-                  placeholder="Search game "
-                  aria-label="Search"
-                />
-                <button class="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-              </div>
-            </form>
-            <div class="inside-layout">
-              <div id="show-game-info" class="filter-game-media"></div>
-              <div id="search-game-btn-container">
-                <button name="deleteGame" id="deleteGame" class="delete-button">
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
 
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide clicked" data-type="role" >
+切換用戶身份
+    </div>
+    <div class="swiper-slide" data-type="upload"  >上傳新獎品
+    </div>
+    <div class="swiper-slide" data-type="edit"  >
+ 編輯獎品
+    </div>
+
+
+  </div>
+</div>
+<div class="sort-container hidden">
+  <select class="sort-select" aria-label="Default select example">
+    <option value="award.created_at asc">排列依創建時間升序</option>
+    <option value="award.created_at desc" selected>排列依創建時間降序</option>
+    <option value="score asc">排列依積分數目升序</option>
+    <option value="score desc">排列依積分數目降序</option>
+  </select>
+</div>
           <div class="filter-user-layout">
             <form name="search-user" id="search-user">
               <div class="search-user-container">
@@ -85,60 +92,64 @@
             <div class="inside-layout">
               <div id="show-user-info" class="filter-user-Info"></div>
               <div id="search-user-btn-container">
-                <button name="deleteUser" id="deleteUser" class="delete-button">
-                  Delete
-                </button>
+
                 <button
                   name="upgradeUser"
                   id="upgradeUser"
                   class="upgrade-button"
                 >
-                  Grade
-                </button>
+               切換</button>
+            
               </div>
+     <div class="flex remind">（玩家<i class="fas fa-exchange-alt"></i>管理員）</div>
             </div>
           </div>
-        </div>
-        <div id="right-column" class="col-sm-12 col-md-6">
-          <button type="button" class="collapsible">Game Report</button>
-          <div class="content game-report-record">
-            <p>report record here</p>
-          </div>
+  <div class="flex"><form id="createAwardForm" class="hidden">
+    <div>獎品名稱:</div>
+    <input name="name" type="text" required></input>
+    <div>獎品圖片:</div>
+    <div class="upload-btn-wrapper">
+      <div class="image-review"><i class="fas fa-plus"></i></div>
+      <input type="file" name="image" required/>
+    </div>
+    <div>積分:</div>
+    <input name="score" type="number" required></input>
+    <div>數量:</div>
+    <input name="quantity" type="number" required></input>
+    <br>
+    <div class="flex"><button type="submit" class="submit-btn">新增</button></div>
 
-          <button type="button" class="collapsible">Message</button>
-          <div class="content message-record">
-            <p>message record here</p>
-          </div>
-        </div>
-      </div>
-
-<form id="createAwardForm">
-  <div>獎品名稱:</div>
-  <input name="name" type="text" required></input>
-  <div>獎品圖片:</div>
-  <input name="image" type="file" required></input>
-  <div>積分:</div>
-  <input name="score" type="number" required></input>
-  <div>數量:</div>
-  <input name="quantity" type="number" required></input>
-  <br>
-  <button type="submit">新增</button>
-</form>
-
-<div id="awardArea"></div>
+  </form></div>
 
 
+<div id="awardArea" class="hidden"></div>
+
+<!-- user template part ------------>
+<template id="user-template">
+
+  <div class="userContainer">
+  <img src="">
+  <div class="nameDiv"><div>姓名:</div><br><span></span>
+  </div>
+  <div class="emailDiv"><div>電郵:</div><br><span></span>
+</div>
+  <div class="roleDiv"><div>現時身份:</div><br><span></span></div>
+
+</template>
+<!-- award template part ------------>
 <template id="awardTemplate">
   <div>
   <div class="card" style="width: 18rem;" id="non-edit">
     <img src="" class="card-img-top" alt="..." id="image">
     <div class="card-body">
+      <div class="card-content-container">
       <h5 class="card-title" id="title"></h5>
      <div>所需積分：<span  id="score"></span></div>
      <div class="quantity">數量：<span id="quantity"></span></div>
-     <div class="quantity">庫存：<span id="quota"></span></div>
-     <i class="fas fa-edit"></i>
-     <i class="fas fa-trash-alt"></i>
+     <div class="quantity">庫存：<span id="quota"></span></div></div>
+     <div class="icon-container">     <i class="fas fa-edit"></i>
+      <i class="fas fa-trash-alt"></i></div>
+
     </div>
   </div>
 
@@ -147,23 +158,32 @@
 
     <div class="card-body">
       <form id="edit-award-form" >
-      <div>獎品圖片：</div>
+      <!-- <div>獎品圖片：</div>
       <input type="file" name="image" id="edit-image-btn"/>
+       -->
+      <div>獎品圖片:</div>
+      <div class="upload-btn-wrapper">
+        <div class="edit-image-upload"><i class="fas fa-plus"></i></div>
+        <input type="file" name="image" required/>
+      </div>
+
       <div> 獎品標題：</div>
 <input type="text"  name="name" id="edit-name"/>
      <div>所需積分：</div>
      <input type="number" name="score"  id="edit-score">
      <div class="quantity">數量：</div>
      <input type="number" name="quantity"  id="edit-quantity">
-     <button type="submit" id="save-btn">儲存變更</button>
+     <div class="icon-container">     <button type="submit" id="save-btn">變更</button>
+      <button id="cancel-btn">取消</button></div>
+
     </form>
 
     </div>
   </div>
 </div>
 </template>
-    </div>
 
+  </div>
     <!-- footer -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -172,6 +192,8 @@
       integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="/js/admin.js"></script>
   </body>
 </html>

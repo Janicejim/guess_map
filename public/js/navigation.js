@@ -127,6 +127,8 @@ document
     const result = await res.json();
     if (result.success) {
       window.location = "/";
+    } else {
+      Swal.fire("", result.msg, result.success ? "success" : "error");
     }
   });
 const socket = io.connect();

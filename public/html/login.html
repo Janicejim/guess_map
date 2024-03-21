@@ -34,15 +34,15 @@
         <form name="login-form" id='login-form'>
         <div class="mb-3 email-column">
           <label for="exampleInputEmail1" class="form-label">電郵</label>
-          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" autocomplete="username">
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" autocomplete="username" required>
         </div>
         <div class="mb-3 password-column">
           <label for="exampleInputPassword1" class="form-label">密碼</label>
-          <input name="password" type="password" class="form-control" id="exampleInputPassword1" autocomplete="current-password">
+          <input name="password" type="password" class="form-control" id="exampleInputPassword1" autocomplete="current-password" required>
         </div>
-        <div id="Alert"></div>
+     
         <button type="submit" class="btn btn-warning button-style">登入</button>
-
+        <div id="message"></div>
         <div class="google-container">
           <a href="/connect/google">
             <div class="google-btn">

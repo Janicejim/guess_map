@@ -27,16 +27,12 @@ let checkInId;
 
 async function loadSingleGame(id) {
   const res = await fetch(`/game?id=${id}`);
-  const gameInfo = await res.json();
-  if (gameInfo == "login first") {
-    window.location = "/login.html";
+  let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
     return;
   }
-
-  if (gameInfo.status == "inactive") {
-    alert("遊戲已下架");
-    return;
-  }
+  const gameInfo = result.data;
 
   const playGameBoardDiv = document.querySelector("#gameInfo-container");
   playGameBoardDiv.innerHTML = ``;
@@ -60,13 +56,11 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
         method: "POST",
       });
       let result = await res.json();
-      if (result.err) {
-        alert("系統故障，等陣先再入嚟la");
-      } else if (!result.success) {
-        alert(result.msg);
-      } else if (result.success) {
-        loadSingleGame(id);
+      if (!result.success) {
+        Swal.fire("", result.msg, result.success ? "success" : "error");
+        return;
       }
+      loadSingleGame(id);
     });
   } else if (status == "joined") {
     gameStatus = "joined";
@@ -98,7 +92,6 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
       answerLocation = gameInfo.data[0].target_location;
     }
 
-    // console.log({ isChecked });
     if (!isChecked) {
       node.querySelector("#completed-map-container").removeAttribute("hidden");
       node.querySelector("#check-in-button").removeAttribute("hidden");
@@ -107,7 +100,7 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
         .addEventListener("click", async () => {
           let location = getLocationByMarker(currentLocationMarker);
           if (!location) {
-            alert("請等待地圖出現人形圖案再提交");
+            Swal.fire("", "請等待地圖出現人形圖案再提交", "error");
             return;
           }
           let result = await checkIn(location, gameInfo.data[0].id);
@@ -137,8 +130,7 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
               .toggleAttribute("hidden");
           } else {
             Swal.fire({
-              title: "提交失敗",
-              text: result.msg,
+              title: result.msg,
               icon: "error",
               confirmButtonText: "關閉",
             });
@@ -160,11 +152,15 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
 async function submitAnswer(marker, isUsePlayerLocation) {
   let location = getLocationByMarker(marker);
   if (!location && isUsePlayerLocation) {
-    alert("請確保已開啟位置分享，以及上方地圖出現人形標示再提交");
+    swal.fire(
+      "",
+      "請確保已開啟位置分享，以及上方地圖出現人形標示再提交",
+      "error"
+    );
     return;
   }
   if (!location && !isUsePlayerLocation) {
-    alert("請確保已在上方地圖選取位置，出現圖釘標示再提交");
+    swal.fire("", "請確保已在上方地圖選取位置，出現圖釘標示再提交", "error");
     return;
   }
   location["isUsePlayerLocation"] = isUsePlayerLocation;
@@ -176,10 +172,11 @@ async function submitAnswer(marker, isUsePlayerLocation) {
     body: JSON.stringify(location),
   });
   let result = await res.json();
-  alert(result.msg || result.err);
-  if (result.success !== undefined) {
+  Swal.fire("", result.msg, result.success ? "success" : "error");
+
+  if (result.success) {
     loadSingleGame(id);
-  } else if (result.success == undefined && result.reduceAttempts) {
+  } else if (!result.success && result.reduceAttempts) {
     let attemptElm = document.querySelector("#attempts");
     let perviousAttempt = +attemptElm.textContent;
     perviousAttempt != 0
@@ -227,7 +224,9 @@ document
 socket.emit("userName", async (name) => {
   const res = await fetch("/user");
   const result = await res.json();
-  name = result.user.name;
+  if (result.success) {
+    name = result.data.user.name;
+  }
 });
 
 //room-Update
@@ -369,14 +368,16 @@ async function checkIn(location, gameId) {
     body: JSON.stringify(location),
   });
   let result = await res.json();
+
   return result;
 }
 
 async function checkCheckedInOrNot(gameId) {
   let res = await fetch(`/check-in/game?gameId=${gameId}`);
   let result = await res.json();
-  isChecked = result.checked;
-  // console.log("after fetch:", { isChecked });
+  if (result.success) {
+    isChecked = result.data;
+  }
 }
 //-----------------------gallery-----------------
 let swiper = new Swiper(".mySwiper", {
@@ -406,16 +407,8 @@ async function submitCheckInData() {
     body: formData,
   });
   let result = await res.json();
-  Swal.close();
-  Swal.fire({
-    title: "上傳成功",
-    icon: "success",
-    showConfirmButton: false,
-    showCancelButton: true,
-    confirmButtonText: "關閉",
-  });
-}
-
-function closeSweetAlert() {
-  Swal.close();
+  if (result.success) {
+    Swal.close();
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+  }
 }

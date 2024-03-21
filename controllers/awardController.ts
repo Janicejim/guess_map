@@ -12,7 +12,7 @@ class AwardController {
     try {
       let { sorting } = req.query;
       if (!sorting) {
-        sorting = "score desc";
+        sorting = "award.created_at desc";
       }
 
       let awards = await this.awardService.getAward(sorting.toString());
@@ -20,10 +20,10 @@ class AwardController {
       if (req.query.limited) {
         awards = awards.slice(0, +req.query.limited);
       }
-      res.json(awards);
+      res.json({ success: true, data: awards });
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -31,12 +31,12 @@ class AwardController {
     try {
       let image = req.file?.filename;
       if (!image) {
-        res.json("missing image");
+        res.json({ success: false, msg: "欠缺圖片" });
         return;
       }
       let { name, score, quantity } = req.body;
       if (!name || !score || !quantity) {
-        res.json("missing body item");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
 
@@ -47,10 +47,10 @@ class AwardController {
         quantity,
         status: "active",
       });
-      res.json("create success");
+      res.json({ success: true, msg: "創建成功" });
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -58,14 +58,14 @@ class AwardController {
     try {
       let { awardId } = req.query;
       if (!awardId) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       await this.awardService.inactiveAward(+awardId);
-      res.json("inactive");
+      res.json({ success: true, msg: "刪除成功" });
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -75,7 +75,7 @@ class AwardController {
       let body = req.body;
       let { awardId } = req.query;
       if (!awardId) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       if (image) {
@@ -83,31 +83,39 @@ class AwardController {
       }
 
       await this.awardService.editAward(body, +awardId);
-      res.json("edit success");
+      res.json({ success: true, msg: "編輯成功" });
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   getAwardRecord = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let user_id = req.session.user.id;
 
       let awardRecords = await this.awardService.getAwardRecords(user_id);
-      res.json(awardRecords);
+      res.json({ success: true, data: awardRecords });
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   createAwardRecord = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let user_id = req.session.user.id;
       let { award_id } = req.query;
       if (!award_id) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       let userScore = (await this.gameService.checkUserScore(user_id))[0]
@@ -116,13 +124,12 @@ class AwardController {
       let score = await this.awardService.getAwardScore(+award_id);
 
       if (+userScore < +score) {
-        res.json("積分不足");
+        res.json({ success: false, msg: "積分不足" });
         return;
       }
       let awardQuota = await this.awardService.checkAwardQuota(+award_id);
-      console.log({ awardQuota });
       if (awardQuota <= 0) {
-        res.json("庫存不足");
+        res.json({ success: false, msg: "庫存不足" });
         return;
       }
       let score_description_id = await this.gameService.getScoreDescriptionId(
@@ -130,15 +137,19 @@ class AwardController {
       );
 
       await this.awardService.createAwardRecord({
-        award_id,
+        award_id: +award_id,
         user_id,
         score_description_id,
         score,
       });
-      res.json("兌換成功,電子券已傳至閣下郵箱，請查收！");
+
+      res.json({
+        success: true,
+        msg: "兌換成功,電子券已傳至閣下郵箱，請查收！",
+      });
     } catch (e) {
       console.log(e);
-      res.json("系統出現問題");
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 }

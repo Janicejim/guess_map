@@ -16,11 +16,18 @@ socket.on("update game status", () => {
 });
 
 async function getAward() {
-  let res = await fetch(`/award?limited=4`);
-  let awards = await res.json();
+  let res = await fetch(`/award?sorting=score desc &limited=4`);
+  let result = await res.json();
   let awardArea = document.querySelector("#award-area");
-  for (let award of awards) {
-    createAwardDiv(award, awardArea);
+
+  if (result.success) {
+    let awards = result.data;
+
+    for (let award of awards) {
+      createAwardDiv(award, awardArea);
+    }
+  } else {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
   }
 }
 
@@ -38,7 +45,12 @@ function createAwardDiv(award, awardArea) {
 async function loadGames() {
   //new game
   const res = await fetch("/games?limit=12");
-  let games = await res.json();
+  let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
+  let games = result.data;
   let newGamesDiv = document.querySelector("#new-game");
   newGamesDiv.innerHTML = ``;
   if (games.length == 0) {
@@ -51,8 +63,13 @@ async function loadGames() {
   if ("preferences" in games[0]) {
     let inProgressDiv = document.querySelector("#in-progress");
     inProgressDiv.classList.remove("hidden");
-    let processRes = await fetch("/game/record/in_progress?limit=true");
-    let progressGames = await processRes.json();
+    let res = await fetch("/game/record/in_progress?limit=true");
+    let result = await res.json();
+    if (!result.success) {
+      Swal.fire("", result.msg, result.success ? "success" : "error");
+      return;
+    }
+    let progressGames = result.data;
     let progressGameDiv = document.querySelector(
       ".in-progress-swiper .swiper-wrapper"
     );
@@ -159,7 +176,13 @@ let gameSwiper = new Swiper(".game-swiper", {
 
 function loginGuard(targetElement) {
   targetElement.addEventListener("click", () => {
-    alert("請先登入");
+    Swal.fire({
+      title: "請登入先",
+      icon: "error",
+      showConfirmButton: false,
+      showCancelButton: true,
+      confirmButtonText: "關閉",
+    });
   });
 }
 
@@ -167,7 +190,12 @@ function loginGuard(targetElement) {
 
 async function loadRank() {
   const res = await fetch(`/rank?period=all&type=score`);
-  let records = await res.json();
+  let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
+  let records = result.data;
   const rankDiv = document.querySelector("table");
   let i = 0;
   for (let record of records) {
@@ -195,9 +223,14 @@ loadRank();
 async function loadCompletedGameForCheckIn() {
   let res = await fetch("/game/completed?limit=10");
   let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
+  let games = result.data;
   let checkInDiv = document.querySelector(".checkInSwiper .swiper-wrapper");
   checkInDiv.innerHTML = ``;
-  for (let game of result) {
+  for (let game of games) {
     createCheckInElm(checkInDiv, game);
   }
   //load completed game for check in, need to append the game first:

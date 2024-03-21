@@ -6,10 +6,15 @@ $(function () {
 async function getAward() {
   let sorting = document.querySelector(".sort-select").value;
   let res = await fetch(`/award?sorting=${sorting}`);
-  let awards = await res.json();
-  awardArea.innerHTML = ``;
-  for (let award of awards) {
-    createAwardDiv(award);
+  let result = await res.json();
+  if (result.success) {
+    let awards = result.data;
+    awardArea.innerHTML = ``;
+    for (let award of awards) {
+      createAwardDiv(award);
+    }
+  } else {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
   }
 }
 
@@ -33,9 +38,10 @@ function createAwardDiv(award) {
       let res = await fetch(`/award/record?award_id=${award.id}`, {
         method: "POST",
       });
-      if (res.ok) {
-        let result = await res.json();
-        alert(result);
+
+      let result = await res.json();
+      if (result.success) {
+        Swal.fire("", result.msg, result.success ? "success" : "error");
         getAward();
       }
     });

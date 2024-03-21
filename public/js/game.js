@@ -23,8 +23,13 @@ async function loadAllGames() {
   } else {
     res = await fetch(`/games?sorting=${sorting}`);
   }
+  let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
 
-  let games = await res.json();
+  let games = result.data;
   const gameBoardDiv = document.querySelector(".all-game-board");
 
   gameBoardDiv.innerHTML = "";
@@ -130,6 +135,6 @@ function clickPreferenceEvent(
 
 function loginGuard(targetElement) {
   targetElement.addEventListener("click", () => {
-    alert("請先登入");
+    Swal.fire("", result.msg, result.success ? "success" : "error");
   });
 }

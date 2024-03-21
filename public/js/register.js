@@ -25,23 +25,20 @@ document
         body: JSON.stringify(userForm),
       });
       const result = await res.json();
-      if (result == false) {
+
+      if (!result.success) {
         form.reset();
-        document.querySelector("#register-failure").innerHTML =
-          "Name or Email have been used.";
+        document.querySelector("#register-failure").textContent = result.msg;
+        setTimeout(() => {
+          document.querySelector("#register-failure").textContent = "";
+        }, 1000);
       } else {
-        alert("注冊成功");
         window.location = "/login.html";
       }
-      // console.log('result', result);
     } catch (error) {
       console.log("error", error);
     }
   });
-
-document.querySelector("#index-signin").addEventListener("click", () => {
-  window.location = "/login.html";
-});
 
 document.querySelector("#index-signup").addEventListener("click", () => {
   window.location = "/register.html";

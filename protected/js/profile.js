@@ -10,15 +10,6 @@ $(function () {
   $("#navbar").load("/navigation.html");
 });
 
-//get user is login or not:
-// async function isLogin() {
-//   let res = await fetch("/login/status");
-//   let isLogin = await res.json();
-//   if (!isLogin) {
-//     window.location = "/login.html";
-//   }
-// }
-
 // Profile content
 const profilePicDiv = document.querySelector(".profile-image");
 const userNameDiv = document.querySelector("#user-name");
@@ -41,16 +32,22 @@ async function getUserProfile() {
   const res = id ? await fetch(`/user?id=${id}`) : await fetch("/user");
   const result = await res.json();
 
-  profilePicDiv.style.backgroundImage = result.user.profile_image
-    ? `url(/${result.user.profile_image})`
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
+  let user = result.data.user;
+
+  profilePicDiv.style.backgroundImage = user.profile_image
+    ? `url(/${user.profile_image})`
     : "url('anonymous.jpg')";
 
-  userNameDiv.value = result.user.name;
-  userEmailDiv.value = result.user.email;
-  userDesDiv.value = result.user.description;
-  totalScoreDiv.textContent = result.user.total_score;
-  winLossDiv.textContent = `${result.user.win_number}勝${result.user.loss_number}敗`;
-  checkInNumber.textContent = result.user.check_in_number;
+  userNameDiv.value = user.name;
+  userEmailDiv.value = user.email;
+  userDesDiv.value = user.description;
+  totalScoreDiv.textContent = user.total_score;
+  winLossDiv.textContent = `${user.win_number}勝${user.loss_number}敗`;
+  checkInNumber.textContent = user.check_in_number;
 }
 
 //preview new profile pic:
@@ -149,7 +146,12 @@ addClickEffectOfBtn(scoreRecordBtn, getScoreRecords);
 
 async function getScoreRecords() {
   let res = await fetch(`/score/record`);
-  let records = await res.json();
+  let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
+  let records = result.data;
   recordAreaContainer.innerHTML = ``;
   for (let record of records) {
     let scoreTemplate = document
@@ -183,21 +185,26 @@ async function getScoreRecords() {
 addClickEffectOfBtn(redeemRecordBtn, getRedeemRecord);
 async function getRedeemRecord() {
   let res = await fetch(`/award/record`);
-  let records = await res.json();
-  recordAreaContainer.innerHTML = ``;
-  if (records.length < 1) {
-    recordAreaContainer.innerHTML = `<div class="no-record"><div >未有紀錄</div><div>`;
-    return;
-  }
+  let result = await res.json();
+  if (result.success) {
+    let records = result.data;
+    recordAreaContainer.innerHTML = ``;
+    if (records.length < 1) {
+      recordAreaContainer.innerHTML = `<div class="no-record"><div >未有紀錄</div><div>`;
+      return;
+    }
 
-  for (let record of records) {
-    let awardTemplate = document
-      .querySelector("#award-record")
-      .content.cloneNode(true);
-    awardTemplate.querySelector("#award-img").src = record.image;
-    awardTemplate.querySelector("#award-name").textContent = record.name;
-    awardTemplate.querySelector("#award-score").textContent = record.score;
-    recordAreaContainer.appendChild(awardTemplate);
+    for (let record of records) {
+      let awardTemplate = document
+        .querySelector("#award-record")
+        .content.cloneNode(true);
+      awardTemplate.querySelector("#award-img").src = record.image;
+      awardTemplate.querySelector("#award-name").textContent = record.name;
+      awardTemplate.querySelector("#award-score").textContent = record.score;
+      recordAreaContainer.appendChild(awardTemplate);
+    }
+  } else {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
   }
 }
 
@@ -233,8 +240,12 @@ async function getGameRecords(type, preferences, status) {
   } else {
     res = await fetch(`/game/like_dislike?preferences=${preferences}`);
   }
-
-  let records = await res.json();
+  let result = await res.json();
+  if (!result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+    return;
+  }
+  let records = result.data;
   recordAreaContainer.innerHTML = ``;
   if (records.length == 0) {
     recordAreaContainer.innerHTML = `<div class="no-record"><div >未有紀錄</div><div>`;
@@ -316,7 +327,7 @@ function clickPreferenceEvent(
 ) {
   targetElement.addEventListener("click", async () => {
     if (type == "create") {
-      alert("創建者不能讚好/負評自己創建的遊戲");
+      Swal.fire("", "創建者不能讚好/負評自己創建的遊戲", "error");
       return;
     }
     await fetch(
@@ -403,7 +414,10 @@ async function getUserCheckInRecord() {
   let res = id
     ? await fetch(`/check-in/record?id=${id}`)
     : await fetch("/check-in/record");
-  checkInRecords = await res.json();
+  let result = await res.json();
+  if (result.success) {
+    checkInRecords = await res.json();
+  }
 
   if (checkInRecords.length == 0) {
     recordAreaContainer.innerHTML = `<div class="no-record"><div >未有紀錄</div><div>`;
@@ -515,24 +529,7 @@ async function submitEditCheckIn(id) {
   });
   let result = await res.json();
   Swal.close();
-  if (result.success) {
-    Swal.fire({
-      title: result.msg,
-      icon: "success",
-      showConfirmButton: false,
-      showCancelButton: true,
-      confirmButtonText: "關閉",
-    });
-    getUserCheckInRecord();
-  } else {
-    Swal.fire({
-      title: result.msg,
-      icon: "error",
-      showConfirmButton: false,
-      showCancelButton: true,
-      confirmButtonText: "關閉",
-    });
-  }
+  Swal.fire("", result.msg, result.success ? "success" : "error");
 }
 
 function closeSweetAlert() {

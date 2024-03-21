@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css"
+    />
     <link rel="stylesheet" href="/css/navigation.css" />
   </head>
   <body>
@@ -60,17 +64,12 @@
       </ul>
     </nav>
     <header>
-      <!-- <a href="/" class="logo">估你吾島</a> -->
       <a href="/"><img src="/icon.png" alt="" class="logo" /></a>
-      <!-- <img
-        src="/menu_black_24dp.svg"
-        alt="menu"
-        class="menu-btn"
-        id="open-menu"
-      /> -->
+
       <i class="fas fa-bars menu-btn" id="open-menu"></i>
     </header>
     <div id="current-user">歡迎</div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/navigation.js"></script>
   </body>

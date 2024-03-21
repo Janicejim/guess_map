@@ -5,52 +5,37 @@ import { Request, Response } from "express";
 class AdminController {
   constructor(private adminService: AdminService) {}
 
-  searchGame = async (req: Request, res: Response) => {
-    const { searchText } = req.body;
-    const gameInfo = await this.adminService.searchGame(searchText);
-    return res.json(gameInfo.rows);
-  };
-
-  deleteGame = async (req: Request, res: Response) => {
-    try {
-      const allGameIDArray = req.body;
-      for (let i = 0; i < allGameIDArray.length; i++) {
-        await this.adminService.deleteGame(allGameIDArray[i]);
-        // io.emit("updateGame");
-      }
-      return res.json({ success: true, msg: "delete Games success" });
-    } catch (error) {
-      console.error("Error :", error);
-      return res.json({ success: false, msg: error });
-    }
-  };
-
   searchUser = async (req: Request, res: Response) => {
     const { searchText } = req.body;
+    if (!searchText) {
+      res.json({ success: false, msg: "欠缺資料" });
+      return;
+    }
     const userInfo = await this.adminService.searchUser(searchText);
-    return res.json(userInfo.rows);
+    return res.json({ success: true, data: userInfo.rows });
   };
 
-  async SwitchGradeUser(req: Request, res: Response) {
+  switchGradeUser = async (req: Request, res: Response) => {
     try {
       let { allEmailArray } = req.body;
-      allEmailArray = JSON.parse(allEmailArray);
-      for (let i = 0; i < allEmailArray.length; i++) {
-        const currentRole = await this.adminService.getUserRole(
-          allEmailArray[i]
-        );
-        if (currentRole[0].role == "user") {
-          await this.adminService.updateUserRole(allEmailArray[i], "admin");
-        } else if (currentRole[0].role == "admin") {
-          await this.adminService.updateUserRole(allEmailArray[i], "user");
+      if (!allEmailArray || allEmailArray.length == 0) {
+        res.json({ success: false, msg: "欠缺資料" });
+        return;
+      }
+      for (let userEmail of allEmailArray) {
+        const currentRole = await this.adminService.getUserRole(userEmail);
+        if (currentRole == "user") {
+          await this.adminService.updateUserRole(userEmail, "admin");
+        } else if (currentRole == "admin") {
+          await this.adminService.updateUserRole(userEmail, "user");
         }
       }
-      return res.json({ success: true, msg: "Upgrade users success" });
+      return res.json({ success: true, msg: "切換成功" });
     } catch (error) {
       console.log(error);
-      return res.json({ success: false, msg: error });
+      return res.json({ success: false, msg: "系統出現問題，新稍後再試" });
     }
-  }
+  };
 }
 
 export default AdminController;

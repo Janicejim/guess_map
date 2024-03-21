@@ -9,18 +9,6 @@ const checkInRoutes = express.Router();
 const checkInService = new CheckInService(knex);
 const checkInController = new CheckInController(checkInService);
 
-checkInRoutes.get(
-  "/collection",
-  isLoggedIn,
-  checkInController.getCollectionByUser
-);
-
-checkInRoutes.post(
-  "/collection",
-  isLoggedIn,
-  checkInController.addOrInactiveCollection
-);
-
 checkInRoutes.post("/check-in", isLoggedIn, checkInController.addCheckInRecord);
 checkInRoutes.patch(
   "/check-in",

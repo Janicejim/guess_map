@@ -28,8 +28,7 @@ class GameController {
     if (req.query.limit) {
       results = results.slice(0, req.query.limit);
     }
-
-    res.json(results);
+    res.json({ success: true, data: results });
   };
 
   uploadGame = async (req: Request, res: Response) => {
@@ -44,6 +43,22 @@ class GameController {
         answer_description,
       } = req.body;
 
+      if (
+        !media ||
+        !targeted_location ||
+        !hints_1 ||
+        !hints_2 ||
+        !answer_name ||
+        !answer_address ||
+        !answer_description
+      ) {
+        res.json({ success: false, msg: "欠缺資料" });
+        return;
+      }
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let id = req.session["user"].id;
 
       await this.gameService.createGame({
@@ -58,10 +73,10 @@ class GameController {
         status: "active",
       });
 
-      res.json({ success: true });
+      res.json({ success: true, msg: "創建成功" });
     } catch (err) {
-      console.log("error:", err);
-      res.json({ success: false, error: err });
+      console.log(err);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -70,7 +85,7 @@ class GameController {
       const gameId = req.query.id;
 
       if (!gameId) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       //check the game status: active,inactive or completed:
@@ -83,7 +98,10 @@ class GameController {
       const completedData = await this.gameService.getCompletedGameInfo(
         +gameId
       );
-
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       const currentUserId = req.session["user"].id;
       // //check user play this game history:
       const playRecord = await this.gameService.getPlayGameRecord(
@@ -96,46 +114,57 @@ class GameController {
       );
       //inactive game don't show data:
       if (gameStatus == "inactive") {
-        res.json({ status: "inactive" });
+        res.json({ success: true, data: { status: "inactive" } });
       } else if (isCreator) {
-        res.json({ status: "creator", data: completedData, gameStatus });
+        res.json({
+          success: true,
+          data: { status: "creator", data: completedData, gameStatus },
+        });
       } else if (gameStatus == "active" && playRecord.length == 0) {
         //game active and user haven't join this game:
-        res.json({ status: "new", data: activeData });
+        res.json({ success: true, data: { status: "new", data: activeData } });
       } else if (gameStatus == "active" && playRecord.length != 0) {
         //game active and user joined this game:
         res.json({
-          status: "joined",
-          data: activeData,
-          attempts: playRecord[0].attempts,
+          success: true,
+          data: {
+            status: "joined",
+            data: activeData,
+            attempts: playRecord[0].attempts,
+          },
         });
       } else {
-        //game is completed
-
-        res.json({ status: "completed", data: completedData });
+        res.json({
+          success: true,
+          data: { status: "completed", data: completedData },
+        });
       }
     } catch (err) {
       console.log(err);
-      res.json({ err: err });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   joinGame = async (req: Request, res: Response) => {
     try {
       const gameId = req.params.id;
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let currentUserId = req.session["user"].id;
 
       await this.gameService.joinGame({
         user_id: currentUserId,
-        game_id: gameId,
+        game_id: +gameId,
         attempts: 3,
         is_win: false,
       });
 
-      res.json({ msg: "參與成功", success: true });
+      res.json({ success: true, msg: "參與成功" });
     } catch (err) {
       console.log(err);
-      res.json({ err: err });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -148,8 +177,11 @@ class GameController {
         !targeted_location_y ||
         isUsePlayerLocation == undefined
       ) {
-        console.log(req.body);
-        res.json({ err: "所交資料缺欠" });
+        res.json({ success: false, msg: "所交資料缺欠" });
+        return;
+      }
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
         return;
       }
       let currentUserId = req.session["user"].id;
@@ -158,11 +190,11 @@ class GameController {
       //check game's status,not active game can't play:
       let gameData = await this.gameService.checkGameData(+game_id);
       if (gameData.status !== "active") {
-        res.json({ msg: "呢個遊戲已經下架" });
+        res.json({ success: false, msg: "遊戲已經下架" });
         return;
       }
       if (currentUserId == gameData.user_id) {
-        res.json({ msg: "創建者唔可以玩自己起ge game" });
+        res.json({ success: false, msg: "創建者不能參加自己建立的遊戲" });
         return;
       }
 
@@ -173,13 +205,13 @@ class GameController {
       );
       //handle user haven't join the game:
       if (game_history.length == 0) {
-        res.json({ msg: "登入先la" });
+        res.json({ success: false, msg: "請先登入" });
         return;
       }
 
       //user play before but no attempts or win already:
       if (game_history[0].attempts <= 0 || game_history[0].is_win) {
-        res.json({ msg: "用晒3次機會la" });
+        res.json({ success: false, msg: "用完3次機會，無法再作答" });
         return;
       }
       //check where have 100 score to play the game
@@ -187,7 +219,8 @@ class GameController {
       let totalScore = scoreRecord.length > 0 ? scoreRecord[0].total_score : 0;
       if (totalScore < 30) {
         res.json({
-          msg: "至少要有30積分先可以提交答案，賺左積分先la!",
+          success: false,
+          msg: "至少要有30積分先可以提交答案，去賺積分先啦!",
         });
         return;
       }
@@ -205,13 +238,7 @@ class GameController {
         let score_description_id = await this.gameService.getScoreDescriptionId(
           "作答失敗"
         );
-        //if attempts only 1 and still wrong,deduce 100 to store:
-        // console.log(
-        //   "attempts:",
-        //   game_history[0].attempts,
-        //   "is_win:",
-        //   game_history[0].is_win
-        // );
+
         if (game_history[0].attempts == 1 && game_history[0].is_win == false) {
           await this.gameService.userAnswerWrongly(
             {
@@ -225,22 +252,20 @@ class GameController {
             },
             {
               user_id: currentUserId,
-              game_id,
+              game_id: +game_id,
               amount_change: 30,
             }
           );
           this.io.to(`Room-${game_id}`).emit("update room store");
           this.io.emit("update game store");
           this.io.emit("update user score");
-          res.json({ msg: "都係估錯，三次機會用晒，已扣30分作為累積獎金！" });
+          res.json({
+            success: false,
+            msg: "用完3次機會，已扣30分作為累積獎金！",
+          });
           return;
         }
-        // console.log(
-        //   "attempts:",
-        //   game_history[0].attempts,
-        //   "id:",
-        //   game_history[0].id
-        // );
+
         await this.gameService.userAnswerWrongly(
           {
             attempts: +game_history[0].attempts - 1,
@@ -248,13 +273,15 @@ class GameController {
           game_history[0].id
         );
         res.json({
-          msg: `估錯左! 同正確坐標相差 ${distanceAfterCompare} m `,
+          success: true,
+          msg: `猜錯! 和正確坐標相差 ${distanceAfterCompare} m `,
           reduceAttempts: true,
         });
         return;
       } else {
         //get the store amount and add score_record to creator and winner
         let total_store = 0;
+        let basic_store = 100;
         let storeResult = await this.gameService.checkGameTotalStore(+game_id);
         if (storeResult.length > 0) {
           total_store = storeResult[0].store;
@@ -262,6 +289,7 @@ class GameController {
 
         if (isUsePlayerLocation) {
           total_store = total_store * 2;
+          basic_store = 200;
         }
 
         let winner_description_id =
@@ -278,7 +306,7 @@ class GameController {
           +game_id,
           {
             user_id: currentUserId,
-            score_change: 100 + total_store / 2,
+            score_change: basic_store + total_store / 2,
             score_description_id: winner_description_id,
           },
           {
@@ -288,7 +316,7 @@ class GameController {
           },
           {
             user_id: currentUserId,
-            game_id,
+            game_id: +game_id,
             amount_change: -total_store,
           }
         );
@@ -296,15 +324,19 @@ class GameController {
       this.io.to(`Room-${game_id}`).emit("update room status");
       this.io.emit("update game status");
       this.io.emit("update user score");
-      res.json({ msg: `恭喜晒！你答啱左la！獎賞已發放`, success: true });
+      res.json({ success: true, msg: `恭喜你！回答正確！獎賞已發放~` });
     } catch (err) {
       console.log("error:", err);
-      res.json({ err: "系統出現問題" });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   getUserDifferentGameRecordByStatus = async (req: Request, res: Response) => {
     let userId = 0;
+    if (!req.session.user) {
+      res.json({ success: false, msg: "請先登入" });
+      return;
+    }
     if (req.query.id) {
       userId = +req.query.id;
     } else {
@@ -336,7 +368,7 @@ class GameController {
     if (req.query.limit != undefined) {
       record = record.slice(0, 3);
     }
-    res.json(record);
+    res.json({ success: true, data: record });
   };
 
   likeOrDislikeGameByPlayer = async (req: Request, res: Response) => {
@@ -344,6 +376,10 @@ class GameController {
       const { preferences, gameId } = req.query;
       if (!preferences || !gameId) {
         res.json("missing query");
+        return;
+      }
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
         return;
       }
       let currentUserId = req.session["user"].id;
@@ -413,7 +449,7 @@ class GameController {
       if (previousPreferenceRecord.length == 0) {
         await this.gameService.addPreference(
           {
-            game_id: gameId,
+            game_id: +gameId,
             user_id: currentUserId,
             type: preferences,
           },
@@ -429,18 +465,22 @@ class GameController {
       }
     } catch (err) {
       console.log(err);
-      res.json({ success: false });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   //user liked/dislike record:
   likeOrDislikeGameRecordByPlayer = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let userId = req.session["user"].id; //login ed user
       let { preferences } = req.query;
 
       if (!preferences) {
-        res.json("missing preferences");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       let results = await this.gameService.getUserAllPreferenceGameByPreference(
@@ -448,16 +488,20 @@ class GameController {
         preferences.toString()
       );
 
-      res.json(results);
+      res.json({ success: true, data: results });
     } catch (err) {
       console.log(err);
-      res.json({ success: false });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   getAllGamesCreateByUser = async (req: Request, res: Response) => {
     try {
       let user_id = 0;
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       if (req.query.id) {
         user_id = +req.query.id;
       } else {
@@ -465,10 +509,10 @@ class GameController {
       }
 
       const result = await this.gameService.getAllGamesCreateByUser(user_id);
-      res.json(result);
+      res.json({ success: true, data: result });
     } catch (err) {
       console.log("error:" + JSON.stringify(err));
-      res.json({ success: false });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -476,7 +520,7 @@ class GameController {
     try {
       let { period, type } = req.query;
       if (!period || !type) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       let redeemedDescriptionId = await this.gameService.getScoreDescriptionId(
@@ -508,23 +552,27 @@ class GameController {
         );
       }
 
-      res.json(result);
+      res.json({ success: true, data: result });
     } catch (e) {
       console.error(e);
-      res.json({ success: false, msg: e });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
   getUserScoreRecord = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let userId = req.session["user"].id;
 
       let result = await this.gameService.getUserScoreRecord(userId);
 
-      res.json(result);
+      res.json({ success: true, data: result });
     } catch (e) {
       console.error(e);
-      res.json({ success: false, msg: e });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -552,10 +600,10 @@ class GameController {
         result = result.slice(0, req.query.limit);
       }
 
-      res.json(result);
+      res.json({ success: true, data: result });
     } catch (e) {
       console.error(e);
-      res.json({ success: false, msg: e });
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 }

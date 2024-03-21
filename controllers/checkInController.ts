@@ -1,65 +1,24 @@
 import CheckInService from "../services/checkInService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
+import { CheckInData } from "../utils/model";
 class CheckInController {
   constructor(private checkInService: CheckInService) {}
 
-  getCollectionByUser = async (req: Request, res: Response) => {
-    try {
-      let userId = req.session.user.id;
-      let result = await this.checkInService.getCollectionByUser(userId);
-
-      res.json(result);
-    } catch (e) {
-      console.log(e);
-      res.json(e);
-    }
-  };
-
-  addOrInactiveCollection = async (req: Request, res: Response) => {
-    try {
-      let userId = req.session.user.id;
-      let { gameId } = req.query;
-      if (!gameId) {
-        res.json("missing query");
-        return;
-      }
-
-      let oldRecord = await this.checkInService.checkOldCollectionRecord(
-        userId,
-        +gameId
-      );
-      if (oldRecord.length == 0) {
-        await this.checkInService.addCollection(userId, +gameId);
-      } else if (oldRecord.length > 0 && oldRecord[0].status == "inactive") {
-        await this.checkInService.updatedCollectionRecordStatus(
-          oldRecord[0].id,
-          "active"
-        );
-      } else if (oldRecord.length > 0 && oldRecord[0].status == "active") {
-        await this.checkInService.updatedCollectionRecordStatus(
-          oldRecord[0].id,
-          "inactive"
-        );
-      }
-
-      res.json("success");
-    } catch (e) {
-      console.log(e);
-      res.json(e);
-    }
-  };
-
   addCheckInRecord = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let user_id = req.session.user.id;
       let { gameId } = req.query;
       let { targeted_location_x, targeted_location_y } = req.body;
-      targeted_location_x = 22.283047923532244;
-      targeted_location_y = 114.15359294197071;
+      // targeted_location_x = 22.283047923532244;
+      // targeted_location_y = 114.15359294197071;
 
       if (!gameId) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       let oldRecord = await this.checkInService.checkOldCheckInRecord(
@@ -67,10 +26,7 @@ class CheckInController {
         +gameId
       );
       if (oldRecord.length > 0) {
-        res.json({
-          msg: "已經打過卡",
-          success: false,
-        });
+        res.json({ success: false, msg: "已經打過卡" });
         return;
       }
 
@@ -87,8 +43,8 @@ class CheckInController {
 
       if (distanceAfterCompare > 200) {
         res.json({
-          msg: "身處位置和打卡位相距多於200米，請再嘗試",
           success: false,
+          msg: "身處位置和打卡位相距多於200米,請再嘗試",
         });
         return;
       }
@@ -100,13 +56,13 @@ class CheckInController {
       });
 
       res.json({
-        msg: "打卡成功",
         success: true,
-        recordId: id,
+        msg: "打卡成功",
+        data: id,
       });
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 
@@ -120,7 +76,7 @@ class CheckInController {
         res.json({ success: false, msg: "欠缺資料" });
         return;
       }
-      let data: any = { id: +id };
+      let data: CheckInData = { id: +id };
       if (image) {
         data["image"] = image;
       }
@@ -128,7 +84,7 @@ class CheckInController {
         data["message"] = message;
       }
       if (!image && !message) {
-        res.json({ success: false, msg: "沒有任何更新" });
+        res.json({ success: false, msg: "沒有要更新的資料" });
         return;
       }
 
@@ -137,11 +93,15 @@ class CheckInController {
       res.json({ success: true, msg: "編輯成功" });
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
   getCheckInRecordByUser = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let userId = 0;
       if (req.query.id) {
         userId = +req.query.id;
@@ -153,15 +113,19 @@ class CheckInController {
       res.json(result);
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
   checkOldCheckInRecordByGame = async (req: Request, res: Response) => {
     try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
       let userId = req.session.user.id;
       let { gameId } = req.query;
       if (!gameId) {
-        res.json("missing query");
+        res.json({ success: false, msg: "欠缺資料" });
         return;
       }
       let result = await this.checkInService.checkOldCheckInRecord(
@@ -170,13 +134,13 @@ class CheckInController {
       );
 
       if (result.length > 0) {
-        res.json({ checked: true });
+        res.json({ success: true, data: true });
       } else {
-        res.json({ checked: false });
+        res.json({ success: true, data: false });
       }
     } catch (e) {
       console.log(e);
-      res.json(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
 }

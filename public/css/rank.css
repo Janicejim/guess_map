@@ -119,3 +119,7 @@ color:grey
   margin-top: 0.5rem;
   margin-bottom:0.5rem
 }
+
+.hidden{
+  display: none;
+}

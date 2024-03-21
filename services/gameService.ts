@@ -1,4 +1,11 @@
 import { Knex } from "knex";
+import {
+  Game,
+  GameHistory,
+  Preference,
+  ScoreData,
+  StoreData,
+} from "../utils/model";
 
 class GameService {
   constructor(private knex: Knex) {}
@@ -38,9 +45,9 @@ class GameService {
     ).rows;
 
     let userJoinedGames = await this.getUserAllJoinedGame(user_id);
-    let neverJoinGames = activeGames.filter((game: any) => {
+    let neverJoinGames = activeGames.filter((game: { id: number }) => {
       return !userJoinedGames.some(
-        (joinedGame: any) => game.id === joinedGame.game_id
+        (joinedGame: { game_id: number }) => game.id === joinedGame.game_id
       );
     });
 
@@ -73,7 +80,7 @@ class GameService {
     }
   }
 
-  async createGame(gameData: any) {
+  async createGame(gameData: Game) {
     await this.knex("game").insert(gameData);
 
     return;
@@ -155,7 +162,7 @@ on game.id=store.game_id where game.id=?`,
       return allCompletedGame;
     } else {
       let filteredRecord = allCompletedGame.filter(
-        (game: any) =>
+        (game: { id: number }) =>
           !userCheckInRecord.some((record) => record.game_id === game.id)
       );
 
@@ -172,17 +179,17 @@ on game.id=store.game_id where game.id=?`,
     ).rows;
   }
 
-  async joinGame(gameHistoryData: any) {
+  async joinGame(gameHistoryData: GameHistory) {
     //insert game_history record:
     await this.knex("game_history").insert(gameHistoryData);
     return;
   }
 
   async userAnswerWrongly(
-    gameHistoryData: any,
+    gameHistoryData: { attempts: number },
     game_history_id: number,
-    scoreData?: any,
-    storeData?: any
+    scoreData?: ScoreData,
+    storeData?: StoreData
   ) {
     let txn = await this.knex.transaction();
     try {
@@ -205,13 +212,13 @@ on game.id=store.game_id where game.id=?`,
   }
 
   async userAnswerCorrect(
-    gameHistoryData: any,
+    gameHistoryData: { is_win: boolean },
     gameHistoryId: number,
-    gameData: any,
+    gameData: { status: string },
     gameId: number,
-    winnerScoreRecordData: any,
-    creatorScoreRecordData: any,
-    storeRecordData: any
+    winnerScoreRecordData: ScoreData,
+    creatorScoreRecordData: ScoreData,
+    storeRecordData: StoreData
   ) {
     let txn = await this.knex.transaction();
     try {
@@ -300,7 +307,7 @@ on game.id=store.game_id where game.id=?`,
     )[0].id;
   }
 
-  async addPreference(preferencesData: any, scoreRecord: any) {
+  async addPreference(preferencesData: Preference, scoreRecord: ScoreData) {
     let txn = await this.knex.transaction();
     try {
       await txn("like_dislike").insert(preferencesData);

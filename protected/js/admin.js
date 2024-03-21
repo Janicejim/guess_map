@@ -1,17 +1,62 @@
-/*----------------get award:-----------------------------*/
-async function getAward() {
-  let res = await fetch(`/award`);
-  let awards = await res.json();
-  if (awards.length < 1) {
-    return;
-  }
-  awardArea.innerHTML = ``;
-  for (let award of awards) {
-    createAwardDiv(award);
+//------------swiper menu ------------------
+let userRoleContainer = document.querySelector(".filter-user-layout");
+let createAwardContainer = document.querySelector("#createAwardForm");
+let editAwardContainer = document.querySelector("#awardArea");
+let sortContainer = document.querySelector(".sort-container");
+let type = "role";
+
+let typeElements = document.querySelectorAll(".swiper-slide");
+for (let typeElement of typeElements) {
+  typeElement.addEventListener("click", () => {
+    clickedStyle(typeElement);
+    type = typeElement.getAttribute("data-type");
+    if (type == "role") {
+      userRoleContainer.classList.remove("hidden");
+      createAwardContainer.classList.add("hidden");
+      editAwardContainer.classList.add("hidden");
+    } else if (type == "upload") {
+      userRoleContainer.classList.add("hidden");
+      createAwardContainer.classList.remove("hidden");
+      editAwardContainer.classList.add("hidden");
+    } else {
+      userRoleContainer.classList.add("hidden");
+      createAwardContainer.classList.add("hidden");
+      sortContainer.classList.remove("hidden");
+      editAwardContainer.classList.remove("hidden");
+
+      getAward();
+    }
+  });
+
+  function clickedStyle(element) {
+    let typeElements = document.querySelectorAll(".swiper-slide");
+    for (let typeElement of typeElements) {
+      typeElement.classList.remove("clicked");
+    }
+    element.classList.add("clicked");
   }
 }
 
-getAward();
+/*----------------get award:-----------------------------*/
+async function getAward() {
+  let sorting = document.querySelector(".sort-select").value;
+  let res = await fetch(`/award?sorting=${sorting}`);
+  let result = await res.json();
+  if (result.success) {
+    let awards = result.data;
+    if (awards.length < 1) {
+      awardArea.innerHTML = `沒有紀錄`;
+      return;
+    }
+    awardArea.innerHTML = ``;
+    for (let award of awards) {
+      createAwardDiv(award);
+    }
+  } else {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
+  }
+}
+
 function createAwardDiv(award) {
   let awardTemplate = document
     .querySelector("#awardTemplate")
@@ -26,6 +71,10 @@ function createAwardDiv(award) {
   awardTemplate.querySelector(".fa-edit").addEventListener("click", () => {
     nonEditElm.classList.toggle("hidden");
     editElm.classList.toggle("hidden");
+    let cards = document.querySelectorAll(".card-body");
+    for (let card of cards) {
+      card.style = " height: 18rem";
+    }
   });
 
   awardTemplate
@@ -34,7 +83,10 @@ function createAwardDiv(award) {
       let res = await fetch(`/award?awardId=${award.id}`, {
         method: "DELETE",
       });
-      if (res.ok) {
+      let result = await res.json();
+
+      if (result.success) {
+        Swal.fire("", result.msg, result.success ? "success" : "error");
         getAward();
       }
     });
@@ -44,6 +96,24 @@ function createAwardDiv(award) {
   awardTemplate.querySelector("#edit-quantity").value = award.quantity;
   let editForm = awardTemplate.querySelector("#edit-award-form");
 
+  let result = awardTemplate.querySelector("#edit-image");
+  let uploadField = awardTemplate.querySelector(".upload-btn-wrapper");
+
+  // on change show image with crop options
+  uploadField.addEventListener("change", (e) => {
+    if (e.target.files.length) {
+      // start file reader
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target.result) {
+          console.log(e.target.result);
+          result.src = e.target.result;
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  });
+
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     let formData = new FormData(editForm);
@@ -51,148 +121,60 @@ function createAwardDiv(award) {
       method: "PUT",
       body: formData,
     });
-    if (res.ok) {
+    let result = await res.json();
+
+    if (result.success) {
       getAward();
     }
+  });
+
+  awardTemplate.querySelector("#cancel-btn").addEventListener("click", () => {
+    nonEditElm.classList.toggle("hidden");
+    editElm.classList.toggle("hidden");
   });
 
   awardArea.appendChild(awardTemplate);
 }
 
-/*----------------create award-----------------------------*/
+document.querySelector(".sort-select").addEventListener("change", () => {
+  getAward();
+});
+
+// ******** create award ********************************************************** //
+//-------------review upload-----------------
+let fileInput = document.querySelector(".upload-btn-wrapper input");
+let reviewDiv = document.querySelector(".image-review");
+fileInput.addEventListener("change", (e) => {
+  document.querySelector(".image-review").innerHTML = ``;
+  if (e.target.files.length) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target.result) {
+        reviewDiv.style.backgroundImage = `url(${e.target.result})`;
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  }
+});
+/*----------------submit create award-----------------------------*/
 createAwardForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   let formData = new FormData(createAwardForm);
   let res = await fetch(`/award`, { method: "POST", body: formData });
-  if (res.ok) {
-    let result = await res.json();
-    alert(result);
+  let result = await res.json();
+  if (result.success) {
+    Swal.fire("", result.msg, result.success ? "success" : "error");
     createAwardForm.reset();
-    getAward();
-  }
-});
-// ******** Search Game ******** //
-
-const searchGameForm = document.querySelector("#search-game");
-const searchGameInput = document.querySelector("#searchGameInput");
-const showGameInfo = document.querySelector("#show-game-info");
-
-searchGameForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  showGameInfo.innerText = "";
-  const form = event.target;
-  const gameObj = { searchText: form.searchGameInput.value };
-  // console.log("mark-client-1")
-
-  const res = await fetch("/search/game", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(gameObj),
-  });
-  const result = await res.json();
-
-  for (let i = 0; i < result.length; i++) {
-    let gameContainer = document.createElement("div");
-    let getUserImg = document.createElement("img");
-    let userName = document.createElement("div");
-    let gameID = document.createElement("div");
-    let gameMedia = document.createElement("img");
-    let gameCreatedDate = document.createElement("div");
-
-    gameContainer.classList.add("gameContainer");
-    gameContainer.classList.add(`game_id-${i}`);
-    userName.classList.add("nameDiv");
-    gameID.classList.add("gameIdDiv");
-    gameMedia.classList.add("mediaDiv");
-    gameCreatedDate.classList.add("game-Created-Date-Div");
-
-    let createdDate = result[i].created_at.split("T")[0];
-    let createdTime = result[i].created_at.split("T")[1].split(".")[0];
-
-    if (result[i].profile_image != null) {
-      getUserImg.src = result[i].profile_image;
-      gameMedia.src = result[i].media;
-      userName.innerHTML = `<b>Name:</b>\n ${result[i].name}`;
-      gameID.innerHTML = `<b>GameID:</b>\n ${result[i].id}`;
-      gameMedia.innerHTML = `${result[i].media}`;
-      gameCreatedDate.innerHTML = `<b>Created_at:</b>\n ${createdDate}\n ${createdTime}`;
-    } else {
-      getUserImg.src = "anonymous.png";
-      gameMedia.src = result[i].media;
-      userName.innerHTML = `<b>Name:</b>\n ${result[i].name}`;
-      gameID.innerHTML = `<b>GameID:</b>\n ${result[i].id}`;
-      gameMedia.innerHTML = `${result[i].media}`;
-      gameCreatedDate.innerHTML = `<b>Created_at:</b>\n ${result[i].created_at}`;
-    }
-    gameContainer.appendChild(getUserImg);
-    gameContainer.appendChild(userName);
-    gameContainer.appendChild(gameID);
-    gameContainer.appendChild(gameMedia);
-    gameContainer.appendChild(gameCreatedDate);
-
-    showGameInfo.appendChild(gameContainer);
-    showGameInfo.scrollTop = showGameInfo.scrollHeight;
-  }
-  // --------- Select Game ---------- //
-  if (showGameInfo.querySelector("*")) {
-    const allGamesDiv = showGameInfo.children;
-    // console.log('allUsersDiv', allUsersDiv);
-
-    for (let j = 0; j < allGamesDiv.length; j++) {
-      const selectGame = document.querySelector(`.game_id-${j}`);
-      selectGame.addEventListener("click", (event) => {
-        event.preventDefault();
-        if (!event.currentTarget.classList.contains("gameSelected")) {
-          event.currentTarget.classList.add("gameSelected");
-          const selectedUser = document.querySelector(".gameSelected");
-          // console.log('selectedUser', selectedUser);
-        } else {
-          event.currentTarget.classList.remove("gameSelected");
-          const selectedUser = document.querySelector(".gameSelected");
-          // console.log('selectedUser', selectedUser);
-        }
-      });
-    }
-    // ---------- Delete Game --------- //
-    // ---------- Delete Game --------- //
-    const deleteGame = document.querySelector("#deleteGame");
-    deleteGame.addEventListener("click", async (event) => {
-      event.preventDefault();
-      const selectedGameDivs = document.querySelectorAll(".gameSelected");
-      // console.log('selectedGameDivs', selectedGameDivs);
-      let allGameIDArray = [];
-      for (let x = 0; x < selectedGameDivs.length; x++) {
-        //get gameID
-        allGameIDArray.push(
-          selectedGameDivs[x]
-            .querySelector(".gameIdDiv")
-            .innerText.split("\n")[1]
-        );
-        // console.log('allGameIDArray', allGameIDArray);
-      }
-
-      const res = await fetch("/game", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(allGameIDArray),
-      });
-      // init-box
-      showGameInfo.innerText = "";
-    });
-    // ---------- Delete Game --------- //
-    // ---------- Delete Game --------- //
+    document.querySelector(".image-review").style.backgroundImage = ``;
+    document.querySelector(
+      ".image-review"
+    ).innerHTML = `<i class="fas fa-plus"></i>`;
   }
 });
 
-// ******** Search Game ******** //
+// ******** Search User ********************************************************** //
 
-// ******** Search User ******** //
-
-//----- Search and Show -----//
+//----- Search and Show user-----//
 const searchUserForm = document.querySelector("#search-user");
 const searchUserInfo = document.querySelector("#searchUserInput");
 const showUserInfo = document.querySelector("#show-user-info");
@@ -202,7 +184,6 @@ searchUserForm.addEventListener("submit", async (event) => {
   showUserInfo.innerText = "";
   const form = event.target;
   const userObj = { searchText: form.searchUserInput.value };
-  // console.log('userObj = ', userObj);
 
   const res = await fetch("/search/user", {
     method: "POST",
@@ -213,159 +194,58 @@ searchUserForm.addEventListener("submit", async (event) => {
   });
   const result = await res.json();
 
-  for (let i = 0; i < result.length; i++) {
-    let userContainer = document.createElement("div");
-    let getUserImg = document.createElement("img");
-    let userName = document.createElement("div");
-    let userEmail = document.createElement("div");
-    let userRole = document.createElement("div");
-
-    userContainer.classList.add("userContainer");
-    userContainer.classList.add(`id-${i}`);
-    userName.classList.add("nameDiv");
-    userEmail.classList.add("emailDiv");
-    userRole.classList.add("roleDiv");
-
-    // change role number the string
-    var userRoleStr;
-    if (result[i].role == 0) {
-      userRoleStr = "Member";
-    } else if (result[i].role == 9) {
-      userRoleStr = "Admin";
-    } else {
-      userRoleStr = result[i].role;
-    }
-
-    if (result[i].profile_image != null) {
-      getUserImg.src = result[i].profile_image;
-      userName.innerHTML = `<b>Name:</b>\n ${result[i].name}`;
-      userEmail.innerHTML = `<b>Email:</b>\n ${result[i].email}`;
-      userRole.innerHTML = `<b>Role:</b>\n ${userRoleStr}`;
-    } else {
-      getUserImg.src = "anonymous.png";
-      userName.innerHTML = `<b>Name:</b>\n ${result[i].name}`;
-      userEmail.innerHTML = `<b>Email:</b>\n ${result[i].email}`;
-      userRole.innerHTML = `<b>Role:</b>\n ${userRoleStr}`;
-    }
-    userContainer.appendChild(getUserImg);
-    userContainer.appendChild(userName);
-    userContainer.appendChild(userEmail);
-    userContainer.appendChild(userRole);
-
-    showUserInfo.appendChild(userContainer);
-    showUserInfo.scrollTop = showUserInfo.scrollHeight;
-  }
-  // --------- Select User ---------- //
-  if (showUserInfo.querySelector("*")) {
-    const allUsersDiv = showUserInfo.children;
-    // console.log('allUsersDiv', allUsersDiv);
-
-    for (let j = 0; j < allUsersDiv.length; j++) {
-      const selectUser = document.querySelector(`.id-${j}`);
-      selectUser.addEventListener("click", (event) => {
-        event.preventDefault();
-        if (!event.currentTarget.classList.contains("userSelected")) {
-          event.currentTarget.classList.add("userSelected");
-          const selectedUser = document.querySelector(".userSelected");
-          // console.log('selectedUser', selectedUser);
-        } else {
-          event.currentTarget.classList.remove("userSelected");
-          const selectedUser = document.querySelector(".userSelected");
-          // console.log('selectedUser', selectedUser);
-        }
+  for (let user of result.data) {
+    let userTemplate = document
+      .querySelector("#user-template")
+      .content.cloneNode(true);
+    userTemplate.querySelector("img").src = user.profile_image
+      ? `/${user.profile_image}`
+      : "/anonymous.jpg";
+    userTemplate.querySelector(".nameDiv span").textContent = user.name;
+    userTemplate.querySelector(".emailDiv span").textContent = user.email;
+    userTemplate.querySelector(".roleDiv span").textContent =
+      user.role == "user" ? "玩家" : "管理員";
+    userTemplate
+      .querySelector(".userContainer")
+      .addEventListener("click", (e) => {
+        e.currentTarget.classList.toggle("userSelected");
       });
-    }
-
-    // ---------- Delete User --------- //
-    // ---------- Delete User --------- //
-    const deleteUser = document.querySelector("#deleteUser");
-    deleteUser.addEventListener("click", async (event) => {
-      event.preventDefault();
-      const selectedUserDivs = document.querySelectorAll(".userSelected");
-      // console.log("selectedUserDivs", selectedUserDivs);
-      let allEmailArray = [];
-      for (let x = 0; x < selectedUserDivs.length; x++) {
-        //get email
-        // const allSelectedEmail =   selectedUserDivs[x].querySelector(".emailDiv").innerText.split("\n")[1];
-        allEmailArray.push(
-          selectedUserDivs[x]
-            .querySelector(".emailDiv")
-            .innerText.split("\n")[1]
-        );
-      }
-      // console.log('allEmailArray', allEmailArray);
-      const res = await fetch("/user", {
-        method: "Delete",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(allEmailArray),
-      });
-      // init-box
-      showUserInfo.innerText = "";
-
-      // const selectedUserEmail = selectedUserDivs.querySelector(".userEmail");
-    });
-    // ---------- Delete User --------- //
-    // ---------- Delete User --------- //
-
-    // ---------- Upgrade User --------- //
-    // ---------- Upgrade User --------- //
-    const upgradeUser = document.querySelector("#upgradeUser");
-    upgradeUser.addEventListener("click", async (event) => {
-      event.preventDefault();
-      const selectedUserDivs = document.querySelectorAll(".userSelected");
-      // console.log("selectedUserDivs", selectedUserDivs);
-      let allEmailArray = [];
-      for (let x = 0; x < selectedUserDivs.length; x++) {
-        //get email
-        // const allSelectedEmail =   selectedUserDivs[x].querySelector(".emailDiv").innerText.split("\n")[1];
-        allEmailArray.push(
-          selectedUserDivs[x]
-            .querySelector(".emailDiv")
-            .innerText.split("\n")[1]
-        );
-      }
-      const res = await fetch("/user", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ allEmailArray }),
-      });
-      // init-box
-      showUserInfo.innerText = "";
-      window.location = "/admin.html";
-    });
-
-    // ---------- Upgrade User --------- //
-    // ---------- Upgrade User --------- //
+    showUserInfo.appendChild(userTemplate);
   }
 });
 
-// ******** Search User ******** //
+// ---------- Upgrade User --------- //
+document.querySelector("#upgradeUser").addEventListener("click", async () => {
+  const selectedUserElms = document.querySelectorAll(".userSelected");
 
-// ******** Game Report & Messages Required js ******** //
+  let allEmailArray = [];
+  for (let elms of selectedUserElms) {
+    allEmailArray.push(elms.querySelector(".emailDiv span").textContent);
+  }
 
-let coll = document.getElementsByClassName("collapsible");
-let i;
+  const res = await fetch("/user", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ allEmailArray }),
+  });
 
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function () {
-    this.classList.toggle("active");
-    let content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
+  let result = await res.json();
+  if (result.success) {
+    showUserInfo.innerText = "";
+  }
+  Swal.fire("", result.msg, result.success ? "success" : "error");
+});
+//----------logout------------
+document
+  .querySelector("#logout-btn")
+  .addEventListener("click", async (event) => {
+    const res = await fetch("/logout", { method: "POST" });
+    const result = await res.json();
+    if (result.success) {
+      window.location = "/login.html";
     } else {
-      content.style.display = "block";
+      Swal.fire("", result.msg, result.success ? "success" : "error");
     }
   });
-}
-
-// ******** Game Report & Messages Required js ******** //
-
-/* loading */
-
-// $(window).on('load', function () {
-//   $('#loading').fadeOut;
-// }) ;

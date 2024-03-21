@@ -14,14 +14,15 @@ let players: player[] = [];
 // ---- socket io chatroom test ---- //
 
 export function chatRoomIO(io: socketIO.Server) {
-  io.on("connection", (socket: any) => {
+  io.on("connection", (socket: socketIO.Socket) => {
     if ((socket.request as express.Request).session["user"]) {
       let user = (socket.request as express.Request).session["user"];
 
-      socket.on("join-room", (id: any) => {
-        // console.log('id', id);
+      socket.on("join-room", (id: string) => {
         socket.join(`Room-${id}`);
-
+        if (!user) {
+          return;
+        }
         let player = {
           socketID: socket!["id"],
           userName: user.name,
@@ -35,7 +36,10 @@ export function chatRoomIO(io: socketIO.Server) {
           user.name + "  加入遊戲"
         );
 
-        socket.on("chat message", (msg: any) => {
+        socket.on("chat message", (msg: string) => {
+          if (!user) {
+            return;
+          }
           io.to(`Room-${id}`).emit(
             "chat message",
             user.profile_image,
@@ -43,6 +47,9 @@ export function chatRoomIO(io: socketIO.Server) {
           );
         });
         socket.on("chat win message", () => {
+          if (!user) {
+            return;
+          }
           io.to(`Room-${id}`).emit(
             "chat message",
             user.profile_image,
@@ -50,6 +57,9 @@ export function chatRoomIO(io: socketIO.Server) {
           );
         });
         socket.on("chat lose message", () => {
+          if (!user) {
+            return;
+          }
           io.to(`Room-${id}`).emit(
             "chat message",
             user.profile_image,
@@ -57,6 +67,9 @@ export function chatRoomIO(io: socketIO.Server) {
           );
         });
         socket.on("chat miss message", () => {
+          if (!user) {
+            return;
+          }
           io.to(`Room-${id}`).emit(
             "chat message",
             user.profile_image,

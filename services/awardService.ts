@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { Award, AwardRecord } from "../utils/model";
 
 class AwardService {
   constructor(private knex: Knex) {}
@@ -11,11 +12,11 @@ class AwardService {
       )
     ).rows;
   }
-  async createAward(awardInfo: any) {
+  async createAward(awardInfo: Award) {
     await this.knex.insert(awardInfo).into("award");
     return;
   }
-  async editAward(awardInfo: any, awardId: number) {
+  async editAward(awardInfo: Award, awardId: number) {
     await this.knex("award").update(awardInfo).where("id", awardId);
     return;
   }
@@ -33,7 +34,7 @@ class AwardService {
       )
     ).rows;
   }
-  async createAwardRecord(awardInfo: any) {
+  async createAwardRecord(awardInfo: AwardRecord) {
     let txn = await this.knex.transaction();
     try {
       await txn.insert({

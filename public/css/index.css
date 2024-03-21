@@ -60,7 +60,7 @@ margin-right: 0.5rem;
 
 .award-image{
     width: 40%;
-    height: auto;
+    height: 100% !important;
     border-radius: 1rem ;
     box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.1);
     margin:0.5rem
@@ -339,7 +339,7 @@ font-weight: bold;
       font-size: 22px;
       font-weight: bold;
       color: #fff !important;
-      background-color: rgb(173, 173, 173);
+      background-color: rgb(234 231 224);
     }
     
 .check-in-image{

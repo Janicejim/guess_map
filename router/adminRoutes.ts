@@ -8,9 +8,7 @@ const adminRoutes = express.Router();
 const adminService = new AdminService(knex);
 const adminController = new AdminController(adminService);
 
-adminRoutes.post("/search/game", isAdmin, adminController.searchGame);
 adminRoutes.post("/search/user", isAdmin, adminController.searchUser);
-adminRoutes.delete("/game", isAdmin, adminController.deleteGame);
-adminRoutes.put("/user", isAdmin, adminController.SwitchGradeUser);
+adminRoutes.put("/user", isAdmin, adminController.switchGradeUser);
 
 export default adminRoutes;

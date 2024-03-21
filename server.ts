@@ -33,7 +33,7 @@ const sessionMiddleware = expressSession({
 
 declare module "express-session" {
   interface SessionData {
-    user?: any;
+    user?: UserSession;
     grant?: any;
   }
 }
@@ -73,6 +73,7 @@ export const gameController = new GameController(gameService, io);
 import gameRoutes from "./router/gameRoutes";
 import checkInRoutes from "./router/checkInRoutes";
 import { isLoggedIn } from "./utils/guard";
+import { UserSession } from "./utils/model";
 
 app.use(gameRoutes);
 app.use(adminRoutes);

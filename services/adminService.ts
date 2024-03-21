@@ -23,7 +23,8 @@ class AdminService {
   }
 
   async getUserRole(email: string) {
-    return await this.knex("users").select("role").where("email", email);
+    return (await this.knex("users").select("role").where("email", email))[0]
+      .role;
   }
 
   async updateUserRole(email: string, role: string) {

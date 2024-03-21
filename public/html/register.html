@@ -26,23 +26,23 @@
   <div id="navbar"></div>
     
     
-    <h3 id="register-failure"></h3>
+
     <!-- <form name="register-form" id='register-form' method="POST" action="/register" enctype="application/x-www-form-urlencoded"> -->
     <form name="register-form" id='register-form' >
       <div class="mb-3 fill-in-column">
         <label for="inputUserName" class="form-label">用戶名稱</label>
-        <input name="name" type="text" class="form-control" id="inputUserName" aria-describedby="usernameInput">
+        <input name="name" type="text" class="form-control" id="inputUserName" aria-describedby="usernameInput" required>
       </div>
       <div class="mb-3 fill-in-column">
         <label for="exampleInputEmail1" class="form-label">電郵</label>
-        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
       </div>
       <div class="mb-3 fill-in-column">
         <label for="exampleInputPassword1" class="form-label">密碼</label>
-        <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+        <input name="password" type="password" class="form-control" id="exampleInputPassword1" required>
       </div>
       <button type="submit" class="btn btn-success sign-in-button">註冊</button>
-
+      <div id="register-failure"></div>
       <div class="google-container">
             <a href="/connect/google">
             <div class="google-btn">

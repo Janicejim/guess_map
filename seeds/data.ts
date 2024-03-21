@@ -2,6 +2,7 @@ import { Knex } from "knex";
 import { hashPassword } from "../utils/hash";
 import xlsx from "xlsx";
 import path from "path";
+import { User } from "../utils/model";
 
 export async function seed(knex: Knex): Promise<void> {
   let txn = await knex.transaction();
@@ -26,7 +27,9 @@ export async function seed(knex: Knex): Promise<void> {
 
     //get all the excel data:
     let dataWorkbook = xlsx.readFile(path.resolve("utils", "seed.xls"));
-    let userData: any = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["users"]);
+    let userData: User[] = xlsx.utils.sheet_to_json(
+      dataWorkbook.Sheets["users"]
+    );
     let gameData = xlsx.utils.sheet_to_json(dataWorkbook.Sheets["game"]);
     let likeDislikeData = xlsx.utils.sheet_to_json(
       dataWorkbook.Sheets["like_dislike"]
