@@ -194,65 +194,6 @@ async function submitAnswer(marker, isUsePlayerLocation) {
   }
 }
 
-// ---------  Chat Room JS  --------------------------------------------------------------------------------------//
-
-// >>>>>> Join Room <<<<<<< //
-
-socket.emit("join-room", id);
-
-// >>>>>> Leave Room <<<<<< //
-// socket.emit("leave-room",id)
-
-//  >>>>> Room setup <<<<< //
-let input = document.querySelector("#chat-input");
-let messages = document.querySelector("#messages");
-let chatroom = document.querySelector("#chatroom-container");
-
-// >>>>>>> submit message 上 server
-document
-  .querySelector("#chat-form")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    if (input.value) {
-      socket.emit("chat message", input.value);
-      input.value = "";
-    }
-  });
-// >>>>>>> socket.on => get the message broadcasted from server = (msg)
-
-socket.emit("userName", async (name) => {
-  const res = await fetch("/user");
-  const result = await res.json();
-  if (result.success) {
-    name = result.data.user.name;
-  }
-});
-
-//room-Update
-
-//message-Update
-socket.on("chat message", async function (img, msg) {
-  let msgContainer = document.createElement("div");
-  let getImg = document.createElement("img");
-  let item = document.createElement("div");
-  if (img != null) {
-    getImg.src = img;
-  } else {
-    getImg.src = "anonymous.jpg";
-  }
-  item.textContent = msg;
-  msgContainer.classList.add("msgContainer");
-
-  msgContainer.appendChild(getImg);
-  msgContainer.appendChild(item);
-
-  messages.appendChild(msgContainer);
-
-  //scroll to button
-  messages.scrollTop = messages.scrollHeight;
-});
-
 //---------------------------------------------------------------------------google map-------------------------------------
 
 let marker;

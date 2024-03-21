@@ -48,7 +48,6 @@ io.use((socket, next) => {
   let res = req.res as express.Response;
   sessionMiddleware(req, res || {}, next as express.NextFunction);
 });
-chatRoomIO(io);
 
 //------------------- google login-------------------------------
 const grantExpress = grant.express({
