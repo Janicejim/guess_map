@@ -1,90 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@200;300;400;500;600;700;900&display=swap"
-    rel="stylesheet"
-  />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@200;300;400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//fonts.googleapis.com/css?family=Open+Sans"
+    />
     <link rel="stylesheet" href="/css/navigation.css" />
-  <link rel="stylesheet" href="/css/register.css">
-  <link rel="icon" href="./icon.png" type="image/svg+xml">
-  <title>註冊</title>
-</head>
+    <link rel="stylesheet" href="/css/register.css" />
+    <link rel="icon" href="./icon.png" type="image/svg+xml" />
+    <title>註冊</title>
+  </head>
 
-<body>
-
-    
-
+  <body>
     <!-- <form name="register-form" id='register-form' method="POST" action="/register" enctype="application/x-www-form-urlencoded"> -->
-     <div class="register-container">
-     
-      <div id="company-icon-container"><img src="/icon.png"/></div>
-   
-   
-      <form name="register-form" id='register-form' >
-      <div class="mb-3 fill-in-column">
-        <label for="inputUserName" class="form-label">用戶名稱</label>
-        <input name="name" type="text" class="form-control" id="inputUserName" aria-describedby="usernameInput" required>
-      </div>
-      <div class="mb-3 fill-in-column">
-        <label for="exampleInputEmail1" class="form-label">電郵</label>
-        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
-      </div>
-      <div class="mb-3 fill-in-column">
-        <label for="exampleInputPassword1" class="form-label">密碼</label>
-        <input name="password" type="password" class="form-control" id="exampleInputPassword1" required>
-      </div>
-      <button type="submit" class="btn btn-warning sign-in-button">註冊</button>
-      <div id="register-failure"></div>
-      <div class="google-container">
-            <a href="/connect/google">
-            <div class="google-btn">
-              <div class="google-icon-wrapper">
-                <img class="google-icon" src="https://static.vecteezy.com/system/resources/previews/029/284/964/non_2x/google-logo-on-transparent-background-popular-search-engine-google-logotype-symbol-icon-google-sign-stock-free-vector.jpg" />
-              </div>
-              <p class="btn-text"><b> 用Google帳號登入</b></p>
-            </div>
-          </div>
+    <div class="register-container">
+      <div id="company-icon-container"><img src="/icon.png" /></div>
 
-      <div class="sign-in-message">
-        <div>已有帳戶？</div>
+      <form name="register-form" id="register-form">
+        <div class="mb-3 fill-in-column">
+          <label for="inputUserName" class="form-label">用戶名稱</label>
+          <input
+            name="name"
+            type="text"
+            class="form-control"
+            id="inputUserName"
+            aria-describedby="usernameInput"
+            required
+          />
+        </div>
+        <div class="mb-3 fill-in-column">
+          <label for="exampleInputEmail1" class="form-label">電郵</label>
+          <input
+            name="email"
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            required
+          />
+        </div>
+        <div class="mb-3 fill-in-column">
+          <label for="exampleInputPassword1" class="form-label">密碼</label>
+          <input
+            name="password"
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-warning sign-in-button">
+          註冊
+        </button>
+        <div id="register-failure"></div>
 
-        <a href="/login.html" class="btn btn-success  sign-in-button">按此登入！</a>
-      </div>
-      
+        <div class="sign-in-message">
+          <div>已有帳戶？</div>
 
-    </form>
-  </div>
-  <img
-  src="/arrow_upward_black_24dp.svg"
-  onclick="topFunction()"
-  id="back_to_top"
-  alt="back_to_top"
-/>
-  <!-- footer -->
+          <a href="/login.html" class="btn btn-success sign-in-button"
+            >按此登入！</a
+          >
+        </div>
+      </form>
+    </div>
+    <img
+      src="/arrow_upward_black_24dp.svg"
+      onclick="topFunction()"
+      id="back_to_top"
+      alt="back_to_top"
+    />
+    <!-- footer -->
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-
-
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-        crossorigin="anonymous"></script>
-  <script src="/js/register.js"></script>
-
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/register.js"></script>
+  </body>
 </html>
