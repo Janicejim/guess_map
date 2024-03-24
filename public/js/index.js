@@ -1,6 +1,7 @@
 //load navbar
 $(function () {
   $("#navbar").load("/navigation.html");
+  $("#footer").load("/footer.html");
 });
 socket = io.connect();
 socket.on("update reaction", () => {

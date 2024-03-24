@@ -9,7 +9,7 @@ import expressSession from "express-session";
 
 import http from "http";
 import { Server as SocketIO } from "socket.io";
-import { chatRoomIO } from "./router/SocketRoute";
+import socketIO from "socket.io";
 import adminRoutes from "./router/adminRoutes";
 import awardRoutes from "./router/awardRoutes";
 
@@ -47,6 +47,12 @@ io.use((socket, next) => {
   let req = socket.request as express.Request;
   let res = req.res as express.Response;
   sessionMiddleware(req, res || {}, next as express.NextFunction);
+});
+
+io.on("connection", (socket: socketIO.Socket) => {
+  socket.on("join-room", (id: string) => {
+    socket.join(`Room-${id}`);
+  });
 });
 
 //------------------- google login-------------------------------

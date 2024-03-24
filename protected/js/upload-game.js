@@ -2,25 +2,16 @@
 $(function () {
   $("#navbar").load("/navigation.html");
 });
-let result = document.querySelector(".result");
-let upload = document.querySelector("#file-input");
-
-// on change show image with crop options
-upload.addEventListener("change", (e) => {
+//-------------review upload-----------------
+let fileInput = document.querySelector(".upload-btn-wrapper input");
+let reviewDiv = document.querySelector(".image-review");
+fileInput.addEventListener("change", (e) => {
+  document.querySelector(".image-review").innerHTML = ``;
   if (e.target.files.length) {
-    // start file reader
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target.result) {
-        // create new image
-        let img = document.createElement("img");
-        img.id = "image";
-        img.src = e.target.result;
-        // clean result before
-        result.innerHTML = "";
-        // append new image
-        result.appendChild(img);
-        // show save btn and options
+        reviewDiv.style.backgroundImage = `url(${e.target.result})`;
       }
     };
     reader.readAsDataURL(e.target.files[0]);
@@ -58,7 +49,9 @@ document
 
     form.reset();
     Swal.fire("", result.msg, result.success ? "success" : "error");
-    window.location = "/";
+    setTimeout(() => {
+      window.location = "/";
+    }, 2000);
   });
 
 var marker;

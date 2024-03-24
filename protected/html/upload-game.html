@@ -18,40 +18,40 @@
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
     <link rel="stylesheet" href="/css/upload-game.css">
-    <link rel="icon" href="./favicon_group5.svg" type="image/svg+xml">
-    <title>Upload game</title>
+    <link rel="icon" href="./icon.png" type="image/svg+xml">
+    <title>創建遊戲</title>
 </head>
 
 <body>
 
   <div id="navbar"></div>
 
-    <div class="upload-media-container">
 
-<!-- Whole form -->
+<div class="container">
+  
+  <div class="upload-media-container">
 
-        <form name="update-game-form" id='update-game-form' >
+    <!-- Whole form -->
+    
+            <form name="update-game-form" id='update-game-form' > <div class="plus">+              <span class="btn-outline-secondary">上傳供玩家猜測的圖片：</span></div>
 
-            <div class="choose-file">
+                <div class="upload-btn-wrapper file-input">
+          <div class="image-review"><i class="fas fa-plus"></i></div>
+                  <input type="file" name="image" required/>
+                </div>
 
-            </div> 
-            <!-- file review -->
-            <div class="box-2">
-                <div class="result"></div> 
-            </div>
-            <!-- input file -->
-            
-            <div id="file-input" class="box ">
-                <input required name="image" id="media" type="file" >
-            </div>
-    </div>
+        </div>
 
 
 <!-- Google-map -->
+
 <div class="google-map-container">
+  <div class="plus">+  <span class="btn-outline-secondary">在地圖指出上傳圖片所在的坐標：</span></div>
 <div id="map" class="google-map"></div>
 <input required type="hidden" name="target_location" id="target_location"/>
 </div>
+
+
 <!-- Hints Input -->
 <div class="input-group mb-3 hints-container">
   <div class="plus">+</div> <button class="btn btn-outline-secondary " type="button" id="button-addon1"> 提示 1 </button>
@@ -62,46 +62,66 @@
   <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 提示 2 </button>
   <input required  name="hints_2" id="hints_2" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
 </div>
-
 <div class="input-group mb-3 hints-container">
   <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 答案名稱</button>
   <input required  name="answer_name" id="answer" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
 </div>
+
 
 <div class="input-group mb-3 hints-container">
   <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 答案地址</button>
   <input required  name="answer_address" id="address" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
 </div>
 
+
 <div class="input-group mb-3 hints-container">
-  <div class="plus">+</div><button class="btn btn-outline-secondary " type="button" id="button-addon1"> 答案特色簡介</button>
-  <input required  name="answer_description" id="description" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-</div>
+  <div class="plus">+<button class="btn btn-outline-secondary " type="button" id="button-addon1"> 答案特色簡介</button></div>
+  <!-- <input required  name="answer_description" id="description" type="text" class="hints-input-box" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"> -->
+<textarea name="answer_description" id="description" cols="30" rows="10" class="hints-input-box"></textarea>
+
 
 </div>
 <div class="button_group">
-<!-- <button class="btn-warning" onclick="getLocation()">Current Location</button> -->
-<button type="submit" class="btn-warning upload-submit">提交</button>    
-<!-- <button id="reset-map" class="btn-warning">Reset</button> -->
-</div>
-    
-</form>
+  <!-- <button class="btn-warning" onclick="getLocation()">Current Location</button> -->
+ <button type="submit" class="btn-warning upload-submit">提交</button> 
+
+  <!-- <button id="reset-map" class="btn-warning">Reset</button> -->
+  </div>
+      
+  </form>
 
 </div>
+ 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <img
 src="/arrow_upward_black_24dp.svg"
 onclick="topFunction()"
 id="back_to_top"
 alt="back_to_top"
 />
+</div>
 <!-- footer -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-        <script
+     
+    <script
         src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDx_KywoJ3TbIkl5VuZuUhj0-PA1WYft-I&callback=initMap&libraries=&v=weekly'
         async
         ></script>
-        <!-- <script src="../../googleMap.js"></script> -->
 
 
         <script src="/js/upload-game.js"></script>

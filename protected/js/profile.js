@@ -102,10 +102,6 @@ editIcon.addEventListener("click", () => {
   userDesDiv.classList.toggle("not-edit");
 });
 
-/*
-勝利過的可以在自己google map 中加入該marker
- */
-
 let editForm = document.querySelector("#edit-profile-form");
 editForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -416,7 +412,7 @@ async function getUserCheckInRecord() {
     : await fetch("/check-in/record");
   let result = await res.json();
   if (result.success) {
-    checkInRecords = await res.json();
+    checkInRecords = result.data;
   }
 
   if (checkInRecords.length == 0) {

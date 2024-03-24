@@ -1,7 +1,6 @@
 import UserService from "../services/userService";
 import { checkPassword, hashPassword } from "../utils/hash";
 import { Request, Response } from "express";
-import { GoogleUserInfo } from "../utils/model";
 class UserController {
   constructor(private userService: UserService) {}
 

@@ -18,17 +18,21 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
     <link rel="stylesheet" href="/css/navigation.css" />
   <link rel="stylesheet" href="/css/register.css">
-  <link rel="icon" href="./favicon_group5.svg" type="image/svg+xml">
-  <title>Register</title>
+  <link rel="icon" href="./icon.png" type="image/svg+xml">
+  <title>註冊</title>
 </head>
 
 <body>
-  <div id="navbar"></div>
-    
+
     
 
     <!-- <form name="register-form" id='register-form' method="POST" action="/register" enctype="application/x-www-form-urlencoded"> -->
-    <form name="register-form" id='register-form' >
+     <div class="register-container">
+     
+      <div id="company-icon-container"><img src="/icon.png"/></div>
+   
+   
+      <form name="register-form" id='register-form' >
       <div class="mb-3 fill-in-column">
         <label for="inputUserName" class="form-label">用戶名稱</label>
         <input name="name" type="text" class="form-control" id="inputUserName" aria-describedby="usernameInput" required>
@@ -41,7 +45,7 @@
         <label for="exampleInputPassword1" class="form-label">密碼</label>
         <input name="password" type="password" class="form-control" id="exampleInputPassword1" required>
       </div>
-      <button type="submit" class="btn btn-success sign-in-button">註冊</button>
+      <button type="submit" class="btn btn-warning sign-in-button">註冊</button>
       <div id="register-failure"></div>
       <div class="google-container">
             <a href="/connect/google">
@@ -54,9 +58,9 @@
           </div>
 
       <div class="sign-in-message">
-        <div>有account？</div>
+        <div>已有帳戶？</div>
 
-        <a href="/login.html" class="btn btn-success  sign-in-button">呢到登入！</a>
+        <a href="/login.html" class="btn btn-success  sign-in-button">按此登入！</a>
       </div>
       
 

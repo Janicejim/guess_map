@@ -74,14 +74,7 @@ body {
   width: 100%;
 }
 
-#profile-image {
 
-    width: 10rem;
-    height: 10rem;
-    border-radius: 80px;
-    background-image: url(/anonymous.jpg);
-    background-size: cover;
-}
 #profile-resize {
   margin-bottom: 20px;
   width: 150px;
@@ -593,10 +586,11 @@ margin-bottom: 2rem;
       margin-top: 5px;
       aspect-ratio: 1 / 1;
       width: 100%;
-      border-radius: 50%;
+      border-radius: 100% !important;
       object-fit: cover;
    
     }
+
     .username{
       color:grey;
       font-size:0.9rem;

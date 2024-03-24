@@ -262,6 +262,7 @@ class GameController {
           res.json({
             success: false,
             msg: "用完3次機會，已扣30分作為累積獎金！",
+            reduceAttempts: true,
           });
           return;
         }
@@ -273,7 +274,7 @@ class GameController {
           game_history[0].id
         );
         res.json({
-          success: true,
+          success: false,
           msg: `猜錯! 和正確坐標相差 ${distanceAfterCompare} m `,
           reduceAttempts: true,
         });

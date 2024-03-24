@@ -80,13 +80,15 @@ function hasScrolled() {
 async function getUserInfo() {
   const res = await fetch("/user");
   const result = await res.json();
+
   const signinDiv = document.querySelector("#signin-btn");
   const logoutDiv = document.querySelector("#logout-btn");
   const profileDiv = document.querySelector("#profile-btn");
   const adminDiv = document.querySelector("#admin-btn");
   const userInfoDiv = document.querySelector("#current-user");
 
-  if (result.user) {
+  if (result.success) {
+    let user = result.data.user;
     signinDiv.classList.remove("show");
     signinDiv.classList.add("hide");
 
@@ -96,10 +98,10 @@ async function getUserInfo() {
     logoutDiv.classList.add("show");
 
     userInfoDiv.innerHTML = `<div>你好 ${
-      result.user.name || result.user.email
-    }</div>     <div id="user_score">積分：${result.user.total_score}</div>`;
+      user.name || result.user.email
+    }</div>     <div id="user_score">積分：${user.total_score}</div>`;
 
-    if (result.user.role == "admin") {
+    if (user.role == "admin") {
       adminDiv.classList.remove("hide");
       adminDiv.classList.add("show");
     } else {
@@ -134,6 +136,5 @@ document
 const socket = io.connect();
 
 socket.on("update user score", () => {
-  console.log("update user score");
   getUserInfo();
 });

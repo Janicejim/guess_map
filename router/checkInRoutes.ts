@@ -21,10 +21,10 @@ checkInRoutes.get(
   isLoggedIn,
   checkInController.getCheckInRecordByUser
 );
+checkInRoutes.get("/check-in/status", isLoggedIn, checkInController.isCheckIn);
 checkInRoutes.get(
   "/check-in/game",
   isLoggedIn,
-  checkInController.checkOldCheckInRecordByGame
+  checkInController.getGameAllCheckInRecord
 );
-
 export default checkInRoutes;

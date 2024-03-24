@@ -2,7 +2,7 @@
 #company-icon-container{
   width: 20rem;
   height: 10rem;
-  background-color: pink;
+margin-bottom: 5rem;
 }
 #company-icon-container img{
   width:100%;
@@ -16,71 +16,7 @@
   margin-top: 5px;
 }
 
-.card {
-  border-radius: 10px;
-}
-
-#current-user {
-  margin-right: 80px;
-  margin-top: 30px;
-  text-align: right;
-}
-
-.game-area {
-  margin: auto;
-  margin-top: 100px;
-  width: 600px !important;
-  position: relative;
-  border-radius: 80px;
-}
-.game-media {
-  width: 574x;
-  height: 500px;
-  opacity: 1; /*close game change to 0.2*/
-  position: relative;
-}
-.fa-check-circle {
-  position: absolute;
-  top: 150px;
-  left: 200px;
-  font-size: 150px;
-  display: none; /*close game change to inline*/
-}
-
-.game-information {
-  display: flex;
-  justify-content: space-between;
-}
-.report-and-share {
-  display: flex;
-  align-items: center;
-}
-
-.report-button {
-  margin: 0 15px;
-}
-.start-game {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  margin-top: 30px;
-  font-size: 20px;
-}
-.game-time {
-  font-size: 30px;
-}
-.fa-stopwatch {
-  margin-left: 10px;
-  color: orange;
-}
-
-footer {
-  background-color: black;
-  width: 100%;
-  color: white;
-  margin-top: 20px !important;
-  padding: 20px;
-}
+/*  */
 
 .show {
   display: block;
@@ -93,14 +29,14 @@ footer {
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>   nav bar css   <<<<<<<<<<<<<<<<<<<<<<<<<<< */
 
 .login-container {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.639);
   width: 25rem;
-  height:auto;
+  height:45rem;
   color: black;
   border-radius: 10px;
   margin: auto;
-  margin-top: 40vh;
-  margin-bottom: 50vh;
+  margin-top: 30vh;
+
 }
 
 .logo-icon {
@@ -185,39 +121,42 @@ footer {
 }
 
 .btn-success {
-  color: #fff;
-  background-color: #0336ff;
-  border-color: #0336ff;
+
+  background-color:white;
+color:orange;
+  border-color:orange;
 }
 
 .btn-success:hover {
   color: #fff;
-  background-color: #ff0266;
-  border-color: #ff0266;
+  background-color:orange;
+  border-color:white;
 }
 
 .btn-warning {
-  color: #000;
-  background-color: #ff0266;
-  border-color: #ff0266;
-  color: white;
+  background-color:white;
+  border-color: #33cbaf;
+  color: #33cbaf;
 }
 
 .btn-warning:hover {
-  color: #000;
-  background-color: #0336ff;
-  border-color: #0336ff;
+  background-color: #33cbaf;
+  border-color: white;
   color: white;
 }
 
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden; /* Hide the scrollbar */
+  height: 100vh; /* Set the height to 100 viewport height */
+  background-image: url("/cover.jpeg");
+  background-repeat: no-repeat;
+  background-size:100vw 100vh;
 }
-.left{
+/* .left{
   background-color: rgb(36, 155, 115);
-  height: 100vh}
+  height: 100vh} */
 
   #message{
     text-align: center;

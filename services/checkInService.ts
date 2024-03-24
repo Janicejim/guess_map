@@ -52,7 +52,7 @@ export class CheckInService {
     return;
   }
 
-  async checkOldCheckInRecord(user_id: number, game_id: number) {
+  async isCheckIn(user_id: number, game_id: number) {
     return await this.knex("check_in")
       .select("*")
       .where("user_id", user_id)
@@ -64,6 +64,15 @@ export class CheckInService {
       await this.knex.raw(
         `select check_in.id,media,image,message,check_in.created_at,game_id from check_in join game on game.id=check_in.game_id where check_in.user_id=? and check_in.status='active' order by check_in.updated_at desc`,
         [user_id]
+      )
+    ).rows;
+  }
+
+  async getGameAllCheckInRecord(game_id: number) {
+    return (
+      await this.knex.raw(
+        `select check_in.id,profile_image,image,message,check_in.created_at,name from check_in join (select name,id,profile_image from users) as user_info on user_info.id=check_in.user_id where game_id=? and check_in.status='active' order by check_in.created_at desc`,
+        [game_id]
       )
     ).rows;
   }

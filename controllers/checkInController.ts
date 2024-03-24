@@ -14,17 +14,12 @@ class CheckInController {
       let user_id = req.session.user.id;
       let { gameId } = req.query;
       let { targeted_location_x, targeted_location_y } = req.body;
-      // targeted_location_x = 22.283047923532244;
-      // targeted_location_y = 114.15359294197071;
 
       if (!gameId) {
         res.json({ success: false, msg: "欠缺資料" });
         return;
       }
-      let oldRecord = await this.checkInService.checkOldCheckInRecord(
-        user_id,
-        +gameId
-      );
+      let oldRecord = await this.checkInService.isCheckIn(user_id, +gameId);
       if (oldRecord.length > 0) {
         res.json({ success: false, msg: "已經打過卡" });
         return;
@@ -110,13 +105,13 @@ class CheckInController {
       }
       let result = await this.checkInService.getAllCheckInRecordOfUser(userId);
 
-      res.json(result);
+      res.json({ success: true, data: result });
     } catch (e) {
       console.log(e);
       res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };
-  checkOldCheckInRecordByGame = async (req: Request, res: Response) => {
+  isCheckIn = async (req: Request, res: Response) => {
     try {
       if (!req.session.user) {
         res.json({ success: false, msg: "請先登入" });
@@ -128,16 +123,33 @@ class CheckInController {
         res.json({ success: false, msg: "欠缺資料" });
         return;
       }
-      let result = await this.checkInService.checkOldCheckInRecord(
-        userId,
-        +gameId
-      );
+      let result = await this.checkInService.isCheckIn(userId, +gameId);
 
       if (result.length > 0) {
         res.json({ success: true, data: true });
       } else {
         res.json({ success: true, data: false });
       }
+    } catch (e) {
+      console.log(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    }
+  };
+
+  getGameAllCheckInRecord = async (req: Request, res: Response) => {
+    try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
+
+      let { gameId } = req.query;
+      if (!gameId) {
+        res.json({ success: false, msg: "欠缺資料" });
+        return;
+      }
+      let result = await this.checkInService.getGameAllCheckInRecord(+gameId);
+      res.json({ success: true, data: result });
     } catch (e) {
       console.log(e);
       res.json({ success: false, msg: "系統出錯，請稍候再試" });

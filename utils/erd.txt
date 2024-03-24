@@ -153,13 +153,11 @@ updated_at timestamp
 
 
 -----------仍待完成部分：----------------
-[]upload-game.html-->ui
-[]play-game.html-->creator睇到ge畫面
-[]play-game.html-->completed-->show 打卡紀錄
-[]play-game.html-->ui
-[]login.html-->ui
-[]register.html-->ui
-#勝利地圖＋打卡地圖
+
+
+
+[]check in alert window ui
+
 
 ---------------已完成部分：
 [y]profile.html-->查閱打卡紀錄
@@ -178,6 +176,12 @@ updated_at timestamp
 [y]backend:res.json() format
 [y]alert-->sweetAlert
 [y]backend:any type-->model.ts
+[y]play-game.html-->creator睇到ge畫面
+[y]play-game.html-->completed-->show 打卡紀錄
+[y]play-game.html-->ui
+[y]upload-game.html-->ui
+[y]login.html-->ui
+[y]register.html-->ui
 
 
 -----如果有時間可以：---------
@@ -198,3 +202,4 @@ updated_at timestamp
 #實景地圖模式
 #玩家開私人房
 []play-game.html-->chatroom 幾時比人chat?未完game chat,可以一齊討論，其實有冇必要chat呢？決定放在多人模式中
+#勝利地圖＋打卡地圖
