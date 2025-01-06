@@ -157,6 +157,7 @@ updated_at timestamp
 
 
 []check in alert window ui
+[]統一color format
 
 
 ---------------已完成部分：
