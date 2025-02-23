@@ -2,7 +2,7 @@ import GameService from "../services/gameService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
 import { Server as SocketIO } from "socket.io";
-import { form } from "../utils/formidable";
+
 
 class GameController {
   constructor(private gameService: GameService, private io: SocketIO) { }

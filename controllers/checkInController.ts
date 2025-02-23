@@ -2,7 +2,7 @@ import CheckInService from "../services/checkInService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
 import { CheckInData } from "../utils/model";
-import { form } from "../utils/formidable";
+
 class CheckInController {
   constructor(private checkInService: CheckInService) { }
 

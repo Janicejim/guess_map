@@ -13,9 +13,4 @@ export const env = {
   SALT_ROUNDS: +process.env.SALT_ROUNDS! || 9,
   LOGGING_LEVEL: process.env.LOGGING_LEVEL || "",
   NODE_ENV: process.env.NODE_ENV || "",
-  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || "",
-  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || "",
-  S3_REGION: process.env.S3_REGION || "",
-  S3_BUCKET_NAME: process.env.S3_BUCKET_NAME || "",
-  S3_IMAGE_URL: process.env.S3_IMAGE_URL || ""
 };
