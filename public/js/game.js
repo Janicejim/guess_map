@@ -63,10 +63,10 @@ function createEachGameDiv(game, gameBoardDiv) {
 
   let gameMediaDiv = gameTemplate.querySelector(".game_container");
 
-  gameMediaDiv.src = `https://guessmap.image.bonbony.one/${game.media}`;
+  gameMediaDiv.src = `/${game.media}`;
   let userProfilePigDiv = gameTemplate.querySelector(".profile_picture");
   gameTemplate.querySelector(".username").textContent = game.name;
-  userProfilePigDiv.src = `https://guessmap.image.bonbony.one/${game.profile_image}`;
+  userProfilePigDiv.src = `/${game.profile_image}`;
   let likeNumberElm = gameTemplate.querySelector(".like_number");
   likeNumberElm.textContent = game.like_number;
   let dislikeNumberElm = gameTemplate.querySelector(".dislike_number");

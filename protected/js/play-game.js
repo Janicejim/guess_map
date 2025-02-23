@@ -39,7 +39,7 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
     status == "creator"
       ? document.querySelector(`#completed-template`).content.cloneNode(true)
       : document.querySelector(`#${status}-template`).content.cloneNode(true);
-  node.querySelector(".question-media").src = `https://guessmap.image.bonbony.one/${gameInfo.data[0].media}`;
+  node.querySelector(".question-media").src = `/${gameInfo.data[0].media}`;
   if (status == "new") {
     gameStatus = "new";
     node.querySelector("#store_amount").textContent =
@@ -219,7 +219,7 @@ function placeMarker(location) {
       map: map,
       draggable: true,
       animation: google.maps.Animation.DROP,
-      icon: "https://guessmap.image.bonbony.one/push_pin_black_24dp.svg",
+      icon: "/push_pin_black_24dp.svg",
     });
     marker.addListener("click", toggleBounce);
   }
@@ -258,7 +258,7 @@ async function initMap() {
       map: map,
       draggable: false,
       icon: {
-        url: "https://guessmap.image.bonbony.one/push_pin_black_24dp.svg",
+        url: "/push_pin_black_24dp.svg",
         scaledSize: new google.maps.Size(40, 40),
       },
     });
@@ -298,7 +298,7 @@ function setCurrentPositionMarker(position) {
     map: map,
     draggable: false,
     icon: {
-      url: "https://guessmap.image.bonbony.one/user.png",
+      url: "/user.png",
       scaledSize: new google.maps.Size(40, 40),
     },
   });
@@ -354,8 +354,8 @@ function createCheckInRecordDiv(record, mainElm) {
     .content.cloneNode(true);
 
   recordTemplate.querySelector(".profile-image").src = record.profile_image
-    ? `https://guessmap.image.bonbony.one/${record.profile_image}`
-    : "https://guessmap.image.bonbony.one/anonymous.jpg";
+    ? `/${record.profile_image}`
+    : "/anonymous.jpg";
   recordTemplate.querySelector(".username").textContent = record.name;
   recordTemplate.querySelector(".check-in-date").textContent = formatDate(
     record.created_at
@@ -364,8 +364,8 @@ function createCheckInRecordDiv(record, mainElm) {
     ? record.message
     : `打卡成功！`;
   recordTemplate.querySelector(".check-in-image").src = record.image
-    ? `https://guessmap.image.bonbony.one/${record.image}`
-    : `https://guessmap.image.bonbony.one/check_in_no_photo.jpg`;
+    ? `/${record.image}`
+    : `/check_in_no_photo.jpg`;
 
   if (record.image) {
     recordTemplate.querySelector("a").href = `/photo-review.html?id=${id}`;

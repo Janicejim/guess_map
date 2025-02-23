@@ -34,59 +34,55 @@ class GameController {
   };
 
   uploadGame = async (req: Request, res: Response) => {
-    form.parse(req, async (err, fields, files) => {
-      try {
-        let {
-          targeted_location,
-          hints_1,
-          hints_2,
-          answer_name,
-          answer_address,
-          answer_description,
-        } = fields
 
-        let media = "";
+    try {
+      let {
+        targeted_location,
+        hints_1,
+        hints_2,
+        answer_name,
+        answer_address,
+        answer_description,
+      } = req.body
 
-        if (files.hasOwnProperty("image")) {
-          media = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
-        }
+      let media = req.file?.fieldname
 
-        if (
-          !media ||
-          !targeted_location ||
-          !hints_1 ||
-          !hints_2 ||
-          !answer_name ||
-          !answer_address ||
-          !answer_description
-        ) {
-          res.json({ success: false, msg: "欠缺資料" });
-          return;
-        }
-        if (!req.session.user) {
-          res.json({ success: false, msg: "請先登入" });
-          return;
-        }
-        let id = req.session["user"].id;
-
-        await this.gameService.createGame({
-          user_id: id,
-          media,
-          target_location: targeted_location as string,
-          answer_name: answer_name as string,
-          answer_address: answer_address as string,
-          answer_description: answer_description as string,
-          hints_1: hints_1 as string,
-          hints_2: hints_2 as string,
-          status: "active",
-        });
-
-        res.json({ success: true, msg: "創建成功" });
-      } catch (err) {
-        console.log(err);
-        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+      if (
+        !media ||
+        !targeted_location ||
+        !hints_1 ||
+        !hints_2 ||
+        !answer_name ||
+        !answer_address ||
+        !answer_description
+      ) {
+        res.json({ success: false, msg: "欠缺資料" });
+        return;
       }
-    })
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
+      }
+      let id = req.session["user"].id;
+
+      await this.gameService.createGame({
+        user_id: id,
+        media,
+        target_location: targeted_location as string,
+        answer_name: answer_name as string,
+        answer_address: answer_address as string,
+        answer_description: answer_description as string,
+        hints_1: hints_1 as string,
+        hints_2: hints_2 as string,
+        status: "active",
+      });
+
+      res.json({ success: true, msg: "創建成功" });
+    } catch (err) {
+      console.log(err);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    }
+
 
   };
 

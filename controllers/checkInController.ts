@@ -63,43 +63,38 @@ class CheckInController {
   };
 
   updateCheckInData = async (req: Request, res: Response) => {
-    form.parse(req, async (err, fields, files) => {
-      try {
-        let { id } = req.query;
-        let { message } = fields;
 
-        if (!id) {
-          res.json({ success: false, msg: "欠缺資料" });
-          return;
-        }
-        let data: CheckInData = { id: +id };
-        let image = "";
+    try {
+      let { id } = req.query;
+      let { message } = req.body;
 
-        if (files.hasOwnProperty("image")) {
-          image = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
-        }
+      if (!id) {
+        res.json({ success: false, msg: "欠缺資料" });
+        return;
+      }
+      let data: CheckInData = { id: +id };
+      let image = req.file?.fieldname
 
-
-        if (image) {
-          data["image"] = image;
-        }
-        if (message) {
-          data["message"] = message as string
-        }
-        if (!image && !message) {
-          res.json({ success: false, msg: "沒有要更新的資料" });
-          return;
-        }
-
-        await this.checkInService.updateCheckInData(data);
-
-        res.json({ success: true, msg: "編輯成功" });
-      } catch (e) {
-        console.log(e);
-        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+      if (image) {
+        data["image"] = image;
+      }
+      if (message) {
+        data["message"] = message as string
+      }
+      if (!image && !message) {
+        res.json({ success: false, msg: "沒有要更新的資料" });
+        return;
       }
 
-    })
+      await this.checkInService.updateCheckInData(data);
+
+      res.json({ success: true, msg: "編輯成功" });
+    } catch (e) {
+      console.log(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    }
+
+
 
 
   };

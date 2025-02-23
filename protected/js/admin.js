@@ -61,7 +61,7 @@ function createAwardDiv(award) {
   let awardTemplate = document
     .querySelector("#awardTemplate")
     .content.cloneNode(true);
-  awardTemplate.querySelector("#image").src = `https://guessmap.image.bonbony.one/${award.image}`;
+  awardTemplate.querySelector("#image").src = `/${award.image}`;
   awardTemplate.querySelector("#title").textContent = award.name;
   awardTemplate.querySelector("#score").textContent = award.score;
   awardTemplate.querySelector("#quantity").textContent = award.quantity;
@@ -90,7 +90,7 @@ function createAwardDiv(award) {
         getAward();
       }
     });
-  awardTemplate.querySelector("#edit-image").src = `https://guessmap.image.bonbony.one/${award.image}`;
+  awardTemplate.querySelector("#edit-image").src = `/${award.image}`;
   awardTemplate.querySelector("#edit-name").value = award.name;
   awardTemplate.querySelector("#edit-score").value = award.score;
   awardTemplate.querySelector("#edit-quantity").value = award.quantity;
@@ -205,8 +205,8 @@ searchUserForm.addEventListener("submit", async (event) => {
       .querySelector("#user-template")
       .content.cloneNode(true);
     userTemplate.querySelector("img").src = user.profile_image
-      ? `https://guessmap.image.bonbony.one/${user.profile_image}`
-      : "https://guessmap.image.bonbony.one/anonymous.jpg";
+      ? `/${user.profile_image}`
+      : "/anonymous.jpg";
     userTemplate.querySelector(".nameDiv span").textContent = user.name;
     userTemplate.querySelector(".emailDiv span").textContent = user.email;
     userTemplate.querySelector(".roleDiv span").textContent =

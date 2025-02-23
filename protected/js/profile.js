@@ -39,8 +39,8 @@ async function getUserProfile() {
   let user = result.data.user;
 
   profilePicDiv.src = user.profile_image
-    ? `https://guessmap.image.bonbony.one/${user.profile_image}`
-    : "https://guessmap.image.bonbony.one/anonymous.jpg";
+    ? `/${user.profile_image}`
+    : "/anonymous.jpg";
 
   userNameDiv.value = user.name;
   userEmailDiv.value = user.email;
@@ -156,7 +156,7 @@ async function getScoreRecords() {
     scoreTemplate.querySelector("#score_created_at").textContent = formatDate(
       record.created_at
     );
-    scoreTemplate.querySelector(".score-image").src = `https://guessmap.image.bonbony.one/${record.image}`;
+    scoreTemplate.querySelector(".score-image").src = `/${record.image}`;
     scoreTemplate.querySelector("#description").textContent =
       record.description;
     let scoreChange;
@@ -193,7 +193,7 @@ async function getRedeemRecord() {
       let awardTemplate = document
         .querySelector("#award-record")
         .content.cloneNode(true);
-      awardTemplate.querySelector("#award-img").src = `https://guessmap.image.bonbony.one/${record.image}`;
+      awardTemplate.querySelector("#award-img").src = `/${record.image}`;
       awardTemplate.querySelector("#award-name").textContent = record.name;
       awardTemplate.querySelector("#award-score").textContent = record.score;
       recordAreaContainer.appendChild(awardTemplate);
@@ -271,8 +271,8 @@ async function getGameRecords(type, preferences, status) {
     }
 
     gameTemplate.querySelector("a").href = `/play-game.html?id=${record.id}`;
-    gameTemplate.querySelector(".game_container").src = `https://guessmap.image.bonbony.one/${record.media}`;
-    gameTemplate.querySelector(".profile_picture").src = `https://guessmap.image.bonbony.one/${record.profile_image}`;
+    gameTemplate.querySelector(".game_container").src = `/${record.media}`;
+    gameTemplate.querySelector(".profile_picture").src = `/${record.profile_image}`;
     gameTemplate.querySelector(".username").textContent = record.name;
     let likeNumberElm = gameTemplate.querySelector(".like_number");
     likeNumberElm.textContent = record.like_number;
@@ -430,7 +430,7 @@ async function getUserCheckInRecord() {
 
     swiperSlideTemplate.querySelector(
       ".check-in-image"
-    ).src = `https://guessmap.image.bonbony.one/${record.media}`;
+    ).src = `/${record.media}`;
 
     swiperSlideTemplate.querySelector(
       "a"
@@ -447,8 +447,8 @@ async function getUserCheckInRecord() {
 
   checkInSwiperContainer.querySelector(".check-in-content img").src =
     checkInRecords[0].image
-      ? `https://guessmap.image.bonbony.one/${checkInRecords[0].image}`
-      : `https://guessmap.image.bonbony.one/check_in_no_photo.jpg`;
+      ? `/${checkInRecords[0].image}`
+      : `/check_in_no_photo.jpg`;
 
   checkInSwiperContainer
     .querySelector(".fa-edit")
@@ -489,7 +489,7 @@ function updateMessageAndDate() {
   let record = checkInRecords[checkInSwiper.activeIndex];
   messageElement.textContent = record.message;
   dateElement.textContent = formatDate(record.created_at);
-  gameImage.src = record.image ? `https://guessmap.image.bonbony.one/${record.image}` : `https://guessmap.image.bonbony.one/check_in_no_photo.jpg`;
+  gameImage.src = record.image ? `/${record.image}` : `/check_in_no_photo.jpg`;
 }
 
 //---------------edit check in ------------------------

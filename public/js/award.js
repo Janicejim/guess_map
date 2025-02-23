@@ -24,7 +24,7 @@ function createAwardDiv(award) {
   let awardTemplate = document
     .querySelector("#awardTemplate")
     .content.cloneNode(true);
-  awardTemplate.querySelector("#image").src = `https://guessmap.image.bonbony.one/${award.image}`;
+  awardTemplate.querySelector("#image").src = `/${award.image}`;
   awardTemplate.querySelector("#title").textContent = award.name;
   awardTemplate.querySelector("#score").textContent = award.score;
   if (award.quota == 0) {

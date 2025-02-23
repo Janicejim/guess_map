@@ -27,36 +27,31 @@ class AwardController {
   };
 
   createAward = async (req: Request, res: Response) => {
-    form.parse(req, async (err, fields, files) => {
-      try {
 
-        let image = "";
+    try {
 
-        if (files.hasOwnProperty("image")) {
-          image = Array.isArray(files.image) ? files.image[0].newFilename : files.image!.newFilename;
-        }
-
-        let { name, score, quantity } = fields;
-        if (!name || !score || !quantity) {
-          res.json({ success: false, msg: "欠缺資料" });
-          return;
-        }
-
-        await this.awardService.createAward({
-          image,
-          name: name as string,
-          score: +score,
-          quantity: +quantity,
-          status: "active",
-        });
-        res.json({ success: true, msg: "創建成功" });
-      } catch (e) {
-        console.log(e);
-        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+      let image = req.file?.filename;
+      let { name, score, quantity } = req.body;
+      if (!name || !score || !quantity || !image) {
+        res.json({ success: false, msg: "欠缺資料" });
+        return;
       }
 
+      await this.awardService.createAward({
+        image,
+        name: name as string,
+        score: +score,
+        quantity: +quantity,
+        status: "active",
+      });
+      res.json({ success: true, msg: "創建成功" });
+    } catch (e) {
+      console.log(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    }
 
-    })
+
+
 
 
   };
@@ -77,30 +72,26 @@ class AwardController {
   };
 
   editAward = async (req: Request, res: Response) => {
-    form.parse(req, async (err, fields, files) => {
-      try {
-        let image = "";
 
-        if (files.hasOwnProperty("image")) {
-          image = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
-        }
-        let body = fields
-        let { awardId } = req.query;
-        if (!awardId) {
-          res.json({ success: false, msg: "欠缺資料" });
-          return;
-        }
-        if (image) {
-          body["image"] = image;
-        }
-
-        await this.awardService.editAward(body, +awardId);
-        res.json({ success: true, msg: "編輯成功" });
-      } catch (e) {
-        console.log(e);
-        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    try {
+      let image = req.file?.filename
+      let body = req.body
+      let { awardId } = req.query;
+      if (!awardId) {
+        res.json({ success: false, msg: "欠缺資料" });
+        return;
       }
-    })
+      if (image) {
+        body["image"] = image;
+      }
+
+      await this.awardService.editAward(body, +awardId);
+      res.json({ success: true, msg: "編輯成功" });
+    } catch (e) {
+      console.log(e);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    }
+
 
   };
 
