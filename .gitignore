@@ -2,6 +2,3 @@ node_modules
 .env
 profileUploads
 .DS_Store
-uploads
-image
-site_images

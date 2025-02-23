@@ -1,5 +1,4 @@
 import UserService from "../services/userService";
-import { form } from "../utils/formidable";
 import { checkPassword, hashPassword } from "../utils/hash";
 import { Request, Response } from "express";
 class UserController {
@@ -132,39 +131,33 @@ class UserController {
   };
 
   editProfile = async (req: Request, res: Response) => {
-    form.parse(req, async (err, fields, files) => {
-      try {
-        if (!req.session.user) {
-          res.json({ success: false, msg: "請先登入" });
-          return;
-        }
-        const currentUserId = req.session["user"].id;
-        const { name, description } = fields
-
-        let profile_image = "";
-
-        if (files.hasOwnProperty("image")) {
-          profile_image = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
-        }
-
-        if (profile_image) {
-          await this.userService.updateProfile(
-            { name: name as string, profile_image: profile_image as string, description: description as string },
-            currentUserId
-          );
-        } else {
-          await this.userService.updateProfile(
-            { name: name as string, description: description as string },
-            currentUserId
-          );
-        }
-
-        res.json({ success: true, msg: "修改成功" });
-      } catch (err) {
-        console.error("error: ", err);
-        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    try {
+      if (!req.session.user) {
+        res.json({ success: false, msg: "請先登入" });
+        return;
       }
-    })
+      const currentUserId = req.session["user"].id;
+      const { name, description } = req.body
+      const profile_image = req.file?.filename;
+
+      if (profile_image) {
+        await this.userService.updateProfile(
+          { name: name as string, profile_image: profile_image as string, description: description as string },
+          currentUserId
+        );
+      } else {
+        await this.userService.updateProfile(
+          { name: name as string, description: description as string },
+          currentUserId
+        );
+      }
+
+      res.json({ success: true, msg: "修改成功" });
+    } catch (err) {
+      console.error("error: ", err);
+      res.json({ success: false, msg: "系統出錯，請稍候再試" });
+    }
+
 
   };
 

@@ -3,6 +3,7 @@ import { knex } from "../utils/db";
 import { isLoggedIn } from "../utils/guard";
 import UserService from "../services/userService";
 import UserController from "../controllers/userController";
+import { multerUpload } from "../utils/multer";
 
 // import { format } from "date-fns";
 
@@ -10,6 +11,7 @@ const userRoutes = express.Router();
 
 const userService = new UserService(knex);
 const userController = new UserController(userService);
+
 
 // ^^^^^^^^^^^^^^^^^^ for user upload profile ^^^^^^^^^^^^^^^^^^^^//
 userRoutes.post("/register", userController.register);
@@ -20,6 +22,7 @@ userRoutes.get("/user", userController.getUserInfo);
 userRoutes.put(
   "/profile",
   isLoggedIn,
+  multerUpload,
   userController.editProfile
 );
 userRoutes.get("/login/status", userController.isLogin);
