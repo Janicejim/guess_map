@@ -8,7 +8,7 @@ import {
 } from "../utils/model";
 
 class GameService {
-  constructor(private knex: Knex) {}
+  constructor(private knex: Knex) { }
 
   async getAllActiveGames(sorting: string) {
     return await this.knex.raw(
@@ -230,9 +230,15 @@ on game.id=store.game_id where game.id=?`,
       await txn("game").update(gameData).where("id", gameId);
       //winner and creator win the store:
       await txn("score_record").insert(winnerScoreRecordData);
-      await txn("score_record").insert(creatorScoreRecordData);
+      if (creatorScoreRecordData.score_change != 0) {
+        await txn("score_record").insert(creatorScoreRecordData);
+      }
+
       //deduce total store amount:
-      await txn("store_record").insert(storeRecordData);
+      if (storeRecordData.amount_change != 0) {
+        await txn("store_record").insert(storeRecordData);
+      }
+
       await txn.commit();
     } catch (e) {
       console.log(e);

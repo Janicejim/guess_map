@@ -1,7 +1,5 @@
 import express from "express";
 import { knex } from "../utils/db";
-
-import { multerUpload } from "../utils/multer";
 import { isLoggedIn } from "../utils/guard";
 import UserService from "../services/userService";
 import UserController from "../controllers/userController";
@@ -22,7 +20,6 @@ userRoutes.get("/user", userController.getUserInfo);
 userRoutes.put(
   "/profile",
   isLoggedIn,
-  multerUpload,
   userController.editProfile
 );
 userRoutes.get("/login/status", userController.isLogin);

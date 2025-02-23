@@ -1,12 +1,11 @@
 import AwardService from "../services/awardService";
 import { Request, Response } from "express";
-import GameService from "../services/gameService";
+import { createFormidableS3Form } from "../utils/formidable";
 
 class AwardController {
   constructor(
     private awardService: AwardService,
-    private gameService: GameService
-  ) {}
+  ) { }
 
   getAward = async (req: Request, res: Response) => {
     try {
@@ -28,30 +27,40 @@ class AwardController {
   };
 
   createAward = async (req: Request, res: Response) => {
-    try {
-      let image = req.file?.filename;
-      if (!image) {
-        res.json({ success: false, msg: "欠缺圖片" });
-        return;
-      }
-      let { name, score, quantity } = req.body;
-      if (!name || !score || !quantity) {
-        res.json({ success: false, msg: "欠缺資料" });
-        return;
+    const form = createFormidableS3Form()
+
+    form.parse(req, async (err, fields, files) => {
+      try {
+
+        let image = "";
+
+        if (files.hasOwnProperty("image")) {
+          image = Array.isArray(files.image) ? files.image[0].newFilename : files.image!.newFilename;
+        }
+
+        let { name, score, quantity } = fields;
+        if (!name || !score || !quantity) {
+          res.json({ success: false, msg: "欠缺資料" });
+          return;
+        }
+
+        await this.awardService.createAward({
+          image,
+          name: name as string,
+          score: +score,
+          quantity: +quantity,
+          status: "active",
+        });
+        res.json({ success: true, msg: "創建成功" });
+      } catch (e) {
+        console.log(e);
+        res.json({ success: false, msg: "系統出錯，請稍候再試" });
       }
 
-      await this.awardService.createAward({
-        image,
-        name,
-        score,
-        quantity,
-        status: "active",
-      });
-      res.json({ success: true, msg: "創建成功" });
-    } catch (e) {
-      console.log(e);
-      res.json({ success: false, msg: "系統出錯，請稍候再試" });
-    }
+
+    })
+
+
   };
 
   inactiveAward = async (req: Request, res: Response) => {
@@ -70,24 +79,32 @@ class AwardController {
   };
 
   editAward = async (req: Request, res: Response) => {
-    try {
-      let image = req.file?.filename;
-      let body = req.body;
-      let { awardId } = req.query;
-      if (!awardId) {
-        res.json({ success: false, msg: "欠缺資料" });
-        return;
-      }
-      if (image) {
-        body["image"] = image;
-      }
+    const form = createFormidableS3Form()
+    form.parse(req, async (err, fields, files) => {
+      try {
+        let image = "";
 
-      await this.awardService.editAward(body, +awardId);
-      res.json({ success: true, msg: "編輯成功" });
-    } catch (e) {
-      console.log(e);
-      res.json({ success: false, msg: "系統出錯，請稍候再試" });
-    }
+        if (files.hasOwnProperty("image")) {
+          image = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
+        }
+        let body = fields
+        let { awardId } = req.query;
+        if (!awardId) {
+          res.json({ success: false, msg: "欠缺資料" });
+          return;
+        }
+        if (image) {
+          body["image"] = image;
+        }
+
+        await this.awardService.editAward(body, +awardId);
+        res.json({ success: true, msg: "編輯成功" });
+      } catch (e) {
+        console.log(e);
+        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+      }
+    })
+
   };
 
   getAwardRecord = async (req: Request, res: Response) => {
@@ -118,8 +135,8 @@ class AwardController {
         res.json({ success: false, msg: "欠缺資料" });
         return;
       }
-      let userScore = (await this.gameService.checkUserScore(user_id))[0]
-        .total_score;
+      let result = await this.awardService.checkUserScore(user_id)
+      let userScore = result[0].total_score;
 
       let score = await this.awardService.getAwardScore(+award_id);
 
@@ -132,7 +149,7 @@ class AwardController {
         res.json({ success: false, msg: "庫存不足" });
         return;
       }
-      let score_description_id = await this.gameService.getScoreDescriptionId(
+      let score_description_id = await this.awardService.getScoreDescriptionId(
         "兌換"
       );
 

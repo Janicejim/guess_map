@@ -8,11 +8,9 @@ socket.on("update reaction", () => {
   loadGames();
 });
 socket.on("update game store", () => {
-  console.log("update game store");
   loadGames();
 });
 socket.on("update game status", () => {
-  console.log("update game status");
   loadGames();
 });
 
@@ -39,7 +37,7 @@ function createAwardDiv(award, awardArea) {
     .querySelector("#award-template")
     .content.cloneNode(true);
   let element = awardTemplate.querySelector(".award-image");
-  element.src = `/${award.image}`;
+  element.src = `https://guessmap.image.bonbony.one/${award.image}`;
   awardArea.appendChild(awardTemplate);
 }
 //load game
@@ -100,9 +98,9 @@ function createEachGameDiv(game, gameBoardDiv) {
 
   let gameMediaDiv = gameTemplate.querySelector(".game_container");
 
-  gameMediaDiv.src = `/${game.media}`;
+  gameMediaDiv.src = `https://guessmap.image.bonbony.one/${game.media}`;
   let userProfilePigDiv = gameTemplate.querySelector(".profile_picture");
-  userProfilePigDiv.src = `/${game.profile_image}`;
+  userProfilePigDiv.src = `https://guessmap.image.bonbony.one/${game.profile_image}`;
   gameTemplate.querySelector(
     ".profile_href"
   ).href = `/profile.html?id=${game.user_id}`;
@@ -212,8 +210,8 @@ function updateRankDiv(record, rankDiv, number) {
   rankTemplate.querySelector(".rank-number").textContent = number;
 
   rankTemplate.querySelector("img").src = record.profile_image
-    ? `/${record.profile_image}`
-    : "/anonymous.jpg";
+    ? `https://guessmap.image.bonbony.one/${record.profile_image}`
+    : "https://guessmap.image.bonbony.one/anonymous.jpg";
   rankTemplate.querySelector(".rank-user").textContent = `${record.name}`;
   rankTemplate.querySelector(".rank-score").textContent = `${record.score}`;
   rankTemplate.querySelector("a").href = `/profile.html?id=${record.user_id}`;
@@ -246,7 +244,7 @@ function createCheckInElm(mainDiv, game) {
     .querySelector("#check-in-template")
     .content.cloneNode(true);
   checkInTemplate.querySelector("a").href = `/play-game.html?id=${game.id}`;
-  checkInTemplate.querySelector("img").src = `/${game.media}`;
+  checkInTemplate.querySelector("img").src = `https://guessmap.image.bonbony.one/${game.media}`;
   checkInTemplate.querySelector(".check-in-number").textContent =
     game.check_in_number;
 

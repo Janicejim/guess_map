@@ -51,6 +51,7 @@
               <i class="fas fa-coins">100</i><span class="plus">+</span>
               <i class="fas fa-piggy-bank"><span id="store_amount"></span></i>
             </div>
+            <div>(如有累積獎金，將由猜對的玩家和創建此遊戲的玩家平分)</div>
             <div class="middle">
               <button id="join-game-btn" class="btn-success">
                 參與遊戲
@@ -90,21 +91,15 @@
             <div class="user-hints hints_2_container" hidden>
               提示2:<span id="hints_2"></span>
             </div>
-            <div class="middle">
-     
-       
+            <div id="msg"></div>
+            <div class="middle" id="submit-btn-group">
   <button class="btn-success answer-btn" id="current-answer">
-    用<span><img src="/user.png" alt="" style="height:35px;width:35px"></img></span>位置提交
+    用<span><img src="https://guessmap.image.bonbony.one/user.png" alt="" style="height:35px;width:35px"></img></span>位置提交
 </button>
 <div class="flex" ><div >或</div></div>
        <button class="btn-success answer-btn" id="map-answer">
-  用所選<span><img src="/push_pin_black_24dp.svg" alt="" style="height:35px;width:35px"></img></span>位置提交
+  用所選<span><img src="https://guessmap.image.bonbony.one/push_pin_black_24dp.svg" alt="" style="height:35px;width:35px"></img></span>位置提交
 </button>
-
-
-      
-             
-
             </div>
           </div>
         </div>
@@ -204,7 +199,7 @@
 
 
     <img
-      src="/arrow_upward_black_24dp.svg"
+      src="https://guessmap.image.bonbony.one/arrow_upward_black_24dp.svg"
       onclick="topFunction()"
       id="back_to_top"
       alt="back_to_top"

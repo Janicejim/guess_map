@@ -2,8 +2,9 @@ import GameService from "../services/gameService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
 import { Server as SocketIO } from "socket.io";
+import { createFormidableS3Form } from "../utils/formidable";
 class GameController {
-  constructor(private gameService: GameService, private io: SocketIO) {}
+  constructor(private gameService: GameService, private io: SocketIO) { }
 
   //////get game data///////
   getAllActiveGames = async (req: Request, res: Response) => {
@@ -32,52 +33,61 @@ class GameController {
   };
 
   uploadGame = async (req: Request, res: Response) => {
-    try {
-      const media = req.file?.filename;
-      let {
-        targeted_location,
-        hints_1,
-        hints_2,
-        answer_name,
-        answer_address,
-        answer_description,
-      } = req.body;
+    const form = createFormidableS3Form()
+    form.parse(req, async (err, fields, files) => {
+      try {
+        let {
+          targeted_location,
+          hints_1,
+          hints_2,
+          answer_name,
+          answer_address,
+          answer_description,
+        } = fields
 
-      if (
-        !media ||
-        !targeted_location ||
-        !hints_1 ||
-        !hints_2 ||
-        !answer_name ||
-        !answer_address ||
-        !answer_description
-      ) {
-        res.json({ success: false, msg: "欠缺資料" });
-        return;
+        let media = "";
+
+        if (files.hasOwnProperty("image")) {
+          media = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
+        }
+
+        if (
+          !media ||
+          !targeted_location ||
+          !hints_1 ||
+          !hints_2 ||
+          !answer_name ||
+          !answer_address ||
+          !answer_description
+        ) {
+          res.json({ success: false, msg: "欠缺資料" });
+          return;
+        }
+        if (!req.session.user) {
+          res.json({ success: false, msg: "請先登入" });
+          return;
+        }
+        let id = req.session["user"].id;
+
+        await this.gameService.createGame({
+          user_id: id,
+          media,
+          target_location: targeted_location as string,
+          answer_name: answer_name as string,
+          answer_address: answer_address as string,
+          answer_description: answer_description as string,
+          hints_1: hints_1 as string,
+          hints_2: hints_2 as string,
+          status: "active",
+        });
+
+        res.json({ success: true, msg: "創建成功" });
+      } catch (err) {
+        console.log(err);
+        res.json({ success: false, msg: "系統出錯，請稍候再試" });
       }
-      if (!req.session.user) {
-        res.json({ success: false, msg: "請先登入" });
-        return;
-      }
-      let id = req.session["user"].id;
+    })
 
-      await this.gameService.createGame({
-        user_id: id,
-        media,
-        target_location: targeted_location,
-        answer_name,
-        answer_address,
-        answer_description,
-        hints_1,
-        hints_2,
-        status: "active",
-      });
-
-      res.json({ success: true, msg: "創建成功" });
-    } catch (err) {
-      console.log(err);
-      res.json({ success: false, msg: "系統出錯，請稍候再試" });
-    }
   };
 
   getSingleGame = async (req: Request, res: Response) => {
@@ -205,7 +215,7 @@ class GameController {
       );
       //handle user haven't join the game:
       if (game_history.length == 0) {
-        res.json({ success: false, msg: "請先登入" });
+        res.json({ success: false, msg: "請先參與遊戲" });
         return;
       }
 
@@ -214,7 +224,7 @@ class GameController {
         res.json({ success: false, msg: "用完3次機會，無法再作答" });
         return;
       }
-      //check where have 100 score to play the game
+      //check where have score to play the game or not:
       let scoreRecord = await this.gameService.checkUserScore(currentUserId);
       let totalScore = scoreRecord.length > 0 ? scoreRecord[0].total_score : 0;
       if (totalScore < 30) {
@@ -293,6 +303,7 @@ class GameController {
           basic_store = 200;
         }
 
+
         let winner_description_id =
           await this.gameService.getScoreDescriptionId("作答成功瓜分");
         let creator_description_id =
@@ -316,7 +327,7 @@ class GameController {
             score_description_id: creator_description_id,
           },
           {
-            user_id: currentUserId,
+            user_id: 1,
             game_id: +game_id,
             amount_change: -total_store,
           }
@@ -512,7 +523,7 @@ class GameController {
       const result = await this.gameService.getAllGamesCreateByUser(user_id);
       res.json({ success: true, data: result });
     } catch (err) {
-      console.log("error:" + JSON.stringify(err));
+      console.log("error:", err);
       res.json({ success: false, msg: "系統出錯，請稍候再試" });
     }
   };

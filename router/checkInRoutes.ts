@@ -1,6 +1,5 @@
 import express from "express";
 import { isLoggedIn } from "../utils/guard";
-import { multerUpload } from "../utils/multer";
 import CheckInService from "../services/checkInService";
 import CheckInController from "../controllers/checkInController";
 import { knex } from "../utils/db";
@@ -13,7 +12,6 @@ checkInRoutes.post("/check-in", isLoggedIn, checkInController.addCheckInRecord);
 checkInRoutes.patch(
   "/check-in",
   isLoggedIn,
-  multerUpload,
   checkInController.updateCheckInData
 );
 checkInRoutes.get(

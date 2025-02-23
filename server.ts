@@ -86,9 +86,13 @@ app.use(awardRoutes);
 app.use(checkInRoutes);
 app.use(express.static("public"));
 app.use(express.static("public/html"));
+/*
+local upload use:
 app.use(express.static("site_images"));
 app.use(express.static("uploads"));
 app.use(express.static("image"));
+*/
+
 app.use(isLoggedIn, express.static("protected"));
 app.use(isLoggedIn, express.static("protected/html"));
 app.use((req, res) => {

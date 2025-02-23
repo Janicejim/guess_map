@@ -33,10 +33,6 @@ function topFunction() {
   document.documentElement.scrollTop = 0;
 }
 
-// socket.on("updateLike",async ()=>{
-//   console.log("socket detect");
-//   // await
-// })
 
 // Hide Header on on scroll down
 var didScroll;

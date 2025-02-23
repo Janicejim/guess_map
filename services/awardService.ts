@@ -2,7 +2,7 @@ import { Knex } from "knex";
 import { Award, AwardRecord } from "../utils/model";
 
 class AwardService {
-  constructor(private knex: Knex) {}
+  constructor(private knex: Knex) { }
 
   async getAward(sorting: string) {
     return (
@@ -83,6 +83,30 @@ class AwardService {
 
     return +quantity - +awardRedeemed;
   }
+
+  async checkUserScore(currentUserId: number) {
+    return (
+      await this.knex.raw(
+        `select sum(score_change)as total_score from score_record where user_id=? group by user_id `,
+        [currentUserId]
+      )
+    ).rows;
+  }
+  async getScoreDescriptionId(keyword: string) {
+    let result = (
+      await this.knex
+        .select("id")
+        .from("score_description")
+        .where("description", "ilike", `%${keyword}%`)
+    )[0].id;
+
+    if (result) {
+      return result;
+    } else {
+      return;
+    }
+  }
+
 }
 
 export default AwardService;

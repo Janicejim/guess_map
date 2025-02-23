@@ -39,11 +39,12 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
     status == "creator"
       ? document.querySelector(`#completed-template`).content.cloneNode(true)
       : document.querySelector(`#${status}-template`).content.cloneNode(true);
-  node.querySelector(".question-media").src = gameInfo.data[0].media;
+  node.querySelector(".question-media").src = `https://guessmap.image.bonbony.one/${gameInfo.data[0].media}`;
   if (status == "new") {
     gameStatus = "new";
     node.querySelector("#store_amount").textContent =
       gameInfo.data[0].store_amount;
+      
     node.querySelector("#join-game-btn").addEventListener("click", async () => {
       let res = await fetch(`/game/join/${gameInfo.data[0].id}`, {
         method: "POST",
@@ -67,6 +68,11 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
     } else if (gameInfo.attempts == 1 || gameInfo.attempts == 0) {
       node.querySelector(".hints_1_container").toggleAttribute("hidden");
       node.querySelector(".hints_2_container").toggleAttribute("hidden");
+      if(gameInfo.attempts == 0){
+        node.querySelector("#play-map-container").toggleAttribute("hidden");
+         node.querySelector("#submit-btn-group").toggleAttribute("hidden");
+         node.querySelector("#msg").textContent="用完3次機會，無法再參與，答案將在有人猜對時揭曉！"
+      }
     }
     node
       .querySelector("#current-answer")
@@ -104,14 +110,14 @@ function createDifferentGameStatusElm(status, appendElm, gameInfo) {
             Swal.fire({
               title: "打卡成功",
               text: "留下更多足跡吧！",
-              html: `    <div class="container">
+              html: `    <div class="check-in-container">
               <div>留言： </div>
               <input type="text" id="check-in-message"></input>
               <div>合照：</div>
               <input type="file" id="file"></input>
-              <div>
-                <button class="submit-btn"  onClick="submitCheckInData()">提交</button>
-                <button   class="cancel-btn" onClick="closeSweetAlert()">取消</button>
+              <div class="btn-container">
+                <button class="btn btn-warning"  onClick="submitCheckInData()">提交</button>
+                <button   class="btn btn-secondary" onClick="closeSweetAlert()">取消</button>
               </div>
         
             </div>`,
@@ -179,7 +185,7 @@ async function submitAnswer(marker, isUsePlayerLocation) {
   } else if (!result.success && result.reduceAttempts) {
     let attemptElm = document.querySelector("#attempts");
     let perviousAttempt = +attemptElm.textContent;
-    console.log({ perviousAttempt });
+
     perviousAttempt != 0
       ? (attemptElm.textContent = perviousAttempt -= 1)
       : (attemptElm.textContent = 0);
@@ -213,7 +219,7 @@ function placeMarker(location) {
       map: map,
       draggable: true,
       animation: google.maps.Animation.DROP,
-      icon: "/push_pin_black_24dp.svg",
+      icon: "https://guessmap.image.bonbony.one/push_pin_black_24dp.svg",
     });
     marker.addListener("click", toggleBounce);
   }
@@ -252,7 +258,7 @@ async function initMap() {
       map: map,
       draggable: false,
       icon: {
-        url: "/push_pin_black_24dp.svg",
+        url: "https://guessmap.image.bonbony.one/push_pin_black_24dp.svg",
         scaledSize: new google.maps.Size(40, 40),
       },
     });
@@ -292,7 +298,7 @@ function setCurrentPositionMarker(position) {
     map: map,
     draggable: false,
     icon: {
-      url: "/user.png",
+      url: "https://guessmap.image.bonbony.one/user.png",
       scaledSize: new google.maps.Size(40, 40),
     },
   });
@@ -348,8 +354,8 @@ function createCheckInRecordDiv(record, mainElm) {
     .content.cloneNode(true);
 
   recordTemplate.querySelector(".profile-image").src = record.profile_image
-    ? `/${record.profile_image}`
-    : "/anonymous.jpg";
+    ? `https://guessmap.image.bonbony.one/${record.profile_image}`
+    : "https://guessmap.image.bonbony.one/anonymous.jpg";
   recordTemplate.querySelector(".username").textContent = record.name;
   recordTemplate.querySelector(".check-in-date").textContent = formatDate(
     record.created_at
@@ -358,8 +364,8 @@ function createCheckInRecordDiv(record, mainElm) {
     ? record.message
     : `打卡成功！`;
   recordTemplate.querySelector(".check-in-image").src = record.image
-    ? `/${record.image}`
-    : `/check_in_no_photo.jpg`;
+    ? `https://guessmap.image.bonbony.one/${record.image}`
+    : `https://guessmap.image.bonbony.one/check_in_no_photo.jpg`;
 
   if (record.image) {
     recordTemplate.querySelector("a").href = `/photo-review.html?id=${id}`;
@@ -392,7 +398,8 @@ async function submitCheckInData() {
   if (result.success) {
     Swal.close();
     Swal.fire("", result.msg, result.success ? "success" : "error");
-    getCheckInRecordOfGame(id);
+    setTimeout(()=>{  getCheckInRecordOfGame(id);},1000)
+  
   }
 }
 function closeSweetAlert() {

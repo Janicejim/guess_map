@@ -1,8 +1,9 @@
 import UserService from "../services/userService";
+import { createFormidableS3Form } from "../utils/formidable";
 import { checkPassword, hashPassword } from "../utils/hash";
 import { Request, Response } from "express";
 class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   login = async (req: Request, res: Response) => {
     try {
@@ -82,8 +83,8 @@ class UserController {
         role: "user",
       });
 
-      const createUserRowCount = createUserResult.length;
-      if (createUserRowCount != 1) {
+
+      if (!createUserResult) {
         res.status(401).json({ success: false, msg: "系統出錯，請稍候再試" });
         return;
       }
@@ -131,32 +132,41 @@ class UserController {
   };
 
   editProfile = async (req: Request, res: Response) => {
-    try {
-      if (!req.session.user) {
-        res.json({ success: false, msg: "請先登入" });
-        return;
-      }
-      const currentUserId = req.session["user"].id;
-      const { name, description } = req.body;
-      const profile_image = req.file?.filename;
+    const form = createFormidableS3Form()
+    form.parse(req, async (err, fields, files) => {
+      try {
+        if (!req.session.user) {
+          res.json({ success: false, msg: "請先登入" });
+          return;
+        }
+        const currentUserId = req.session["user"].id;
+        const { name, description } = fields
 
-      if (profile_image) {
-        await this.userService.updateProfile(
-          { name, profile_image, description },
-          currentUserId
-        );
-      } else {
-        await this.userService.updateProfile(
-          { name, description },
-          currentUserId
-        );
-      }
+        let profile_image = "";
 
-      res.json({ success: true, msg: "修改成功" });
-    } catch (err) {
-      console.error("error: ", err);
-      res.json({ success: false, msg: "系統出錯，請稍候再試" });
-    }
+        if (files.hasOwnProperty("image")) {
+          profile_image = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
+        }
+
+        if (profile_image) {
+          await this.userService.updateProfile(
+            { name: name as string, profile_image: profile_image as string, description: description as string },
+            currentUserId
+          );
+        } else {
+          await this.userService.updateProfile(
+            { name: name as string, description: description as string },
+            currentUserId
+          );
+        }
+
+        res.json({ success: true, msg: "修改成功" });
+      } catch (err) {
+        console.error("error: ", err);
+        res.json({ success: false, msg: "系統出錯，請稍候再試" });
+      }
+    })
+
   };
 
   isLogin = async (req: Request, res: Response) => {

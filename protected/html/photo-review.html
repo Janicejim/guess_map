@@ -112,7 +112,7 @@
       </div>
     </div>
     <img
-      src="/arrow_upward_black_24dp.svg"
+      src="https://guessmap.image.bonbony.one/arrow_upward_black_24dp.svg"
       onclick="topFunction()"
       id="back_to_top"
       alt="back_to_top"
@@ -153,8 +153,8 @@
           let imageTemplate2 = document
             .querySelector("template")
             .content.cloneNode(true);
-          imageTemplate.querySelector("img").src = `/${record.image}`;
-          imageTemplate2.querySelector("img").src = `/${record.image}`;
+          imageTemplate.querySelector("img").src = `https://guessmap.image.bonbony.one/${record.image}`;
+          imageTemplate2.querySelector("img").src = `https://guessmap.image.bonbony.one/${record.image}`;
           document
             .querySelector(".mySwiper .swiper-wrapper")
             .appendChild(imageTemplate);

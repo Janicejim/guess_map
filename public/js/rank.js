@@ -93,8 +93,8 @@ function updateUserRankDiv(record, rankDiv, number, type) {
 
   if (type == "score" || type == "user-check-in") {
     rankTemplate.querySelector("img").src = record.profile_image
-      ? `/${record.profile_image}`
-      : "/anonymous.jpg";
+      ? `https://guessmap.image.bonbony.one/${record.profile_image}`
+      : "https://guessmap.image.bonbony.one/anonymous.jpg";
     rankTemplate.querySelector("a").href = `/profile.html?id=${record.user_id}`;
     rankTemplate.querySelector(".rank-user").textContent = `${record.name}`;
 

@@ -24,7 +24,7 @@ function createAwardDiv(award) {
   let awardTemplate = document
     .querySelector("#awardTemplate")
     .content.cloneNode(true);
-  awardTemplate.querySelector("#image").src = `/${award.image}`;
+  awardTemplate.querySelector("#image").src = `https://guessmap.image.bonbony.one/${award.image}`;
   awardTemplate.querySelector("#title").textContent = award.name;
   awardTemplate.querySelector("#score").textContent = award.score;
   if (award.quota == 0) {
@@ -35,6 +35,16 @@ function createAwardDiv(award) {
   awardTemplate
     .querySelector("#redeem-btn")
     .addEventListener("click", async () => {
+
+//check user is login or not:
+  let userRes = await fetch(`/user`);
+
+      let userResult = await userRes.json();
+if(!userResult.success){
+  window.location="/login.html"
+  return
+}
+
       let res = await fetch(`/award/record?award_id=${award.id}`, {
         method: "POST",
       });
@@ -43,7 +53,10 @@ function createAwardDiv(award) {
       if (result.success) {
         Swal.fire("", result.msg, result.success ? "success" : "error");
         getAward();
-      }
+      }else{
+  Swal.fire("", result.msg, result.success ? "success" : "error");
+ }
+      
     });
 
   awardArea.appendChild(awardTemplate);

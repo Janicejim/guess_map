@@ -3,9 +3,6 @@ import { env } from "./env";
 
 
 const SALT_ROUNDS = env.SALT_ROUNDS;
-// const SALT_ROUNDS = 9;
-
-
 
 export async function hashPassword(plainPassword: string) {
     const hash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
@@ -18,8 +15,8 @@ export async function checkPassword(plainPassword: string, hashPassword: string)
     // console.log('plainPassword', plainPassword);
     const match = await bcrypt.compare(plainPassword, hashPassword);
     // console.log('match', match);
-    return match? true:false
-    
+    return match ? true : false
+
 }
 
 

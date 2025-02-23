@@ -63,10 +63,6 @@ let currentLocationForMarker;
 const getCurrentLocation = navigator.geolocation.watchPosition((position) => {
   const { latitude, longitude } = position.coords;
   currentLocation = position;
-  // console.log("current location:", currentLocation);
-  // console.log(currentLocation.coords.latitude);
-  // console.log(currentLocation.coords.longitude);
-  // Show a map centered at latitude / longitude.
   currentLocationForMarker = new google.maps.LatLng(
     currentLocation.coords.latitude,
     currentLocation.coords.longitude

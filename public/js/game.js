@@ -24,10 +24,12 @@ async function loadAllGames() {
     res = await fetch(`/games?sorting=${sorting}`);
   }
   let result = await res.json();
-  if (!result.success) {
+  if(!result.success){
     Swal.fire("", result.msg, result.success ? "success" : "error");
-    return;
+ return
   }
+    
+  
 
   let games = result.data;
   const gameBoardDiv = document.querySelector(".all-game-board");
@@ -61,10 +63,10 @@ function createEachGameDiv(game, gameBoardDiv) {
 
   let gameMediaDiv = gameTemplate.querySelector(".game_container");
 
-  gameMediaDiv.src = `/${game.media}`;
+  gameMediaDiv.src = `https://guessmap.image.bonbony.one/${game.media}`;
   let userProfilePigDiv = gameTemplate.querySelector(".profile_picture");
   gameTemplate.querySelector(".username").textContent = game.name;
-  userProfilePigDiv.src = `/${game.profile_image}`;
+  userProfilePigDiv.src = `https://guessmap.image.bonbony.one/${game.profile_image}`;
   let likeNumberElm = gameTemplate.querySelector(".like_number");
   likeNumberElm.textContent = game.like_number;
   let dislikeNumberElm = gameTemplate.querySelector(".dislike_number");

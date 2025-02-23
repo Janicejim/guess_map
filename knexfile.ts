@@ -1,6 +1,6 @@
 import type { Knex } from "knex";
 import { env } from "./utils/env";
-// Update with your config settings.
+
 
 const config: { [key: string]: Knex.Config } = {
   development: {
@@ -42,11 +42,6 @@ const config: { [key: string]: Knex.Config } = {
       database: env.DB_NAME,
       user: env.DB_USERNAME,
       password: env.DB_PASSWORD
-      // host: env.POSTGRES_HOST,
-      // database: env.POSTGRES_DB,
-      // user: env.POSTGRES_USER,
-      // password: env.POSTGRES_PASSWORD,
-      // port: 5433,
     },
     pool: {
       min: 2,

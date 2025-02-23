@@ -2,8 +2,9 @@ import CheckInService from "../services/checkInService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
 import { CheckInData } from "../utils/model";
+import { createFormidableS3Form } from "../utils/formidable";
 class CheckInController {
-  constructor(private checkInService: CheckInService) {}
+  constructor(private checkInService: CheckInService) { }
 
   addCheckInRecord = async (req: Request, res: Response) => {
     try {
@@ -62,34 +63,46 @@ class CheckInController {
   };
 
   updateCheckInData = async (req: Request, res: Response) => {
-    try {
-      let { id } = req.query;
-      const image = req.file?.filename;
-      let { message } = req.body;
+    const form = createFormidableS3Form()
+    form.parse(req, async (err, fields, files) => {
+      try {
+        let { id } = req.query;
+        let { message } = fields;
 
-      if (!id) {
-        res.json({ success: false, msg: "欠缺資料" });
-        return;
-      }
-      let data: CheckInData = { id: +id };
-      if (image) {
-        data["image"] = image;
-      }
-      if (message) {
-        data["message"] = message;
-      }
-      if (!image && !message) {
-        res.json({ success: false, msg: "沒有要更新的資料" });
-        return;
+        if (!id) {
+          res.json({ success: false, msg: "欠缺資料" });
+          return;
+        }
+        let data: CheckInData = { id: +id };
+        let image = "";
+
+        if (files.hasOwnProperty("image")) {
+          image = Array.isArray(files.image) ? files.image[0].newFilename : files.image.newFilename;
+        }
+
+
+        if (image) {
+          data["image"] = image;
+        }
+        if (message) {
+          data["message"] = message as string
+        }
+        if (!image && !message) {
+          res.json({ success: false, msg: "沒有要更新的資料" });
+          return;
+        }
+
+        await this.checkInService.updateCheckInData(data);
+
+        res.json({ success: true, msg: "編輯成功" });
+      } catch (e) {
+        console.log(e);
+        res.json({ success: false, msg: "系統出錯，請稍候再試" });
       }
 
-      await this.checkInService.updateCheckInData(data);
+    })
 
-      res.json({ success: true, msg: "編輯成功" });
-    } catch (e) {
-      console.log(e);
-      res.json({ success: false, msg: "系統出錯，請稍候再試" });
-    }
+
   };
   getCheckInRecordByUser = async (req: Request, res: Response) => {
     try {

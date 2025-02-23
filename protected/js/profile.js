@@ -38,9 +38,9 @@ async function getUserProfile() {
   }
   let user = result.data.user;
 
-  profilePicDiv.style.backgroundImage = user.profile_image
-    ? `url(/${user.profile_image})`
-    : "url('anonymous.jpg')";
+  profilePicDiv.src = user.profile_image
+    ? `https://guessmap.image.bonbony.one/${user.profile_image}`
+    : "https://guessmap.image.bonbony.one/anonymous.jpg";
 
   userNameDiv.value = user.name;
   userEmailDiv.value = user.email;
@@ -57,11 +57,10 @@ let uploadField = document.querySelector(".file-upload-field");
 // on change show image with crop options
 uploadField.addEventListener("change", (e) => {
   if (e.target.files.length) {
-    // start file reader
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target.result) {
-        result.style.backgroundImage = `url(${e.target.result})`;
+        result.src = `${e.target.result}`;
       }
     };
     reader.readAsDataURL(e.target.files[0]);
@@ -157,7 +156,7 @@ async function getScoreRecords() {
     scoreTemplate.querySelector("#score_created_at").textContent = formatDate(
       record.created_at
     );
-    scoreTemplate.querySelector(".score-image").src = `/${record.image}`;
+    scoreTemplate.querySelector(".score-image").src = `https://guessmap.image.bonbony.one/${record.image}`;
     scoreTemplate.querySelector("#description").textContent =
       record.description;
     let scoreChange;
@@ -194,7 +193,7 @@ async function getRedeemRecord() {
       let awardTemplate = document
         .querySelector("#award-record")
         .content.cloneNode(true);
-      awardTemplate.querySelector("#award-img").src = record.image;
+      awardTemplate.querySelector("#award-img").src = `https://guessmap.image.bonbony.one/${record.image}`;
       awardTemplate.querySelector("#award-name").textContent = record.name;
       awardTemplate.querySelector("#award-score").textContent = record.score;
       recordAreaContainer.appendChild(awardTemplate);
@@ -268,12 +267,12 @@ async function getGameRecords(type, preferences, status) {
     }
 
     if (!record.profile_image) {
-      record.profile_image = "/anonymous.jpg";
+      record.profile_image = "anonymous.jpg";
     }
 
     gameTemplate.querySelector("a").href = `/play-game.html?id=${record.id}`;
-    gameTemplate.querySelector(".game_container").src = record.media;
-    gameTemplate.querySelector(".profile_picture").src = record.profile_image;
+    gameTemplate.querySelector(".game_container").src = `https://guessmap.image.bonbony.one/${record.media}`;
+    gameTemplate.querySelector(".profile_picture").src = `https://guessmap.image.bonbony.one/${record.profile_image}`;
     gameTemplate.querySelector(".username").textContent = record.name;
     let likeNumberElm = gameTemplate.querySelector(".like_number");
     likeNumberElm.textContent = record.like_number;
@@ -381,7 +380,6 @@ function handleWindowResize() {
 }
 
 document.querySelector("#sub-menu").addEventListener("click", () => {
-  console.log("sub menu");
   let sideBar = document.querySelector("#side-bar");
   sideBar.classList.toggle("hidden");
 });
@@ -432,7 +430,7 @@ async function getUserCheckInRecord() {
 
     swiperSlideTemplate.querySelector(
       ".check-in-image"
-    ).src = `/${record.media}`;
+    ).src = `https://guessmap.image.bonbony.one/${record.media}`;
 
     swiperSlideTemplate.querySelector(
       "a"
@@ -449,8 +447,8 @@ async function getUserCheckInRecord() {
 
   checkInSwiperContainer.querySelector(".check-in-content img").src =
     checkInRecords[0].image
-      ? `/${checkInRecords[0].image}`
-      : `/check_in_no_photo.jpg`;
+      ? `https://guessmap.image.bonbony.one/${checkInRecords[0].image}`
+      : `https://guessmap.image.bonbony.one/check_in_no_photo.jpg`;
 
   checkInSwiperContainer
     .querySelector(".fa-edit")
@@ -491,25 +489,7 @@ function updateMessageAndDate() {
   let record = checkInRecords[checkInSwiper.activeIndex];
   messageElement.textContent = record.message;
   dateElement.textContent = formatDate(record.created_at);
-  gameImage.src = record.image ? `/${record.image}` : `/check_in_no_photo.jpg`;
-  document
-    .querySelector(".check-in-content .fa-edit")
-    .addEventListener("click", () => {
-      Swal.fire({
-        title: "編輯留言記錄",
-        html: `<div class="edit-check-in">
-        <div>留言：</div>
-        <input type="text" id="check-in-message" value=${record.message}></input>
-        <div>合照：</div>
-        <input type="file" id="file"></input>
-        <button class="submit-btn" onClick="submitEditCheckIn(${record.id})">提交</button>
-        <button class="cancel-btn"  onClick="closeSweetAlert()">取消</button>
-      </div>`,
-        showConfirmButton: false,
-        showCancelButton: false,
-        allowOutsideClick: true,
-      });
-    });
+  gameImage.src = record.image ? `https://guessmap.image.bonbony.one/${record.image}` : `https://guessmap.image.bonbony.one/check_in_no_photo.jpg`;
 }
 
 //---------------edit check in ------------------------
@@ -526,6 +506,9 @@ async function submitEditCheckIn(id) {
   let result = await res.json();
   Swal.close();
   Swal.fire("", result.msg, result.success ? "success" : "error");
+  setTimeout(()=>{ getUserCheckInRecord()},1000)
+
+ 
 }
 
 function closeSweetAlert() {

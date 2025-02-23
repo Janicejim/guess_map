@@ -150,7 +150,7 @@ html, body {
   padding: 0;
   overflow: hidden; /* Hide the scrollbar */
   height: 100vh; /* Set the height to 100 viewport height */
-  background-image: url("/cover.jpeg");
+  background-image: url("https://guessmap.image.bonbony.one/cover.jpeg");
   background-repeat: no-repeat;
   background-size:100vw 100vh;
 }
