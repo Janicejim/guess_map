@@ -1,5 +1,5 @@
 import UserService from "../services/userService";
-import { createFormidableS3Form } from "../utils/formidable";
+import { form } from "../utils/formidable";
 import { checkPassword, hashPassword } from "../utils/hash";
 import { Request, Response } from "express";
 class UserController {
@@ -132,7 +132,6 @@ class UserController {
   };
 
   editProfile = async (req: Request, res: Response) => {
-    const form = createFormidableS3Form()
     form.parse(req, async (err, fields, files) => {
       try {
         if (!req.session.user) {

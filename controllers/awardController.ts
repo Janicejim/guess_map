@@ -1,6 +1,6 @@
 import AwardService from "../services/awardService";
 import { Request, Response } from "express";
-import { createFormidableS3Form } from "../utils/formidable";
+import { form } from "../utils/formidable";
 
 class AwardController {
   constructor(
@@ -27,8 +27,6 @@ class AwardController {
   };
 
   createAward = async (req: Request, res: Response) => {
-    const form = createFormidableS3Form()
-
     form.parse(req, async (err, fields, files) => {
       try {
 
@@ -79,7 +77,6 @@ class AwardController {
   };
 
   editAward = async (req: Request, res: Response) => {
-    const form = createFormidableS3Form()
     form.parse(req, async (err, fields, files) => {
       try {
         let image = "";

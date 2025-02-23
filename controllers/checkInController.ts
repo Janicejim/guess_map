@@ -2,7 +2,7 @@ import CheckInService from "../services/checkInService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
 import { CheckInData } from "../utils/model";
-import { createFormidableS3Form } from "../utils/formidable";
+import { form } from "../utils/formidable";
 class CheckInController {
   constructor(private checkInService: CheckInService) { }
 
@@ -63,7 +63,6 @@ class CheckInController {
   };
 
   updateCheckInData = async (req: Request, res: Response) => {
-    const form = createFormidableS3Form()
     form.parse(req, async (err, fields, files) => {
       try {
         let { id } = req.query;

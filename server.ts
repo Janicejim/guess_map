@@ -25,7 +25,7 @@ app.use(express.json());
 
 //--------session config------------------------------
 const sessionMiddleware = expressSession({
-  secret: "Tecky Academy teaches typescript",
+  secret: "dfdgadghhgf",
   resave: true,
   saveUninitialized: true,
   cookie: { secure: false },

@@ -2,7 +2,8 @@ import GameService from "../services/gameService";
 import { Request, Response } from "express";
 import { checkDistance } from "../utils/distance";
 import { Server as SocketIO } from "socket.io";
-import { createFormidableS3Form } from "../utils/formidable";
+import { form } from "../utils/formidable";
+
 class GameController {
   constructor(private gameService: GameService, private io: SocketIO) { }
 
@@ -33,7 +34,6 @@ class GameController {
   };
 
   uploadGame = async (req: Request, res: Response) => {
-    const form = createFormidableS3Form()
     form.parse(req, async (err, fields, files) => {
       try {
         let {
