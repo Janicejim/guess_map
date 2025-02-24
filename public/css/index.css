@@ -159,7 +159,7 @@ height:450px;
     margin-top: 5px;
     aspect-ratio: 1 / 1;
     width: 100%;
-    border-radius: 100%;
+    border-radius: 100% !important;
     object-fit: cover;
  
   }

@@ -79,7 +79,7 @@
   margin-top: 5px;
   aspect-ratio: 1 / 1;
   width: 100%;
-  border-radius: 50%;
+  border-radius: 50% !important;
   object-fit: cover;
 
 }
