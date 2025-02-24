@@ -25,7 +25,7 @@ app.use(express.json());
 
 //--------session config------------------------------
 const sessionMiddleware = expressSession({
-  secret: "dfdgadghhgf",
+  secret: env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
   cookie: { secure: false },
@@ -58,7 +58,7 @@ io.on("connection", (socket: socketIO.Socket) => {
 //------------------- google login-------------------------------
 const grantExpress = grant.express({
   defaults: {
-    origin: "http://localhost:8000",
+    origin: env.FRONTEND_URL,
     transport: "session",
     state: true,
   },
@@ -86,11 +86,8 @@ app.use(awardRoutes);
 app.use(checkInRoutes);
 app.use(express.static("public"));
 app.use(express.static("public/html"));
-
 app.use(express.static("uploads"));
 app.use(express.static("image"));
-
-
 app.use(isLoggedIn, express.static("protected"));
 app.use(isLoggedIn, express.static("protected/html"));
 app.use((req, res) => {

@@ -13,4 +13,6 @@ export const env = {
   SALT_ROUNDS: +process.env.SALT_ROUNDS! || 9,
   LOGGING_LEVEL: process.env.LOGGING_LEVEL || "",
   NODE_ENV: process.env.NODE_ENV || "",
+  SESSION_SECRET: process.env.SESSION_SECRET || "",
+  FRONTEND_URL: process.env.FRONTEND_URL || ""
 };
