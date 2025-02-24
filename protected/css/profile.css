@@ -8,7 +8,6 @@ body {
   width:60%
 }
 
-/* upload-btn */
 
 .file-upload-wrapper {
   position: relative;
@@ -184,10 +183,6 @@ textarea {
   height: 120px;
   overflow-wrap: break-word !important;
 }
-
-/* #user-description {
-    height:150px !important;
-  } */
 
 input:focus,
 textarea:focus {
@@ -367,10 +362,6 @@ margin-left: 1.5rem;
   border-radius: 5px 5px 5px 5px;
   margin-top: 2rem;
   margin-left: 1rem;
-  /* display: flex;
-  align-items: center;
-  justify-content: space-evenly;
- */
  width: 100%;
 }
 
@@ -429,7 +420,6 @@ width:15rem
       position: fixed;
       bottom: 1%;
     left: 1%;
-      /* background-color: pink; */
       display: flex;
     justify-content: center;
     align-items: center;

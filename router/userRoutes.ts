@@ -5,15 +5,10 @@ import UserService from "../services/userService";
 import UserController from "../controllers/userController";
 import { multerUpload } from "../utils/multer";
 
-// import { format } from "date-fns";
-
 const userRoutes = express.Router();
 
 const userService = new UserService(knex);
 const userController = new UserController(userService);
-
-
-// ^^^^^^^^^^^^^^^^^^ for user upload profile ^^^^^^^^^^^^^^^^^^^^//
 userRoutes.post("/register", userController.register);
 userRoutes.post("/login", userController.login);
 userRoutes.get("/login/google", userController.loginGoogle);

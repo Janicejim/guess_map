@@ -1,8 +1,3 @@
-//load navbar
-// $(function () {
-//   $("#navbar").load("/navigation.html");
-// });
-
 //login form
 document
   .querySelector("#login-form")

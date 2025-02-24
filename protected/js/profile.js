@@ -1,11 +1,9 @@
 window.onload = () => {
-  // isLogin();
   handleWindowResize();
   getUserProfile();
   loadDefaultRecord();
 };
 
-//load navbar
 $(function () {
   $("#navbar").load("/navigation.html");
 });

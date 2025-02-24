@@ -26,8 +26,6 @@ margin-bottom: 5rem;
   display: none;
 }
 
-/* >>>>>>>>>>>>>>>>>>>>>>>>>>>   nav bar css   <<<<<<<<<<<<<<<<<<<<<<<<<<< */
-
 .login-container {
   background-color: rgba(255, 255, 255, 0.639);
   width: 25rem;
@@ -62,8 +60,6 @@ margin-bottom: 5rem;
   display: flex;
   justify-content: center;
 }
-
-/* @import url(https://fonts.googleapis.com/css?family=Roboto:500); */
 
 .google-container {
   display: flex;
@@ -100,7 +96,6 @@ margin-bottom: 5rem;
   color: #fff;
   font-size: 14px;
   letter-spacing: 0.2px;
-  /* font-family: "Roboto"; */
 }
 .google-btn:hover {
   box-shadow: 0 0 6px #4285f4;
@@ -148,15 +143,13 @@ color:orange;
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Hide the scrollbar */
-  height: 100vh; /* Set the height to 100 viewport height */
+  overflow: hidden; 
+  height: 100vh; 
   background-image: url("/cover.jpeg");
   background-repeat: no-repeat;
   background-size:100vw 100vh;
 }
-/* .left{
-  background-color: rgb(36, 155, 115);
-  height: 100vh} */
+
 
   #message{
     text-align: center;

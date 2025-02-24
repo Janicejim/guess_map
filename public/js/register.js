@@ -1,5 +1,3 @@
-//register
-
 document
   .querySelector("#register-form")
   .addEventListener("submit", async (event) => {

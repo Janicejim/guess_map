@@ -1,4 +1,3 @@
-let editGameId = -1;
 let games = [];
 
 export async function loadGames() {
@@ -9,12 +8,8 @@ export async function loadGames() {
   let idx = 0;
   for (let game of games) {
     updateGameDiv(game, gameBoardDiv);
-    idx++; //idx = idx + 1;
+    idx++; 
   }
-
-  //   for (idx = 0; idx < games.length; idx++) {
-  //     updateGameEvent(games[idx]);
-  //   }
 }
 
 function updateGameDiv(game, gameBoardDiv) {

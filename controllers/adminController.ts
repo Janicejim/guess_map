@@ -1,9 +1,8 @@
-// import { io } from "../router/SocketRoute";
 import AdminService from "../services/adminService";
 import { Request, Response } from "express";
 
 class AdminController {
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService) { }
 
   searchUser = async (req: Request, res: Response) => {
     const { searchText } = req.body;

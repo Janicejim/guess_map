@@ -1,15 +1,11 @@
 
 
-/* resized response config */
 @media (max-width: 1000px ){
     .col-md-6{
         flex: 0 0 auto !important;
         width: 100% !important;
     }
 }
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^ Search User ^^^^^^^^^^^^^^^^^^^^^^^*/
-
 
 .filter-user-layout{
     min-width: 300px;
@@ -155,77 +151,8 @@ width:300px;
 }
 
 
-
-
-
-
-
-
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
-/* 
-
-.collapsible {
-    background-color: #eee;
-    color: #444;
-    cursor: pointer;
-    padding: 18px;
-    width: 91%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    margin-bottom: 20px;
-    margin-left: 25px;
-    margin-right: 25px;
-}
-  
-  
-  
-  .active, .collapsible:hover {
-    background-color: #ccc;
-  }
-  
-
-  .content {
-    padding: 0 18px;
-    display: none;
-    overflow: hidden;
-    background-color: #f1f1f1;
-  }
-  .collapsible:after {
-    content: '\02795'; 
-    font-size: 13px;
-    color: white;
-    float: right;
-    margin-left: 5px;
-  }
-  
-  .active:after {
-    content: "\2796"; 
-  }
-
- #right-column{
-     margin-bottom: 10%;
- } */
-  /* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
-  /* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
-  /* ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^ Messages & Report ^^^^^^^^^^^^^^^^^^^^^^^*/
-
-
-/* disable text selection */
-
   ::selection { background: transparent; } ::-moz-selection { background: transparent; }
 
-/* disable text selection */
-
-
-
-
-
-/* loading  css*/
 
 @import url('https://fonts.googleapis.com/css2?family=Advent+Pro&display=swap');
 
@@ -409,7 +336,6 @@ align-items: center;
   }
   .card-body{
     height: 13rem;
-    /* edit mode:17rem */
   }
   .icon-container{
     display: flex;

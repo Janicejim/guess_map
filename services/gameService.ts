@@ -194,7 +194,6 @@ on game.id=store.game_id where game.id=?`,
     let txn = await this.knex.transaction();
     try {
       //insert game_history record:
-      // console.log(gameHistoryData, game_history_id, scoreData, storeData);
       await txn("game_history")
         .update(gameHistoryData)
         .where("id", game_history_id);

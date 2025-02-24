@@ -30,7 +30,6 @@ header {
 
 .nav-up {
   top: -40px;
-  /* // same as header height. use variables in LESS/SASS */
 }
 
 header .logo {
@@ -308,7 +307,6 @@ nav ul li {
 #current-user {
   text-align: right;
   margin-right: 5%;
-  /* font-weight:bold; */
   font-size: 18px;
   margin-top:1rem
 }

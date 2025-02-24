@@ -1,4 +1,3 @@
-//load navbar
 $(function () {
   $("#navbar").load("/navigation.html");
 });

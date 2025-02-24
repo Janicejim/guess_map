@@ -224,15 +224,11 @@ font-weight: bold;
     display: none;
   }
 
-  /* check in card */
-
 
    #check-in-image{
     width:100%;
     height:100%
-
    }
-    /* */
 
     .game-swiper {
       width: 100%;
@@ -348,7 +344,7 @@ object-fit: cover;
 border-radius: 18px;
 height: 100%;
 }
-.check-in-amount-cointer{
+.check-in-amount-container{
   position:absolute;
   top:10px;
   left:10px;

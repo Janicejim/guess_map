@@ -51,27 +51,6 @@ footer {
   align-items: center;
 }
 
-/* .rules-area {
-  width: 80vw;
-  height: auto;
-  background-color: rgb(50, 13, 99);
-  margin-top: 50px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-
-/* rules-inside-layout {
-  border-radius: 2rem;
-  width: 75vw;
-  height: auto;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-
 body {
   margin: 0px;
   margin-top: -30px;

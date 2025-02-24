@@ -73,7 +73,7 @@ class CheckInController {
         return;
       }
       let data: CheckInData = { id: +id };
-      let image = req.file?.fieldname
+      let image = req.file?.filename
 
       if (image) {
         data["image"] = image;

@@ -7,7 +7,6 @@ import { Server as SocketIO } from "socket.io";
 class GameController {
   constructor(private gameService: GameService, private io: SocketIO) { }
 
-  //////get game data///////
   getAllActiveGames = async (req: Request, res: Response) => {
     let user_id = req.session.user?.id || 0;
     let results;
@@ -45,7 +44,8 @@ class GameController {
         answer_description,
       } = req.body
 
-      let media = req.file?.fieldname
+      let media = req.file?.filename
+      console.log("req.file:", req.file)
 
       if (
         !media ||

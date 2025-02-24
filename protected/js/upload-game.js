@@ -1,4 +1,3 @@
-//load navbar
 $(function () {
   $("#navbar").load("/navigation.html");
 });
@@ -99,19 +98,11 @@ function toggleBounce() {
 }
 function initMap() {
   myLatLng = new google.maps.LatLng(22.28780558413936, 114.14833128874676);
-  // Create a new StyledMapType object, passing it an array of styles,
-  // and the name to be displayed on the map type control.
-
-  // Create a map object, and include the MapTypeId to add
-  // to the map type control.
   const map = new google.maps.Map(document.getElementById("map"), {
     center: myLatLng,
     zoom: 12,
     mapTypeControl: false,
     streetViewControl: false,
-    // mapTypeControlOptions: {
-    //   mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
-    // },
   });
 
   google.maps.event.addListener(map, "click", function (mapsMouseEvent) {
@@ -121,8 +112,6 @@ function initMap() {
     );
 
     placeMarker(mapsMouseEvent.latLng);
-
-    // To add the marker to the map, call setMap();
     marker.setMap(map);
   });
 }
