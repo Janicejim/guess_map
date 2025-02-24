@@ -1,7 +1,7 @@
 import { Knex } from "knex";
 
 class UserService {
-  constructor(private knex: Knex) {}
+  constructor(private knex: Knex) { }
 
   async getUserMyEmail(email: string) {
     return await this.knex.select("*").from("users").where("email", email);
@@ -46,20 +46,20 @@ class UserService {
   }) {
     let txn = await this.knex.transaction();
     try {
-      let [{ id }] = await txn("users").insert(data).returning("id");
+      let userData = await txn("users").insert(data).returning("*");
 
       let newUserScoreDesId = await this.getScoreDescriptionId("新玩家");
       await txn("score_record").insert({
-        user_id: id,
+        user_id: userData[0].id,
         score_change: 100,
         score_description_id: newUserScoreDesId,
       });
       await txn.commit();
-      return id;
+      return userData
     } catch (e) {
       console.log(e);
       await txn.rollback();
-      return;
+      return [];
     }
   }
 

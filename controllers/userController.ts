@@ -71,7 +71,7 @@ class UserController {
     );
     const googleUserInfo: any = await fetchRes.json();
     const users = await this.userService.getUserMyEmail(googleUserInfo.email);
-    const user = users[0];
+    let user = users[0];
     if (!user) {
       let hashedPassword = await hashPassword((Math.random() + 1).toString(36));
       const createUserResult = await this.userService.createUser({
@@ -83,15 +83,17 @@ class UserController {
       });
 
 
-      if (!createUserResult) {
+      if (createUserResult.length < 1) {
         res.status(401).json({ success: false, msg: "系統出錯，請稍候再試" });
         return;
       }
+      user = createUserResult[0]
     }
     if (req.session) {
       req.session["user"] = user;
     }
     return res.redirect("/");
+
   };
 
   logout = async (req: Request, res: Response) => {
